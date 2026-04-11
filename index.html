@@ -7,7 +7,7 @@
     <title>Rooted Daily | Daily Bible Companion</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,7 +19,6 @@
             --bg-dark: #0f1419;
             --bg-card: #1a2027;
             --accent-green: #5ab97f;
-            --accent-gold: #c9a961;
             --text-primary: #f5f5f5;
             --text-secondary: #b8b8b8;
             --border-color: #2d3d4d;
@@ -37,7 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* Header & Navigation */
         header {
             position: fixed;
             top: 0;
@@ -46,7 +44,7 @@
             background: rgba(15, 20, 25, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
+            padding: 1.2rem 2rem;
         }
 
         nav {
@@ -59,12 +57,9 @@
 
         .logo {
             font-family: 'Crimson Text', serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent-green);
         }
 
         nav ul {
@@ -77,6 +72,7 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.9rem;
+            font-weight: 500;
             transition: color 0.3s;
         }
 
@@ -93,66 +89,51 @@
             }
         }
 
-        /* Hero Section */
         .hero {
             margin-top: 80px;
-            padding: 6rem 2rem;
+            padding: 5rem 2rem;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(90, 185, 127, 0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
-        }
-
-        .hero h1 {
-            font-family: 'Crimson Text', serif;
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .hero .tagline {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 3rem;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-            max-width: 600px;
+            max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
         }
 
+        .hero h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+
         .cta-buttons {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             justify-content: center;
             margin-bottom: 4rem;
             flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease-out 0.4s both;
         }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.9rem 2rem;
-            border-radius: 8px;
+            display: inline-block;
+            padding: 0.95rem 2rem;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.95rem;
             transition: all 0.3s;
-            border: 1px solid transparent;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-primary {
@@ -161,9 +142,8 @@
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--accent-green), #66c896);
+            background: #66c896;
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(90, 185, 127, 0.3);
         }
 
         .btn-secondary {
@@ -177,54 +157,23 @@
             transform: translateY(-2px);
         }
 
-        .btn-donate {
-            background: var(--accent-gold);
-            color: #0f1419;
-        }
-
-        .btn-donate:hover {
-            background: linear-gradient(135deg, var(--accent-gold), #dfc069);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(201, 169, 97, 0.3);
-        }
-
-        .btn-disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(90, 185, 127, 0.15);
-            color: var(--accent-green);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Hero Image */
-        .hero-showcase {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
             margin-top: 3rem;
-            animation: fadeIn 1s ease-out 0.6s both;
         }
 
         .phone-frame {
             width: 280px;
             height: 560px;
             border: 8px solid #1a2027;
-            border-radius: 40px;
+            border-radius: 36px;
             overflow: hidden;
             background: #0a0e13;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            position: relative;
+            margin: 0 auto;
         }
 
         .phone-frame::before {
@@ -233,34 +182,41 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 25px;
+            height: 20px;
             background: #0a0e13;
-            border-bottom: 1px solid #2d3d4d;
-            z-index: 10;
+            border-radius: 0 0 20px 20px;
         }
 
         .phone-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            justify-items: center;
         }
 
         @media (max-width: 1024px) {
-            .hero-showcase {
-                flex-wrap: wrap;
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
             }
-            .phone-frame {
-                width: 240px;
-                height: 480px;
+            .showcase-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
-            .hero-showcase {
-                gap: 1rem;
+            .showcase-grid {
+                grid-template-columns: 1fr;
             }
             .phone-frame {
                 width: 200px;
@@ -268,19 +224,18 @@
             }
         }
 
-        /* Features Section */
         .features {
-            padding: 6rem 2rem;
+            padding: 5rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
+            background: linear-gradient(180deg, transparent 0%, rgba(90, 185, 127, 0.03) 100%);
         }
 
         .features h2 {
             font-family: 'Crimson Text', serif;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             text-align: center;
-            margin-bottom: 4rem;
-            animation: fadeInUp 0.8s ease-out;
+            margin-bottom: 3rem;
         }
 
         .features-grid {
@@ -291,88 +246,73 @@
 
         .feature-card {
             background: var(--bg-card);
-            padding: 2.5rem;
-            border-radius: 12px;
+            padding: 2rem;
+            border-radius: 8px;
             border: 1px solid var(--border-color);
             transition: all 0.3s;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .feature-card:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-
-        .feature-card:nth-child(3) {
-            animation-delay: 0.2s;
-        }
-
-        .feature-card:nth-child(4) {
-            animation-delay: 0.3s;
         }
 
         .feature-card:hover {
             border-color: var(--accent-green);
             transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(90, 185, 127, 0.15);
         }
 
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
+        .feature-title {
             font-family: 'Crimson Text', serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-bottom: 0.75rem;
+            font-weight: 700;
         }
 
         .feature-card p {
             color: var(--text-secondary);
             font-size: 0.95rem;
+            line-height: 1.7;
         }
 
-        /* Scripture Quote Section */
-        .quote-section {
-            padding: 6rem 2rem;
+        .scripture-section {
+            padding: 4rem 2rem;
             text-align: center;
-            background: linear-gradient(135deg, rgba(90, 185, 127, 0.05) 0%, rgba(201, 169, 97, 0.05) 100%);
-            margin: 3rem 0;
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
+            margin: 3rem 0;
         }
 
-        .quote-section blockquote {
+        .scripture-section blockquote {
             font-family: 'Crimson Text', serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-style: italic;
             color: var(--accent-green);
             margin-bottom: 1rem;
             line-height: 1.8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .quote-source {
+        .scripture-source {
             color: var(--text-secondary);
             font-size: 0.9rem;
+            font-weight: 500;
         }
 
-        /* Newsletter Section */
         .newsletter {
             padding: 4rem 2rem;
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             text-align: center;
         }
 
         .newsletter h2 {
             font-family: 'Crimson Text', serif;
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.75rem;
         }
 
         .newsletter p {
             color: var(--text-secondary);
             margin-bottom: 2rem;
+            font-weight: 400;
         }
 
         .newsletter-form {
@@ -384,12 +324,13 @@
         .newsletter-form input {
             flex: 1;
             min-width: 200px;
-            padding: 0.9rem 1.2rem;
+            padding: 0.85rem 1rem;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 6px;
             background: var(--bg-card);
             color: var(--text-primary);
             font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
             transition: all 0.3s;
         }
 
@@ -403,13 +344,12 @@
             color: var(--text-secondary);
         }
 
-        /* Footer */
         footer {
             padding: 3rem 2rem;
             border-top: 1px solid var(--border-color);
             text-align: center;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .footer-links {
@@ -424,48 +364,26 @@
             color: var(--accent-green);
             text-decoration: none;
             transition: color 0.3s;
+            font-weight: 500;
         }
 
         .footer-links a:hover {
-            color: var(--accent-gold);
+            color: var(--text-primary);
         }
 
-        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Store Badges */
-        .store-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .store-icon {
-            width: 20px;
-            height: 20px;
-        }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <nav>
             <div class="logo">Rooted</div>
@@ -477,100 +395,74 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="badge">✨ Coming to iOS & Android</div>
+    <section class="hero" id="download">
         <h1>Stay Rooted in the Word</h1>
-        <p class="tagline">Your daily Bible companion with high-quality audio narration, AI-powered reflections, and personal journaling.</p>
+        <p class="subtitle">Your daily Bible companion with audio narration, AI reflections, and personal journaling.</p>
         
-        <div class="cta-buttons" id="download">
-            <a href="https://play.google.com/store/apps/details?id=com.pacmac.rooted" class="btn btn-primary">
-                <span class="store-badge">
-                    <svg class="store-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3.02 5.42c-.84 1.318-.84 3.023 0 4.341L10.22 17.18c.84 1.318 2.2 2.097 3.73 2.097.97 0 1.881-.268 2.636-.78l4.86-3.062c.84-.53 1.4-1.4 1.4-2.44V7.98c0-1.05-.56-1.92-1.4-2.45l-4.86-3.062c-.755-.512-1.666-.78-2.636-.78-1.53 0-2.89.779-3.73 2.097L3.02 5.42z"/>
-                    </svg>
-                    Google Play
-                </span>
-            </a>
-            <a href="https://apps.apple.com/app/rooted-daily/idXXXXXXXXXX" class="btn btn-primary">
-                <span class="store-badge">
-                    <svg class="store-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.71 19.71a6 6 0 1 1 .89-.89l4.17 4.17a1 1 0 1 1-1.41 1.41ZM12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/>
-                    </svg>
-                    App Store
-                </span>
-            </a>
-            <a href="https://donate.stripe.com/test/YOUR_LINK_HERE" class="btn btn-donate">
-                <span class="store-badge">
-                    💝 Support Us
-                </span>
-            </a>
+        <div class="cta-buttons">
+            <a href="https://play.google.com/store/apps/details?id=com.pacmac.rooted" class="btn btn-primary">Get on Google Play</a>
+            <a href="https://apps.apple.com/app/rooted-daily/idXXXXXXXXXX" class="btn btn-primary">Download on App Store</a>
+            <a href="https://donate.stripe.com/test/YOUR_LINK_HERE" class="btn btn-secondary">Support Us</a>
         </div>
 
-        <div class="hero-showcase">
-            <div class="phone-frame">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 560'%3E%3Crect fill='%230a0e13' width='280' height='560'/%3E%3Ctext x='50%' y='50%' fill='%235ab97f' font-size='32' font-family='Crimson Text, serif' text-anchor='middle' dominant-baseline='middle'%3EHome Screen%3C/text%3E%3C/svg%3E" alt="Rooted Daily Home Screen">
-            </div>
-            <div class="phone-frame">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 560'%3E%3Crect fill='%230a0e13' width='280' height='560'/%3E%3Ctext x='50%' y='50%' fill='%235ab97f' font-size='32' font-family='Crimson Text, serif' text-anchor='middle' dominant-baseline='middle'%3EBible Reader%3C/text%3E%3C/svg%3E" alt="Bible Reader">
-            </div>
-            <div class="phone-frame">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 560'%3E%3Crect fill='%230a0e13' width='280' height='560'/%3E%3Ctext x='50%' y='50%' fill='%235ab97f' font-size='32' font-family='Crimson Text, serif' text-anchor='middle' dominant-baseline='middle'%3EAI Reflection%3C/text%3E%3C/svg%3E" alt="AI Reflection">
+        <div class="hero-content">
+            <div class="showcase-grid">
+                <div class="phone-frame">
+                    <img src="home_cropped.png" alt="Rooted Daily home screen showing daily devotional">
+                </div>
+                <div class="phone-frame">
+                    <img src="bible_cropped.png" alt="Bible reader with Genesis 1">
+                </div>
+                <div class="phone-frame">
+                    <img src="reflection_cropped.png" alt="AI-powered reflection on John 10:16">
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Quote Section -->
-    <section class="quote-section">
+    <section class="scripture-section">
         <blockquote>"Let the word of Christ dwell in you richly as you teach and admonish one another with all wisdom through psalms, hymns, and songs from the Spirit, singing to God with gratitude in your hearts."</blockquote>
-        <p class="quote-source">— Colossians 3:16</p>
+        <p class="scripture-source">Colossians 3:16</p>
     </section>
 
-    <!-- Features Section -->
     <section class="features" id="features">
-        <h2>Your Spiritual Companion</h2>
+        <h2>Built for Daily Growth</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">📖</div>
-                <h3>Interactive Bible Reader</h3>
-                <p>Highlight, share, and dive deep into scripture with our fluid, horizontal reader. Navigate through books and chapters with ease.</p>
+                <div class="feature-title">Interactive Reader</div>
+                <p>Navigate scripture with a fluid, horizontal reader. Highlight verses, share passages, and mark your favorites as you study the Word.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🎙️</div>
-                <h3>Natural Audio Narration</h3>
-                <p>Listen to verses read aloud with premium, human-like audio narration. Perfect for your commute or quiet moments of reflection.</p>
+                <div class="feature-title">Audio Narration</div>
+                <p>Listen to verses read aloud with natural, human-quality audio. Perfect for your commute, morning routine, or moments of quiet reflection.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🤖</div>
-                <h3>AI-Powered Reflections</h3>
-                <p>Engage with contextual insights and guidance. Our AI companion helps you explore deeper meaning and practical application.</p>
+                <div class="feature-title">AI Reflections</div>
+                <p>Go deeper with contextual insights and guidance. Ask questions and explore the practical application of Scripture in your daily life.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">📔</div>
-                <h3>Personal Journaling</h3>
-                <p>Record your reflections and spiritual growth. Build a lasting record of your faith journey and personal insights.</p>
+                <div class="feature-title">Personal Journal</div>
+                <p>Record your thoughts, prayers, and spiritual growth. Build a lasting record of how God is working in your life over time.</p>
             </div>
         </div>
     </section>
 
-    <!-- Newsletter Section -->
     <section class="newsletter" id="newsletter">
-        <h2>Stay Connected</h2>
-        <p>Get updates about new features, daily devotional highlights, and exclusive content straight to your inbox.</p>
+        <h2>Stay Updated</h2>
+        <p>Get notified about new features and devotional highlights.</p>
         <form class="newsletter-form" onsubmit="handleNewsletter(event)">
-            <input type="email" placeholder="Enter your email" required>
+            <input type="email" placeholder="Your email" required>
             <button type="submit" class="btn btn-primary" style="flex: 0 0 auto;">Subscribe</button>
         </form>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-links">
             <a href="#privacy">Privacy Policy</a>
             <a href="#terms">Terms of Service</a>
             <a href="#contact">Contact</a>
         </div>
-        <p>&copy; 2026 PacMac Mobile LLC. All rights reserved. Helping believers stay rooted in Scripture.</p>
+        <p>&copy; 2026 PacMac Mobile LLC. All rights reserved.</p>
     </footer>
 
     <script>
@@ -581,7 +473,6 @@
             e.target.reset();
         }
 
-        // Smooth scroll for nav links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
