@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rooted Daily: Your daily Bible companion with audio narration, AI reflections, and personal journaling.">
+    <title>Rooted Daily | Daily Bible Companion</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0f1419;
+            --bg-card: #1a2027;
+            --accent-green: #5ab97f;
+            --text-primary: #f5f5f5;
+            --text-secondary: #b8b8b8;
+            --border-color: #2d3d4d;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #141a22 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 2rem;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+            nav a {
+                font-size: 0.8rem;
+            }
+        }
+
+        .hero {
+            margin-top: 80px;
+            padding: 5rem 2rem;
+            text-align: center;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.95rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: #0f1419;
+        }
+
+        .btn-primary:hover {
+            background: #66c896;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-green);
+            border: 1.5px solid var(--accent-green);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(90, 185, 127, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .phone-frame {
+            width: 280px;
+            height: 560px;
+            border: 8px solid #1a2027;
+            border-radius: 36px;
+            overflow: hidden;
+            background: #0a0e13;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            margin: 0 auto;
+        }
+
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: #0a0e13;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .phone-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            justify-items: center;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .showcase-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+            .phone-frame {
+                width: 200px;
+                height: 400px;
+            }
+        }
+
+        .features {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, transparent 0%, rgba(90, 185, 127, 0.03) 100%);
+        }
+
+        .features h2 {
+            font-family: 'Crimson Text', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-4px);
+        }
+
+        .feature-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .scripture-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin: 3rem 0;
+        }
+
+        .scripture-section blockquote {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .scripture-source {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .newsletter {
+            padding: 4rem 2rem;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .newsletter p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(90, 185, 127, 0.1);
+        }
+
+        .newsletter-form input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .footer-links {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--accent-green);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Rooted</div>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#newsletter">Newsletter</a></li>
+                <li><a href="#download">Download</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="download">
+        <h1>Stay Rooted in the Word</h1>
+        <p class="subtitle">Your daily Bible companion with audio narration, AI reflections, and personal journaling.</p>
+        
+        <div class="cta-buttons">
+            <a href="https://expo.dev/accounts/unsungomaha/projects/rooted-daily-bible-buddy/builds/8f6d2df6-4652-4d42-9976-02b14ff96a2e" class="btn btn-primary">Get on Google Play</a>
+            <a href="https://apps.apple.com/app/rooted-daily/idXXXXXXXXXX" class="btn btn-primary">Download on App Store</a>
+            <a href="https://account.venmo.com/u/UnSungMinistries" class="btn btn-secondary">Support Us</a>
+        </div>
+
+        <div class="hero-content">
+            <div class="showcase-grid">
+                <div class="phone-frame">
+                    <img src="home_cropped.png" alt="Rooted Daily home screen showing daily devotional">
+                </div>
+                <div class="phone-frame">
+                    <img src="bible_cropped.png" alt="Bible reader with Genesis 1">
+                </div>
+                <div class="phone-frame">
+                    <img src="reflection_cropped.png" alt="AI-powered reflection on John 10:16">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="scripture-section">
+        <blockquote>"Let the word of Christ dwell in you richly as you teach and admonish one another with all wisdom through psalms, hymns, and songs from the Spirit, singing to God with gratitude in your hearts."</blockquote>
+        <p class="scripture-source">Colossians 3:16</p>
+    </section>
+
+    <section class="features" id="features">
+        <h2>Built for Daily Growth</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-title">Interactive Reader</div>
+                <p>Navigate scripture with a fluid, horizontal reader. Highlight verses, share passages, and mark your favorites as you study the Word.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Audio Narration</div>
+                <p>Listen to verses read aloud with natural, human-quality audio. Perfect for your commute, morning routine, or moments of quiet reflection.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">AI Reflections</div>
+                <p>Go deeper with contextual insights and guidance. Ask questions and explore the practical application of Scripture in your daily life.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Personal Journal</div>
+                <p>Record your thoughts, prayers, and spiritual growth. Build a lasting record of how God is working in your life over time.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter" id="newsletter">
+        <h2>Stay Updated</h2>
+        <p>Get notified about new features and devotional highlights.</p>
+        <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+            <input type="email" placeholder="Your email" required>
+            <button type="submit" class="btn btn-primary" style="flex: 0 0 auto;">Subscribe</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#terms">Terms of Service</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <p>&copy; 2026 PacMac Mobile LLC. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function handleNewsletter(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input[type="email"]').value;
+            alert(`Thank you! We've added ${email} to our newsletter.`);
+            e.target.reset();
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href !== '#download') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
