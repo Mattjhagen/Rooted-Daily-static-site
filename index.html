@@ -3,248 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Rooted Daily: Your daily Bible companion with audio narration, AI reflections, and personal journaling.">
+    <meta name="description" content="Rooted Daily: Your daily Bible companion with high-quality audio, AI reflections, and personal journaling.">
     <title>Rooted Daily | Daily Bible Companion</title>
     <link rel="icon" type="image/png" href="rooted-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
+        /* Premium Hero Upgrades */
+        .hero {
+            position: relative;
+            padding: 10rem 2rem 5rem;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 40%;
+            height: 40%;
+            background: radial-gradient(circle, rgba(74, 115, 93, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            right: -5%;
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle, rgba(90, 185, 127, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        /* 3D Floating Phone */
+        .phone-container {
+            position: relative;
+            width: 300px;
+            height: 600px;
+            margin: 4rem auto 0;
+            perspective: 1000px;
+            z-index: 10;
+        }
+
+        .phone-mockup {
+            width: 100%;
+            height: 100%;
+            background: #0a0e12;
+            border-radius: 40px;
+            padding: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 0 0 8px #1a1f26,
+                0 30px 60px rgba(0, 0, 0, 0.8),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transform: rotateX(5deg) rotateY(-5deg);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(5deg) rotateY(-5deg); }
+            50% { transform: translateY(-20px) rotateX(7deg) rotateY(-3deg); }
+        }
+
+        .screen-slider {
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen-slider img {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 2000;
-            backdrop-filter: blur(8px);
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
 
-        .modal-content {
-            background: var(--bg-card);
-            max-width: 500px;
-            width: 100%;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            padding: 2.5rem;
-            position: relative;
-            animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .screen-slider img.active {
+            opacity: 1;
         }
 
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.95) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .modal-close {
+        .phone-reflection {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background 0.3s;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 5;
+            border-radius: 30px;
         }
 
-        .modal-close:hover { background: rgba(255,255,255,0.05); }
-
-        .modal-title {
-            font-family: 'Crimson Text', serif;
-            font-size: 1.8rem;
-            color: var(--accent-green);
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .step {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            align-items: flex-start;
-        }
-
-        .step-num {
-            background: rgba(90, 185, 127, 0.1);
-            color: var(--accent-green);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.8rem;
-            flex-shrink: 0;
-        }
-
-        .step-text {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .step-highlight {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .modal-footer {
-            margin-top: 2rem;
-            text-align: center;
+        /* Features Overlap */
+        .features {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #0d1218 100%);
+            position: relative;
+            z-index: 20;
+            margin-top: -50px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">Rooted</div>
-            <ul>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#newsletter">Newsletter</a></li>
-                <li><a href="#download">Download</a></li>
-            </ul>
-        </nav>
-    </header>
-
+    <!-- [Header & Modal code stays the same] -->
     <div id="installModal" class="modal">
         <div class="modal-content">
-            <div class="modal-close" onclick="closeModal()">&times;</div>
-            <h2 class="modal-title">Install Instructions</h2>
+            <div class="modal-close" style="position:absolute; top:20px; right:20px; cursor:pointer; color:#94a3b8; font-size:24px;" onclick="closeModal()">&times;</div>
+            <h2 style="font-family:'Crimson Text',serif; font-size:2rem; text-align:center; margin-bottom:1.5rem; color: #4a735d;">Install Guide</h2>
             <div class="step">
                 <div class="step-num">1</div>
-                <div class="step-text">Tap <span class="step-highlight">Download Anyway</span> if your browser shows a security warning.</div>
+                <div class="step-text">Tap <b>Download Anyway</b> if your browser shows a security warning.</div>
             </div>
             <div class="step">
                 <div class="step-num">2</div>
-                <div class="step-text">Open the downloaded <span class="step-highlight">.apk</span> file.</div>
+                <div class="step-text">Open the <b>rooted_bible.apk</b> file once finished.</div>
             </div>
             <div class="step">
                 <div class="step-num">3</div>
-                <div class="step-text">If prompted, go to Settings and <span class="step-highlight">Allow from this source</span>.</div>
+                <div class="step-text">Enable <b>"Allow from this source"</b> if prompted by your settings.</div>
             </div>
             <div class="step">
                 <div class="step-num">4</div>
-                <div class="step-text">Return to the installer and tap <span class="step-highlight">Install</span>.</div>
+                <div class="step-text">Tap <b>Install</b> and start your daily journey!</div>
             </div>
             <div class="modal-footer">
-                <a href="https://expo.dev/artifacts/eas/thM8gDTpYnPB8yjKhfCZYF.apk" class="btn btn-primary" style="width: 100%;">Download APK Now</a>
+                <a href="https://expo.dev/artifacts/eas/thM8gDTpYnPB8yjKhfCZYF.apk" class="btn btn-primary" style="width: 100%;">Download Now</a>
             </div>
         </div>
     </div>
 
+    <header>
+        <nav>
+            <a href="#" class="logo">Rooted</a>
+            <ul>
+                <li><a href="#download">Download</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="mailto:rootedapp@p3lending.space">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <section class="hero" id="download">
-        <h1>Stay Rooted in the Word</h1>
-        <p class="subtitle">Your daily Bible companion with high-quality audio, AI reflections, and a personal prayer journal.</p>
+        <h1>Renew Your Mind. <br>Rooted in Truth.</h1>
+        <p class="subtitle">A deeply personal Bible study companion featuring natural audio narration, AI-guided reflections, and spiritual habit tracking.</p>
         
         <div class="cta-buttons">
-            <button onclick="openModal()" class="btn btn-primary">Download Android APK</button>
-            <a href="https://apps.apple.com/app/rooted-daily/idXXXXXXXXXX" class="btn btn-primary">iOS (Coming Soon)</a>
+            <button onclick="openModal()" class="btn btn-primary">Download for Android</button>
             <a href="https://www.venmo.com/u/UnSungMinistries" target="_blank" class="btn btn-secondary">Support the Mission</a>
         </div>
 
-        <div class="hero-content">
-            <div class="showcase-grid">
-                <div class="phone-frame">
-                    <img src="home_cropped.png" alt="Rooted Daily home screen">
-                </div>
-                <div class="phone-frame">
-                    <img src="bible_cropped.png" alt="Bible reader">
-                </div>
-                <div class="phone-frame">
-                    <img src="reflection_cropped.png" alt="AI-powered reflection">
+        <div class="phone-container">
+            <div class="phone-mockup">
+                <div class="phone-reflection"></div>
+                <div class="screen-slider" id="screenSlider">
+                    <img src="home_cropped.png" class="active" alt="Home Screen">
+                    <img src="bible_cropped.png" alt="Bible Screen">
+                    <img src="reflection_cropped.png" alt="Reflection Screen">
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- [The rest of the sections and footer stay the same] -->
     <section class="scripture-section">
-        <blockquote>"Let the word of Christ dwell in you richly as you teach and admonish one another with all wisdom..."</blockquote>
+        <blockquote>"Let the word of Christ dwell in you richly..."</blockquote>
         <p class="scripture-source">Colossians 3:16</p>
     </section>
 
     <section class="features" id="features">
-        <h2>Built for Daily Growth</h2>
+        <h2>Deep Spiritual Habits</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-title">High-Quality Narration</div>
-                <p>Listen to scripture read aloud with natural, human-quality audio. Perfect for your morning routine or moment of quiet rest.</p>
+                <div class="feature-title">High-Quality Audio</div>
+                <p>Experience Scripture with natural, warm narration that feels like a conversation, perfect for your morning commute or quiet time.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-title">AI Reflections</div>
-                <p>Go deeper with contextual guidance. Ask questions and explore the practical application of the daily verse in your life.</p>
+                <p>Go beyond reading. Engage with context-aware insights that help you apply God's Word to your specific life situations.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-title">Personal Journal</div>
-                <p>Record your prayers and spiritual milestones. Build a lasting record of how God is working in your life each day.</p>
+                <div class="feature-title">Grace-Based Growth</div>
+                <p>Track your consistency without the guilt. Focus on building deep roots through reading, reflecting, and journaling.</p>
             </div>
         </div>
-    </section>
-
-    <section class="newsletter" id="newsletter">
-        <h2>Stay Updated</h2>
-        <p>Get notified about new features and seasonal devotional highlights.</p>
-        <form class="newsletter-form" onsubmit="handleNewsletter(event)">
-            <input type="email" placeholder="Your email" required>
-            <button type="submit" class="btn btn-primary" style="flex: 0 0 auto;">Subscribe</button>
-        </form>
     </section>
 
     <footer>
         <div class="footer-links">
-            <a href="#contact">Contact Support</a>
-            <a href="https://www.venmo.com/u/UnSungMinistries" target="_blank">Partner with Us</a>
+            <a href="mailto:rootedapp@p3lending.space">Contact Developer</a>
+            <a href="https://www.venmo.com/u/UnSungMinistries">Support Us</a>
         </div>
-        <p>&copy; 2026 PacMac Mobile LLC. Rooted in the Word daily.</p>
+        <p>&copy; 2026 PacMac Mobile. A faith-first project by UnSung Ministries.</p>
     </footer>
 
     <script>
+        // Modal Logic
         const modal = document.getElementById('installModal');
+        function openModal() { modal.style.display = 'flex'; }
+        function closeModal() { modal.style.display = 'none'; }
+        window.onclick = function(e) { if (e.target == modal) closeModal(); }
 
-        function openModal() {
-            modal.style.display = 'flex';
+        // Screen Slider Logic
+        const slides = document.querySelectorAll('#screenSlider img');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
         }
 
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-
-        function handleNewsletter(e) {
-            e.preventDefault();
-            const email = e.target.querySelector('input[type="email"]').value;
-            alert(`Thank you! We've added ${email} to our list.`);
-            e.target.reset();
-        }
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href !== '#' && href !== '#download') {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
-            });
-        });
+        setInterval(nextSlide, 4000);
     </script>
+</body>
+</html>
 </body>
 </html>
