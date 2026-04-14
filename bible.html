@@ -287,6 +287,19 @@
         .btn-secondary { background: var(--bg-page); color: var(--text-main); border: 1px solid var(--border); }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
 
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            text-align: left;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .checkbox-group input { margin-top: 4px; border-radius: 4px; }
+        .checkbox-group a { color: var(--accent); text-decoration: underline; }
+
         #loading {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -352,6 +365,18 @@
             <form onsubmit="handleAuth(event)">
                 <input type="email" name="email" class="input-field" placeholder="Email Address" required autocomplete="email">
                 <input type="password" name="password" class="input-field" placeholder="Password" required autocomplete="current-password">
+                
+                <div id="signUpFields" style="display: none; margin-bottom: 20px;">
+                    <label class="checkbox-group">
+                        <input type="checkbox" name="newsletter" checked>
+                        <span>Join the Rooted community newsletter (weekly devotions & updates)</span>
+                    </label>
+                    <label class="checkbox-group">
+                        <input type="checkbox" name="terms" required>
+                        <span>I agree to the <a href="terms.html" target="_blank">Terms of Use</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></span>
+                    </label>
+                </div>
+
                 <button type="submit" id="submitBtn" class="btn btn-primary">Sign In</button>
             </form>
             <p style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.95rem;">
@@ -408,7 +433,17 @@
             if (authMode === 'signin') {
                 result = await sbClient.auth.signInWithPassword({ email, password });
             } else {
-                result = await sbClient.auth.signUp({ email, password });
+                const newsletter = e.target.newsletter.checked;
+                result = await sbClient.auth.signUp({ 
+                    email, 
+                    password,
+                    options: {
+                        data: {
+                            newsletter_signup: newsletter,
+                            agreed_to_terms: true
+                        }
+                    }
+                });
                 if (!result.error) alert("Check your email for confirmation!");
             }
             if (result.error) alert(result.error.message);
@@ -421,6 +456,7 @@
             document.getElementById('submitBtn').textContent = authMode === 'signin' ? 'Sign In' : 'Sign Up';
             document.getElementById('authToggleText').textContent = authMode === 'signin' ? "Don't have an account?" : "Already have an account?";
             document.getElementById('authToggleLink').textContent = authMode === 'signin' ? "Sign Up" : "Sign In";
+            document.getElementById('signUpFields').style.display = authMode === 'signin' ? 'none' : 'block';
         }
 
         function renderChapter() {
