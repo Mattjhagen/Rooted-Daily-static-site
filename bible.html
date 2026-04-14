@@ -562,7 +562,6 @@
                 "mainEntity": {
                     "@type": "Book",
                     "name": "Holy Bible",
-                    "author": "God",
                     "hasPart": {
                         "@type": "Chapter",
                         "name": `${book} ${chapter}`,
@@ -572,6 +571,12 @@
             };
             script.text = JSON.stringify(data);
             document.head.appendChild(script);
+
+            // IndexNow: Notify Bing & Yandex of this page in real-time
+            const INDEXNOW_KEY = 'd718b356beff465387ba08ad370cb2ab';
+            const pageUrl = encodeURIComponent(window.location.href);
+            fetch(`https://api.indexnow.org/indexnow?url=${pageUrl}&key=${INDEXNOW_KEY}`)
+                .catch(() => {}); // Silent fail — non-critical
         }
 
         async function loadUserData() {
