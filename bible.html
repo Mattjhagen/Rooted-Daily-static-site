@@ -522,7 +522,145 @@
         }
         .checkbox-row a { color: var(--accent); text-decoration: underline; }
         .auth-link { color: var(--accent); font-weight: 700; text-decoration: none; }
-    </style>
+
+        /* ── AI SCRIPTURE GUIDE ── */
+        .ai-fab {
+            position: fixed;
+            bottom: 90px; right: 1.25rem;
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #4a735d, #2d5a45);
+            border: none; border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(74,115,93,0.5);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 200;
+            transition: all 0.25s;
+            color: white;
+        }
+        .ai-fab:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(74,115,93,0.6); }
+        .ai-fab .notif {
+            position: absolute; top: -3px; right: -3px;
+            width: 14px; height: 14px;
+            background: #f59e0b;
+            border-radius: 50%;
+            border: 2px solid var(--bg);
+            display: none;
+        }
+        .ai-panel {
+            position: fixed;
+            bottom: -100%;
+            left: 0; right: 0;
+            height: 75vh;
+            background: var(--bg-nav);
+            border-radius: 28px 28px 0 0;
+            border-top: 1px solid var(--border);
+            z-index: 450;
+            display: flex; flex-direction: column;
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ai-panel.open { bottom: 0; }
+        .ai-panel-header {
+            padding: 1rem 1.25rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .ai-panel-title {
+            font-family: var(--sans);
+            font-weight: 700; font-size: 1rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .ai-panel-subtitle {
+            font-family: var(--sans);
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-top: 0.1rem;
+        }
+        .ai-close {
+            background: var(--border); border: none; cursor: pointer;
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text); font-size: 0.85rem; font-weight: 700;
+        }
+        .ai-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.25rem;
+            display: flex; flex-direction: column; gap: 0.85rem;
+            scroll-behavior: smooth;
+        }
+        .ai-msg {
+            max-width: 88%;
+            padding: 0.75rem 1rem;
+            border-radius: 18px;
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+        .ai-msg.user {
+            background: var(--accent);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .ai-msg.assistant {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .ai-msg.typing {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        .ai-suggestions {
+            display: flex; gap: 0.5rem; flex-wrap: wrap;
+            padding: 0 1.25rem 0.75rem;
+            flex-shrink: 0;
+        }
+        .ai-suggestion {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.4rem 0.85rem;
+            font-family: var(--sans);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .ai-suggestion:hover { background: var(--accent); color: white; border-color: var(--accent); }
+        .ai-input-row {
+            padding: 0.75rem 1.25rem 1.5rem;
+            display: flex; gap: 0.6rem; align-items: flex-end;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .ai-textarea {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text);
+            font-family: var(--sans); font-size: 0.9rem;
+            resize: none; outline: none;
+            line-height: 1.4;
+            max-height: 100px;
+            transition: border-color 0.2s;
+        }
+        .ai-textarea:focus { border-color: var(--accent); }
+        .ai-send {
+            width: 42px; height: 42px; flex-shrink: 0;
+            background: var(--accent); border: none;
+            border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: white; transition: all 0.2s;
+        }
+        .ai-send:hover { transform: scale(1.1); }
+        .ai-send:disabled { opacity: 0.4; transform: none; cursor: default; }
 </head>
 <body>
 
@@ -614,8 +752,48 @@
             </button>
         </div>
     </div>
+    <!-- AI FAB BUTTON -->
+    <button class="ai-fab" id="aiFab" onclick="toggleAIPanel()" title="Ask AI">
+        <div class="notif" id="aiNotif"></div>
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <path d="M8 10h8M8 14h5" stroke-linecap="round"/>
+        </svg>
+    </button>
 
-    <!-- OVERLAY -->
+    <!-- AI CHAT PANEL -->
+    <div class="ai-panel" id="aiPanel">
+        <div class="ai-panel-header">
+            <div>
+                <div class="ai-panel-title">
+                    ✨ Scripture Guide
+                </div>
+                <div class="ai-panel-subtitle" id="aiContextLabel">Ask anything about this chapter</div>
+            </div>
+            <button class="ai-close" onclick="toggleAIPanel()">✕</button>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <!-- messages injected by JS -->
+        </div>
+        <div class="ai-suggestions" id="aiSuggestions">
+            <button class="ai-suggestion" onclick="sendSuggestion(this)">What is the main theme?</button>
+            <button class="ai-suggestion" onclick="sendSuggestion(this)">Explain the historical context</button>
+            <button class="ai-suggestion" onclick="sendSuggestion(this)">How do I apply this today?</button>
+            <button class="ai-suggestion" onclick="sendSuggestion(this)">What does this mean for my life?</button>
+        </div>
+        <div class="ai-input-row">
+            <textarea class="ai-textarea" id="aiInput" placeholder="Ask about this chapter..." rows="1"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAIMessage();}"
+                oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';"></textarea>
+            <button class="ai-send" id="aiSendBtn" onclick="sendAIMessage()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <line x1="22" y1="2" x2="11" y2="13"/>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
     <!-- SETTINGS PANEL -->
@@ -1167,6 +1345,169 @@
         }
 
         init();
+
+        // ── AI SCRIPTURE GUIDE ──
+        // API key lives in Cloudflare Worker (never exposed in client code)
+        const AI_PROXY_URL = 'https://rooted-ai.YOUR_SUBDOMAIN.workers.dev'; // update after deploying worker
+        const aiHistory = [];
+        let aiPanelOpen = false;
+        let aiIsTyping = false;
+
+        function toggleAIPanel() {
+            aiPanelOpen = !aiPanelOpen;
+            const panel = document.getElementById('aiPanel');
+            const overlay = document.getElementById('overlay');
+            panel.classList.toggle('open', aiPanelOpen);
+            overlay.style.display = aiPanelOpen ? 'block' : 'none';
+
+            if (aiPanelOpen) {
+                // Update context label to current chapter
+                const ref = `${bookNames[currentBookIndex]} ${currentChapterIndex + 1}`;
+                document.getElementById('aiContextLabel').textContent = `Studying ${ref}`;
+                // Show welcome message if first open
+                if (aiHistory.length === 0) {
+                    addAIMessage('assistant',
+                        `I'm your Scripture Guide for **${ref}**. Ask me anything — the historical context, key themes, how to apply it to your life today, or what a specific verse means. I'm here to help you go deeper.`
+                    );
+                    // Update suggestion chips for this chapter
+                    updateSuggestions(ref);
+                }
+                setTimeout(() => document.getElementById('aiInput').focus(), 400);
+                document.getElementById('aiNotif').style.display = 'none';
+            }
+        }
+
+        function updateSuggestions(ref) {
+            const chips = [
+                `What is the main theme of ${ref}?`,
+                `Historical context of ${ref}`,
+                `How do I apply ${ref} to my life?`,
+                `Cross-references for ${ref}`
+            ];
+            const el = document.getElementById('aiSuggestions');
+            el.innerHTML = chips.map(c =>
+                `<button class="ai-suggestion" onclick="sendSuggestion(this)">${c}</button>`
+            ).join('');
+        }
+
+        function addAIMessage(role, text) {
+            const msgs = document.getElementById('aiMessages');
+            const div = document.createElement('div');
+            div.className = `ai-msg ${role}`;
+            // Render basic markdown: **bold**, line breaks
+            div.innerHTML = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+            return div;
+        }
+
+        function showTypingIndicator() {
+            const msgs = document.getElementById('aiMessages');
+            const div = document.createElement('div');
+            div.className = 'ai-msg assistant typing';
+            div.id = 'typingIndicator';
+            div.innerHTML = '● ● ●';
+            div.style.animation = 'pulse 1.2s ease-in-out infinite';
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const t = document.getElementById('typingIndicator');
+            if (t) t.remove();
+        }
+
+        function sendSuggestion(btn) {
+            const text = btn.textContent;
+            // Hide suggestions after first use
+            document.getElementById('aiSuggestions').style.display = 'none';
+            sendAIMessage(text);
+        }
+
+        async function sendAIMessage(overrideText) {
+            if (aiIsTyping) return;
+            const input = document.getElementById('aiInput');
+            const userMsg = overrideText || input.value.trim();
+            if (!userMsg) return;
+
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Show user message
+            addAIMessage('user', userMsg);
+
+            // Build context of current chapter (first 8 verses for context window)
+            const book = bookNames[currentBookIndex];
+            const chap = currentChapterIndex + 1;
+            const chapterVerses = bibleData?.books?.[currentBookIndex]?.chapters?.[currentChapterIndex] || [];
+            const verseContext = chapterVerses.slice(0, 10).map((v, i) => `${i+1}. ${v}`).join('\n');
+
+            // Add to history
+            aiHistory.push({ role: 'user', content: userMsg });
+
+            // System prompt
+            const systemPrompt = `You are a warm, knowledgeable Scripture Guide for the Rooted Daily Bible app. The user is currently reading ${book} Chapter ${chap}.
+
+Here are the first verses of this chapter for context:
+${verseContext}
+
+Answer the user's question about this scripture in a way that is:
+- Warm and accessible (not academic or preachy)
+- Grounded in the text
+- Practical and applicable to daily life
+- Non-denominational
+- Concise (3-5 sentences unless more detail is needed)
+
+If asked about a specific verse, give the verse number context. Format key points with **bold** for emphasis.`;
+
+            aiIsTyping = true;
+            document.getElementById('aiSendBtn').disabled = true;
+            showTypingIndicator();
+
+            try {
+                let responseText = '';
+
+                // Call Cloudflare Worker proxy (key stored server-side)
+                const res = await fetch(AI_PROXY_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: 'system', content: systemPrompt },
+                            ...aiHistory.slice(-8)
+                        ]
+                    })
+                });
+                const data = await res.json();
+                if (data.error) throw new Error(data.error.message);
+                responseText = data.choices?.[0]?.message?.content || data.content || 'No response.';
+
+                removeTypingIndicator();
+                addAIMessage('assistant', responseText);
+                aiHistory.push({ role: 'assistant', content: responseText });
+
+            } catch(e) {
+                removeTypingIndicator();
+                const errMsg = e.message.includes('401') || e.message.includes('invalid_api_key')
+                    ? '⚠️ Invalid API key. Please check your Groq API key.'
+                    : `⚠️ ${e.message}`;
+                addAIMessage('assistant', errMsg);
+            }
+
+            aiIsTyping = false;
+            document.getElementById('aiSendBtn').disabled = false;
+        }
+
+        // Show AI notif dot when chapter changes (invite engagement)
+        function nudgeAI() {
+            if (!aiPanelOpen && aiHistory.length === 0) {
+                setTimeout(() => {
+                    document.getElementById('aiNotif').style.display = 'block';
+                }, 3000);
+            }
+        }
     </script>
 </body>
 </html>
