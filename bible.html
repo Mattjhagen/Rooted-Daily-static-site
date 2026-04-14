@@ -398,6 +398,9 @@
                 <input type="email" name="email" class="input-field" placeholder="Email Address" required autocomplete="email">
                 <input type="password" name="password" class="input-field" placeholder="Password" required autocomplete="current-password">
                 
+                <div id="authError" style="display:none; background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.4); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem; color: #f87171; font-size: 0.9rem; text-align: left;"></div>
+                <div id="authSuccess" style="display:none; background: rgba(74,115,93,0.15); border: 1px solid rgba(74,115,93,0.4); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem; color: #4a735d; font-size: 0.9rem; text-align: left;"></div>
+
                 <div id="signUpFields" style="display: none; margin-bottom: 20px;">
                     <label class="checkbox-group">
                         <input type="checkbox" name="newsletter" checked>
@@ -486,29 +489,78 @@
             } catch (e) { console.error(e); } finally { document.getElementById('loading').style.display = 'none'; }
         }
 
+        function showAuthError(msg) {
+            const el = document.getElementById('authError');
+            document.getElementById('authSuccess').style.display = 'none';
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function showAuthSuccess(msg) {
+            const el = document.getElementById('authSuccess');
+            document.getElementById('authError').style.display = 'none';
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function clearAuthMessages() {
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authSuccess').style.display = 'none';
+        }
+
         async function handleAuth(e) {
             e.preventDefault();
+            clearAuthMessages();
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = 'Please wait...';
+            btn.disabled = true;
+
             const email = e.target.email.value, password = e.target.password.value;
             let result;
+
             if (authMode === 'signin') {
                 result = await sbClient.auth.signInWithPassword({ email, password });
+                if (result.error) {
+                    const msg = result.error.message;
+                    if (msg.includes('Invalid login credentials')) {
+                        showAuthError('❌ Incorrect email or password. Please try again.');
+                    } else if (msg.includes('Email not confirmed')) {
+                        showAuthError('📧 Please confirm your email address before signing in. Check your inbox.');
+                    } else {
+                        showAuthError(msg);
+                    }
+                } else {
+                    user = result.data.user;
+                    updateAuthUI();
+                    loadUserData();
+                    closeAuthModal();
+                }
             } else {
                 const newsletter = e.target.newsletter.checked;
-                result = await sbClient.auth.signUp({ 
-                    email, 
+                result = await sbClient.auth.signUp({
+                    email,
                     password,
                     options: {
                         emailRedirectTo: 'https://app.vibecodes.space/bible.html',
-                        data: {
-                            newsletter_signup: newsletter,
-                            agreed_to_terms: true
-                        }
+                        data: { newsletter_signup: newsletter, agreed_to_terms: true }
                     }
                 });
-                if (!result.error) alert("Check your email for confirmation!");
+                if (result.error) {
+                    const msg = result.error.message;
+                    if (msg.includes('already registered')) {
+                        showAuthError('⚠️ An account with this email already exists. Try signing in instead.');
+                    } else if (msg.includes('Password should be')) {
+                        showAuthError('🔒 Password must be at least 6 characters long.');
+                    } else {
+                        showAuthError(msg);
+                    }
+                } else {
+                    showAuthSuccess('✅ Account created! Check your email to confirm your address before signing in.');
+                }
             }
-            if (result.error) alert(result.error.message);
-            else if (result.data.user) { user = result.data.user; updateAuthUI(); loadUserData(); closeAuthModal(); }
+
+            btn.textContent = authMode === 'signin' ? 'Sign In' : 'Sign Up';
+            btn.disabled = false;
         }
 
         function toggleAuthMode() {
