@@ -1,37 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy | Rooted Daily</title>
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9L915C1DE8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-9L915C1DE8');
-    </script>
-    <link rel="icon" type="image/png" href="rooted-icon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; line-height: 1.8; color: #1a1a1a; background: #fff; max-width: 800px; margin: 4rem auto; padding: 0 2rem; }
-        h1, h2 { font-family: 'Crimson Text', serif; color: #4a735d; margin-top: 3rem; }
-        h1 { font-size: 3rem; text-align: center; }
-        p { margin-bottom: 1.5rem; }
-        .back-link { display: block; margin-top: 4rem; text-align: center; color: #4a735d; text-decoration: none; font-weight: 700; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy – Rooted Daily</title>
+  <meta name="description" content="Privacy Policy for the Rooted Daily Bible app. Learn how we collect, use, and protect your data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #12100E; --surface: #1C1915; --border: #2E2A26;
+      --accent: #4a735d; --accent-light: #5a8a6f;
+      --text: #E8E0D5; --text-sec: #8A8178;
+      --sans: 'Inter', sans-serif; --serif: 'EB Garamond', Georgia, serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.7; }
+    header { padding: 2rem 1.5rem 1.5rem; text-align: center; border-bottom: 1px solid var(--border); }
+    .logo { font-family: var(--serif); font-size: 1.75rem; color: var(--accent-light); text-decoration: none; }
+    .logo span { color: var(--text-sec); font-style: italic; font-size: 0.9rem; display: block; }
+    .hero { text-align: center; padding: 3rem 1.5rem 2.5rem; border-bottom: 1px solid var(--border); }
+    .hero h1 { font-family: var(--serif); font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 500; margin-bottom: 0.75rem; }
+    .hero p { color: var(--text-sec); font-size: 0.95rem; max-width: 480px; margin: 0 auto; }
+    .badge { display: inline-block; margin-top: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 50px; padding: 0.3rem 1rem; font-size: 0.8rem; color: var(--text-sec); }
+    .content { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+    section { margin-bottom: 3rem; }
+    h2 { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--text); margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
+    p { color: var(--text); margin-bottom: 1rem; }
+    p:last-child { margin-bottom: 0; }
+    ul { list-style: none; padding: 0; margin: 0.75rem 0 1rem; }
+    ul li { padding: 0.5rem 0 0.5rem 1.5rem; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    ul li:last-child { border-bottom: none; }
+    ul li::before { content: '›'; position: absolute; left: 0; color: var(--accent-light); font-size: 1.1rem; line-height: 1.5; }
+    .box { background: linear-gradient(135deg, rgba(74,115,93,0.12), rgba(74,115,93,0.05)); border: 1px solid rgba(74,115,93,0.25); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; }
+    .box p { margin: 0; }
+    a { color: var(--accent-light); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    footer { text-align: center; padding: 2rem 1.5rem; border-top: 1px solid var(--border); color: var(--text-sec); font-size: 0.85rem; }
+  </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p>Last Updated: April 14, 2026</p>
-    <h2>Introduction</h2>
-    <p>At Rooted Daily, we respect your privacy and are committed to protecting it. This policy describes the types of information we may collect from you and our practices for collecting, using, maintaining, and protecting that information.</p>
-    <h2>Information We Collect</h2>
-    <p>We collect information that you provide to us directly, such as your email address when you create an account. This allows you to sync your Bible highlights and reflections across your devices.</p>
-    <h2>How We Use Your Information</h2>
-    <p>We use the information we collect to provide and maintain our services, to inform you about updates to the App, and to improve the overall user experience.</p>
-    <a href="index.html" class="back-link">← Back to Rooted</a>
+
+<header>
+  <a href="index.html" class="logo">🌿 Rooted Daily<span>Bible Reader &amp; Scripture Guide</span></a>
+</header>
+
+<div class="hero">
+  <h1>Privacy Policy</h1>
+  <p>We believe your faith journey is personal. Here's exactly what we collect, why, and how we protect it.</p>
+  <div class="badge">Effective April 14, 2025</div>
+</div>
+
+<div class="content">
+
+  <section>
+    <h2>👋 Who We Are</h2>
+    <p>Rooted Daily ("we," "our," or "us") is a Bible reading app developed by PacMac Mobile LLC. We operate the Rooted Daily mobile app and companion web reader at <a href="https://app.vibecodes.space">app.vibecodes.space</a>.</p>
+    <p>Questions? Email us at <a href="mailto:mattjhagen@ymail.com">mattjhagen@ymail.com</a>.</p>
+  </section>
+
+  <section>
+    <h2>📋 Information We Collect</h2>
+    <p><strong>Account Information</strong></p>
+    <ul>
+      <li>Email address (used to create and identify your account)</li>
+      <li>Display name (optional)</li>
+      <li>Authentication tokens (managed by Supabase)</li>
+    </ul>
+    <p><strong>App Usage Data</strong></p>
+    <ul>
+      <li>Highlighted verses and notes you save</li>
+      <li>Journal entries and reflections you write</li>
+      <li>Reading progress and bookmarks</li>
+    </ul>
+    <p><strong>AI Scripture Guide</strong></p>
+    <ul>
+      <li>Questions you ask the AI are sent to our proxy and forwarded to Groq to generate responses</li>
+      <li>Conversation history exists only in your device's memory during the session — not stored on our servers</li>
+      <li>Your AI questions are not linked to your identity or stored long-term</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🔒 How We Use Your Information</h2>
+    <ul>
+      <li>To sync your highlights, notes, and journal entries across devices</li>
+      <li>To provide AI responses about scripture</li>
+      <li>To maintain your reading progress and preferences</li>
+      <li>To send optional devotional notifications (only if you enable them)</li>
+      <li>To improve the app and fix bugs</li>
+    </ul>
+    <div class="box">
+      <p>🌿 <strong>We do not sell your personal information.</strong> We do not share your data with advertisers, data brokers, or third parties for marketing purposes.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>🤝 Third-Party Services</h2>
+    <ul>
+      <li><strong>Supabase</strong> — Secure cloud database for account data, highlights, and journals. <a href="https://supabase.com/privacy" target="_blank">Privacy Policy ↗</a></li>
+      <li><strong>Groq</strong> — AI provider for the Scripture Guide. Questions are anonymized. <a href="https://groq.com/privacy-policy/" target="_blank">Privacy Policy ↗</a></li>
+      <li><strong>Cloudflare</strong> — Proxy and CDN that protects our servers. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Privacy Policy ↗</a></li>
+      <li><strong>ElevenLabs</strong> — Text-to-speech for the audio reading feature. <a href="https://elevenlabs.io/privacy" target="_blank">Privacy Policy ↗</a></li>
+      <li><strong>Expo / EAS</strong> — App delivery platform for over-the-air updates. <a href="https://expo.dev/privacy" target="_blank">Privacy Policy ↗</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🛡️ Data Security</h2>
+    <ul>
+      <li>All data is transmitted over HTTPS/TLS encryption</li>
+      <li>API keys and secrets are stored server-side — never exposed in the app</li>
+      <li>Authentication is handled by Supabase using industry-standard JWT tokens</li>
+      <li>We do not store plaintext passwords</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>👤 Your Rights</h2>
+    <ul>
+      <li><strong>Access</strong> — Request a copy of your personal data we hold</li>
+      <li><strong>Delete</strong> — Request deletion of your account and all associated data</li>
+      <li><strong>Export</strong> — Request an export of your journal entries and highlights</li>
+      <li><strong>Opt out</strong> — Disable push notifications at any time in app Settings</li>
+    </ul>
+    <p>To exercise any of these rights, email <a href="mailto:mattjhagen@ymail.com">mattjhagen@ymail.com</a> — we'll respond within 72 hours.</p>
+  </section>
+
+  <section>
+    <h2>👦 Children's Privacy</h2>
+    <p>Rooted Daily is intended for users 13 and older. We do not knowingly collect personal information from children under 13. If you believe a child under 13 has provided us with personal information, contact us immediately so we can delete it.</p>
+  </section>
+
+  <section>
+    <h2>🔔 Notifications</h2>
+    <p>If you enable push notifications, we may send daily devotional reminders and verse highlights. You can disable these at any time in your device's notification settings or within the Rooted Daily app under Settings.</p>
+  </section>
+
+  <section>
+    <h2>📝 Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we do, we'll update the "Effective" date above. For significant changes, we'll notify you through the app. Continued use of Rooted Daily after changes means you accept the updated policy.</p>
+  </section>
+
+  <section>
+    <h2>✉️ Contact Us</h2>
+    <p>Have questions or requests about your privacy?</p>
+    <div class="box">
+      <p><strong>PacMac Mobile LLC</strong><br>
+      Email: <a href="mailto:mattjhagen@ymail.com">mattjhagen@ymail.com</a><br>
+      Web: <a href="https://app.vibecodes.space">app.vibecodes.space</a></p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>© 2025 PacMac Mobile LLC · <a href="index.html">Rooted Daily</a> · <a href="bible.html">Read the Bible</a></p>
+</footer>
+
 </body>
 </html>
