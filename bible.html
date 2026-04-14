@@ -433,7 +433,9 @@
         const bookNames = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah", "Inter", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"];
 
         async function init() {
+            console.log("Bible Reader: Initializing...");
             setTimeout(() => { document.getElementById('loading').style.display = 'none'; }, 4000);
+            
             try {
                 if (typeof supabase !== 'undefined') {
                     sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -441,9 +443,26 @@
                     user = session?.user || null;
                     if (window.location.hash.includes('type=recovery')) handleRecovery();
                 }
+
+                // URL Parameter Support (for SEO Deep Linking)
+                const urlParams = new URLSearchParams(window.location.search);
+                const queryBook = urlParams.get('book');
+                const queryChap = urlParams.get('chapter');
+
                 const res = await fetch('data/bible.json');
                 bibleData = await res.json();
-                populateSelectors(); renderChapter(); loadVoices();
+
+                if (queryBook) {
+                    const foundIdx = bookNames.findIndex(b => b.toLowerCase() === queryBook.toLowerCase().replace(/\+/g, ' '));
+                    if (foundIdx !== -1) {
+                        currentBookIndex = foundIdx;
+                        if (queryChap) currentChapterIndex = parseInt(queryChap) - 1;
+                    }
+                }
+
+                populateSelectors(); 
+                renderChapter(); 
+                loadVoices();
                 if (user) loadUserData();
                 updateAuthUI();
             } catch (e) { console.error(e); } finally { document.getElementById('loading').style.display = 'none'; }
