@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg-page: #ffffff;
@@ -168,7 +169,43 @@
         .serif { font-family: var(--font-family-serif); }
         .sans { font-family: var(--font-family-body); }
 
-        /* --- Navigation --- */
+        /* --- Verse Actions --- */
+        .verse {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .verse:hover {
+            background-color: rgba(74, 115, 93, 0.05);
+        }
+
+        .user-highlight {
+            background-color: rgba(255, 230, 0, 0.3) !important;
+            border-bottom: 2px solid rgba(255, 200, 0, 0.5);
+        }
+
+        .has-note::after {
+            content: '📝';
+            font-size: 0.8rem;
+            position: absolute;
+            top: -10px;
+            right: -5px;
+        }
+
+        .action-menu {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-nav);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 20px;
+            display: none;
+            gap: 1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
         .page-nav {
             position: fixed;
             top: 50%;
@@ -324,6 +361,7 @@
     <header>
         <a href="index.html" class="logo">Rooted</a>
         <div class="nav-right">
+            <button id="authBtn" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;" onclick="toggleAuth()">Sign In</button>
             <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
                 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
             </button>
@@ -421,33 +459,136 @@
         </div>
     </div>
 
-    <script>
-        let bibleData = null;
-        let currentBookIndex = 39; // Matthew
-        let currentChapterIndex = 0;
-        let synth = window.speechSynthesis;
-        let isSpeaking = false;
-
-        const bookNames = [
-            "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
-            "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs",
-            "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos",
-            "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
-            "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians",
-            "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter",
-            "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"
-        ];
+        // Supabase Initialization
+        const SUPABASE_URL = 'https://xphxtkdsshqsddajzlkj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaHh0a2Rzc2hxc2RkYWp6bGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4Mzg1MzksImV4cCI6MjA5MTQxNDUzOX0.zkXqNnFkOxkYEkQh8pYpsfUMdJMd8ri_Bta5_Jn_8lg';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        let user = null;
+        let selectedVerse = null;
 
         async function init() {
             try {
+                const { data: { session } } = await supabase.auth.getSession();
+                user = session?.user || null;
+                updateAuthUI();
+
                 const response = await fetch('data/bible.json');
                 bibleData = await response.json();
                 populateSelectors();
                 renderChapter();
                 loadVoices();
+                if (user) loadUserData();
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
                 console.error("Failed to load bible data:", error);
+            }
+        }
+
+        function updateAuthUI() {
+            const btn = document.getElementById('authBtn');
+            btn.textContent = user ? 'Sign Out' : 'Sign In';
+        }
+
+        async function toggleAuth() {
+            if (user) {
+                await supabase.auth.signOut();
+                user = null;
+                updateAuthUI();
+                renderChapter(); // Refresh to remove private data
+            } else {
+                openAuthModal();
+            }
+        }
+
+        let userHighlights = [];
+        let userNotes = [];
+
+        async function loadUserData() {
+            const { data: highlights } = await supabase.from('highlights').select('*');
+            const { data: notes } = await supabase.from('journal').select('*');
+            userHighlights = highlights || [];
+            userNotes = notes || [];
+            renderChapter();
+        }
+
+        function handleVerseClick(vNum) {
+            selectedVerse = vNum;
+            document.getElementById('verseActionMenu').style.display = 'flex';
+        }
+
+        async function toggleHighlight() {
+            if (!user) return alert("Sign in to save highlights!");
+            const book = bookNames[currentBookIndex];
+            const chapter = currentChapterIndex + 1;
+            
+            const existing = userHighlights.find(h => h.book === book && h.chapter === chapter && h.verse === selectedVerse);
+            
+            if (existing) {
+                await supabase.from('highlights').delete().match({ id: existing.id });
+                userHighlights = userHighlights.filter(h => h.id !== existing.id);
+            } else {
+                const { data } = await supabase.from('highlights').insert({ 
+                    book, chapter, verse: selectedVerse, user_id: user.id 
+                }).select();
+                if (data) userHighlights.push(data[0]);
+            }
+            renderChapter();
+            closeVerseMenu();
+        }
+
+        function openNoteModal() {
+            if (!user) return alert("Sign in to write reflections!");
+            document.getElementById('noteModal').style.display = 'flex';
+            const existing = userNotes.find(n => 
+                n.book === bookNames[currentBookIndex] && 
+                n.chapter === currentChapterIndex + 1 && 
+                n.verse === selectedVerse
+            );
+            document.getElementById('noteText').value = existing ? existing.content : '';
+        }
+
+        async function saveNote() {
+            const content = document.getElementById('noteText').value;
+            const book = bookNames[currentBookIndex];
+            const chapter = currentChapterIndex + 1;
+
+            const existing = userNotes.find(n => n.book === book && n.chapter === chapter && n.verse === selectedVerse);
+            
+            if (existing) {
+                await supabase.from('journal').update({ content }).match({ id: existing.id });
+                existing.content = content;
+            } else {
+                const { data } = await supabase.from('journal').insert({
+                    book, chapter, verse: selectedVerse, content, user_id: user.id
+                }).select();
+                if (data) userNotes.push(data[0]);
+            }
+            
+            renderChapter();
+            closeNoteModal();
+            closeVerseMenu();
+        }
+
+        function closeVerseMenu() { document.getElementById('verseActionMenu').style.display = 'none'; }
+        function closeNoteModal() { document.getElementById('noteModal').style.display = 'none'; }
+        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = e.target.email.value;
+            const password = e.target.password.value;
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                // Try signup if login fails (simple dev flow)
+                const { error: signUpError } = await supabase.auth.signUp({ email, password });
+                if (signUpError) return alert(signUpError.message);
+                alert("Check your email for confirmation!");
+            } else {
+                user = data.user;
+                updateAuthUI();
+                loadUserData();
+                closeAuthModal();
             }
         }
 
@@ -524,12 +665,20 @@
             const chapter = book.chapters[currentChapterIndex];
             const header = document.getElementById('chapterHeader');
             const textContainer = document.getElementById('bibleText');
+            const bookName = bookNames[currentBookIndex];
+            const chapNum = currentChapterIndex + 1;
 
-            header.textContent = `${bookNames[currentBookIndex]} ${currentChapterIndex + 1}`;
+            header.textContent = `${bookName} ${chapNum}`;
             
             let html = '';
             chapter.forEach((verse, i) => {
-                html += `<span class="verse"><span class="verse-num">${i + 1}</span>${verse} </span>`;
+                const vNum = i + 1;
+                const isHighlighted = userHighlights.some(h => h.book === bookName && h.chapter === chapNum && h.verse === vNum);
+                const hasNote = userNotes.some(n => n.book === bookName && n.chapter === chapNum && n.verse === vNum);
+
+                html += `<span class="verse ${isHighlighted ? 'user-highlight' : ''} ${hasNote ? 'has-note' : ''}" onclick="handleVerseClick(${vNum})">
+                            <span class="verse-num">${vNum}</span>${verse} 
+                         </span>`;
             });
             textContainer.innerHTML = html;
             window.scrollTo({ top: 0, behavior: 'smooth' });
