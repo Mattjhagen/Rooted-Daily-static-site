@@ -39,7 +39,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* --- Header --- */
         header {
             height: 72px;
             display: flex;
@@ -80,15 +79,9 @@
             transition: background 0.2s;
         }
 
-        .icon-btn:hover {
-            background: rgba(0,0,0,0.05);
-        }
+        .icon-btn:hover { background: rgba(0,0,0,0.05); }
+        [data-theme="dark"] .icon-btn:hover { background: rgba(255,255,255,0.1); }
 
-        [data-theme="dark"] .icon-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* --- Bible Toolbar --- */
         .bible-toolbar {
             display: flex;
             align-items: center;
@@ -103,12 +96,7 @@
             gap: 1rem;
         }
 
-        .selector-group {
-            display: flex;
-            gap: 0.5rem;
-            flex-grow: 1;
-        }
-
+        .selector-group { display: flex; gap: 0.5rem; flex-grow: 1; }
         .select-btn {
             padding: 0.5rem 1rem;
             border: 1px solid var(--border);
@@ -123,7 +111,6 @@
             min-width: 120px;
         }
 
-        /* --- Bible Content --- */
         main {
             max-width: 800px;
             margin: 2rem auto;
@@ -146,37 +133,15 @@
             display: inline;
             padding: 2px 0;
             border-radius: 4px;
-        }
-
-        .verse.highlight {
-            background-color: rgba(74, 115, 93, 0.2);
-            box-shadow: 0 0 10px rgba(74, 115, 93, 0.1);
-        }
-
-        .verse-num {
-            font-size: 0.75rem;
-            color: var(--accent);
-            vertical-align: super;
-            margin-right: 0.25rem;
-            font-weight: 700;
-        }
-
-        .bible-text {
-            font-size: var(--font-size-base);
-            text-align: justify;
-        }
-
-        .serif { font-family: var(--font-family-serif); }
-        .sans { font-family: var(--font-family-body); }
-
-        /* --- Verse Actions --- */
-        .verse {
             cursor: pointer;
             position: relative;
         }
 
-        .verse:hover {
-            background-color: rgba(74, 115, 93, 0.05);
+        .verse:hover { background-color: rgba(74, 115, 93, 0.05); }
+
+        .verse.highlight {
+            background-color: rgba(74, 115, 93, 0.2);
+            box-shadow: 0 0 10px rgba(74, 115, 93, 0.1);
         }
 
         .user-highlight {
@@ -192,6 +157,18 @@
             right: -5px;
         }
 
+        .verse-num {
+            font-size: 0.75rem;
+            color: var(--accent);
+            vertical-align: super;
+            margin-right: 0.25rem;
+            font-weight: 700;
+        }
+
+        .bible-text { font-size: var(--font-size-base); text-align: justify; }
+        .serif { font-family: var(--font-family-serif); }
+        .sans { font-family: var(--font-family-body); }
+
         .action-menu {
             position: fixed;
             bottom: 2rem;
@@ -206,6 +183,7 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             z-index: 1000;
         }
+
         .page-nav {
             position: fixed;
             top: 50%;
@@ -233,13 +211,8 @@
             transition: transform 0.2s, background 0.2s;
         }
 
-        .nav-arrow:hover {
-            transform: scale(1.1);
-            background: var(--accent);
-            color: white;
-        }
+        .nav-arrow:hover { transform: scale(1.1); background: var(--accent); color: white; }
 
-        /* --- Side Panel (Settings/Drawer) --- */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -269,21 +242,9 @@
             padding-bottom: 1rem;
         }
 
-        .setting-item {
-            margin-bottom: 2rem;
-        }
-
-        .setting-label {
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            display: block;
-        }
-
-        .font-toggle {
-            display: flex;
-            gap: 0.5rem;
-        }
-
+        .setting-item { margin-bottom: 2rem; }
+        .setting-label { font-weight: 600; margin-bottom: 0.75rem; display: block; }
+        .font-toggle { display: flex; gap: 0.5rem; }
         .font-toggle button {
             flex: 1;
             padding: 0.75rem;
@@ -293,19 +254,9 @@
             border-radius: 8px;
             color: var(--text-main);
         }
+        .font-toggle button.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .size-slider { width: 100%; margin-top: 0.5rem; }
 
-        .font-toggle button.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .size-slider {
-            width: 100%;
-            margin-top: 0.5rem;
-        }
-
-        /* --- AI Coming Soon --- */
         .ai-banner {
             background: linear-gradient(135deg, #4f46e5, #4a735d);
             color: white;
@@ -320,7 +271,6 @@
             font-weight: 600;
         }
 
-        /* --- Loading --- */
         #loading {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -332,8 +282,7 @@
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             border: 4px solid var(--border);
             border-top: 4px solid var(--accent);
             border-radius: 50%;
@@ -342,7 +291,6 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- Modals --- */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -378,23 +326,10 @@
             font-size: 1rem;
         }
 
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-secondary { background: var(--bg-nav); color: var(--text-main); border: 1px solid var(--border); }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        .btn-secondary {
-            background: var(--bg-nav);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
-
-        /* --- Mobile Responsive --- */
         @media (max-width: 640px) {
             .nav-arrow { width: 40px; height: 40px; }
             .bible-toolbar { padding: 0.5rem 1rem; }
@@ -406,20 +341,16 @@
 </head>
 <body>
 
-    <div id="loading">
-        <div class="spinner"></div>
-    </div>
+    <div id="loading"><div class="spinner"></div></div>
 
     <header>
         <a href="index.html" class="logo">Rooted</a>
         <div class="nav-right">
             <button id="authBtn" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;" onclick="toggleAuth()">Sign In</button>
             <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
             </button>
-            <button class="icon-btn" onclick="openPanel()" title="Text Settings">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-            </button>
+            <button class="icon-btn" onclick="openPanel()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
         </div>
     </header>
 
@@ -430,529 +361,217 @@
             <div class="select-btn" style="background: rgba(0,0,0,0.03); border:none;">WEB</div>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <button class="icon-btn" title="Parallel (Coming Soon)">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-            </button>
-            <button class="icon-btn" onclick="playAudio()" title="Listen">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2V15H6L11 19V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            </button>
-            <button class="icon-btn" onclick="openPanel()" title="A|A Settings">
-                <span style="font-weight: 700; font-size: 1rem;">AA</span>
-            </button>
+            <button class="icon-btn" onclick="playAudio()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2V15H6L11 19V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+            <button class="icon-btn" onclick="openPanel()"><span style="font-weight: 700;">AA</span></button>
         </div>
     </div>
 
     <main id="bibleContainer">
-        <h1 id="chapterHeader" class="chapter-title">Matthew 1</h1>
-        <div id="bibleText" class="bible-text serif">
-            <!-- Text injected here -->
-        </div>
-
-        <div class="ai-banner">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-            AI Spiritual Guide - Coming Soon to Web!
-        </div>
+        <h1 id="chapterHeader" class="chapter-title">Loading...</h1>
+        <div id="bibleText" class="bible-text serif"></div>
+        <div class="ai-banner">AI Spiritual Guide - Coming Soon!</div>
     </main>
 
     <div class="page-nav">
-        <div class="nav-arrow" onclick="prevChapter()" id="prevBtn" title="Previous Chapter">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </div>
-        <div class="nav-arrow" onclick="nextChapter()" id="nextBtn" title="Next Chapter">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </div>
+        <div class="nav-arrow" onclick="prevChapter()" id="prevBtn"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-arrow" onclick="nextChapter()" id="nextBtn"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
     </div>
 
     <div class="overlay" id="overlay" onclick="closePanel()"></div>
     <div class="side-panel" id="sidePanel">
-        <div class="panel-header">
-            <h3>Text Settings</h3>
-            <button class="icon-btn" onclick="closePanel()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-        </div>
-
-        <div class="setting-item">
-            <span class="setting-label">Font Style</span>
-            <div class="font-toggle">
-                <button id="serifBtn" class="active" onclick="setFont('serif')">Serif</button>
-                <button id="sansBtn" onclick="setFont('sans')">Sans</button>
-            </div>
-        </div>
-
-        <div class="setting-item">
-            <span class="setting-label">Font Size</span>
-            <input type="range" min="14" max="32" value="18" class="size-slider" oninput="setSize(this.value)">
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
-                <span>Small</span>
-                <span>Large</span>
-            </div>
-        </div>
-
-        <div class="setting-item">
-            <span class="setting-label">Narrator Voice</span>
-            <select id="voiceSelect" class="select-btn" style="width: 100%;" onchange="testVoice()"></select>
-            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Select "Samantha" or "Siri" for a premium experience.</p>
-        </div>
-
-        <div class="setting-item">
-            <span class="setting-label">Narrator Speed</span>
-            <input type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="size-slider" id="speedSlider" oninput="document.getElementById('speedText').textContent = this.value + 'x'">
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
-                <span>0.5x</span>
-                <span id="speedText">1.0x</span>
-                <span>2.0x</span>
-            </div>
-        </div>
-
-        <div id="accountSettings" class="setting-item" style="display: none;">
-            <hr style="border:none; border-top: 1px solid var(--border); margin-bottom: 1.5rem;">
-            <span class="setting-label">Security Settings</span>
-            <button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.9rem;" onclick="openPasswordReset()">Change Password</button>
-            <button class="btn btn-secondary" style="width: 100%; font-size: 0.9rem;" onclick="openEmailChange()">Update Email</button>
-        </div>
-
-        <div class="setting-item">
-            <span class="setting-label">ElevenLabs (Coming Soon)</span>
-            <div style="padding: 1rem; border: 1px dashed var(--border); border-radius: 8px; font-size: 0.9rem; color: var(--text-muted);">
-                Premium AI voices will be integrated here for the ultimate experience.
-            </div>
-        </div>
+        <div class="panel-header"><h3>Settings</h3><button class="icon-btn" onclick="closePanel()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+        <div class="setting-item"><span class="setting-label">Font Style</span><div class="font-toggle"><button id="serifBtn" class="active" onclick="setFont('serif')">Serif</button><button id="sansBtn" onclick="setFont('sans')">Sans</button></div></div>
+        <div class="setting-item"><span class="setting-label">Font Size</span><input type="range" min="14" max="32" value="18" class="size-slider" oninput="setSize(this.value)"></div>
+        <div class="setting-item"><span class="setting-label">Narrator Voice</span><select id="voiceSelect" class="select-btn" style="width: 100%;" onchange="testVoice()"></select></div>
+        <div class="setting-item"><span class="setting-label">Narrator Speed</span><input type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="size-slider" id="speedSlider" oninput="document.getElementById('speedText').textContent = this.value + 'x'"><div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span id="speedText">1.0x</span></div></div>
+        <div id="accountSettings" class="setting-item" style="display: none;"><hr style="margin-bottom: 1.5rem;"><span class="setting-label">Account</span><button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.5rem;" onclick="openPasswordReset()">Change Password</button></div>
     </div>
 
-        // Supabase Initialization
-        const SUPABASE_URL = 'https://xphxtkdsshqsddajzlkj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaHh0a2Rzc2hxc2RkYWp6bGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4Mzg1MzksImV4cCI6MjA5MTQxNDUzOX0.zkXqNnFkOxkYEkQh8pYpsfUMdJMd8ri_Bta5_Jn_8lg';
+    <div class="action-menu" id="verseActionMenu">
+        <button class="btn btn-primary" onclick="toggleHighlight()">Highlight</button>
+        <button class="btn btn-secondary" onclick="openNoteModal()">Reflection</button>
+        <button class="btn btn-secondary" onclick="closeVerseMenu()">Cancel</button>
+    </div>
+
+    <div id="noteModal" class="modal"><div class="modal-content"><h2>Reflection</h2><textarea id="noteText"></textarea><div style="display: flex; gap: 1rem;"><button class="btn btn-primary" onclick="saveNote()">Save</button><button class="btn btn-secondary" onclick="closeNoteModal()">Cancel</button></div></div></div>
+    <div id="authModal" class="modal"><div class="modal-content"><h2>Sign In</h2><form onsubmit="handleLogin(event)"><input type="email" name="email" placeholder="Email" required autocomplete="email"><input type="password" name="password" placeholder="Password" required autocomplete="current-password"><button type="submit" class="btn btn-primary">Continue</button></form><p onclick="closeAuthModal()">Cancel</p></div></div>
+
+    <script>
+        let bibleData = null;
+        let currentBookIndex = 39;
+        let currentChapterIndex = 0;
+        let synth = window.speechSynthesis;
+        let isSpeaking = false;
         let sbClient = null;
         let user = null;
         let selectedVerse = null;
-
-        async function init() {
-            console.log("Bible Reader: Initializing...");
-            
-            // Safety: Force hide loader after 4 seconds if stuck
-            setTimeout(() => {
-                const loader = document.getElementById('loading');
-                if (loader && loader.style.display !== 'none') {
-                    console.warn("Safety: Dismissing stuck loader.");
-                    loader.style.display = 'none';
-                }
-            }, 4000);
-
-            try {
-                if (typeof supabase === 'undefined') {
-                    throw new Error("Supabase library not found. Check your internet or CDN.");
-                }
-
-                sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-                console.log("Supabase: Client ready.");
-
-                // Handle Password Recovery Flow
-                if (window.location.hash && window.location.hash.includes('type=recovery')) {
-                    const newPassword = prompt("Enter your new password:");
-                    if (newPassword) {
-                        const { error } = await sbClient.auth.updateUser({ password: newPassword });
-                        if (error) alert(error.message);
-                        else alert("Password updated successfully!");
-                    }
-                    window.location.hash = ''; // Clear hash
-                }
-
-                const { data: { session } } = await sbClient.auth.getSession();
-                user = session?.user || null;
-                updateAuthUI();
-
-                const response = await fetch('data/bible.json');
-                bibleData = await response.json();
-                console.log("Bible Data: Loaded.");
-
-                populateSelectors();
-                renderChapter();
-                loadVoices();
-                if (user) {
-                    loadUserData();
-                    document.getElementById('accountSettings').style.display = 'block';
-                }
-            } catch (error) {
-                console.error("Critical Initialization Error:", error);
-            } finally {
-                const loader = document.getElementById('loading');
-                if (loader) loader.style.display = 'none';
-            }
-        }
-
-        function updateAuthUI() {
-            const btn = document.getElementById('authBtn');
-            const settings = document.getElementById('accountSettings');
-            btn.textContent = user ? 'Sign Out' : 'Sign In';
-            if (settings) settings.style.display = user ? 'block' : 'none';
-        }
-
-        async function openPasswordReset() {
-            const { error } = await sbClient.auth.resetPasswordForEmail(user.email, {
-                redirectTo: 'https://app.vibecodes.space/bible.html',
-            });
-            if (error) alert(error.message);
-            else alert("Password reset link sent to your email!");
-        }
-
-        async function openEmailChange() {
-            const newEmail = prompt("Enter your new email address:");
-            if (!newEmail) return;
-            const { error } = await sbClient.auth.updateUser({ email: newEmail });
-            if (error) alert(error.message);
-            else alert("Please check both your old and new email to confirm the change!");
-        }
-
-        async function toggleAuth() {
-            if (user) {
-                await sbClient.auth.signOut();
-                user = null;
-                updateAuthUI();
-                renderChapter(); // Refresh to remove private data
-            } else {
-                openAuthModal();
-            }
-        }
-
         let userHighlights = [];
         let userNotes = [];
 
-        async function loadUserData() {
-            const { data: highlights } = await sbClient.from('highlights').select('*');
-            const { data: notes } = await sbClient.from('journal').select('*');
-            userHighlights = highlights || [];
-            userNotes = notes || [];
-            renderChapter();
-        }
+        const SUPABASE_URL = 'https://xphxtkdsshqsddajzlkj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaHh0a2Rzc2hxc2RkYWp6bGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4Mzg1MzksImV4cCI6MjA5MTQxNDUzOX0.zkXqNnFkOxkYEkQh8pYpsfUMdJMd8ri_Bta5_Jn_8lg';
+        const bookNames = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"];
 
-        function handleVerseClick(vNum) {
-            selectedVerse = vNum;
-            document.getElementById('verseActionMenu').style.display = 'flex';
-        }
-
-        async function toggleHighlight() {
-            if (!user) return alert("Sign in to save highlights!");
-            const book = bookNames[currentBookIndex];
-            const chapter = currentChapterIndex + 1;
-            
-            const existing = userHighlights.find(h => h.book === book && h.chapter === chapter && h.verse === selectedVerse);
-            
-            if (existing) {
-                await sbClient.from('highlights').delete().match({ id: existing.id });
-                userHighlights = userHighlights.filter(h => h.id !== existing.id);
-            } else {
-                const { data } = await sbClient.from('highlights').insert({ 
-                    book, chapter, verse: selectedVerse, user_id: user.id 
-                }).select();
-                if (data) userHighlights.push(data[0]);
-            }
-            renderChapter();
-            closeVerseMenu();
-        }
-
-        function openNoteModal() {
-            if (!user) return alert("Sign in to write reflections!");
-            document.getElementById('noteModal').style.display = 'flex';
-            const existing = userNotes.find(n => 
-                n.book === bookNames[currentBookIndex] && 
-                n.chapter === currentChapterIndex + 1 && 
-                n.verse === selectedVerse
-            );
-            document.getElementById('noteText').value = existing ? existing.content : '';
-        }
-
-        async function saveNote() {
-            const content = document.getElementById('noteText').value;
-            const book = bookNames[currentBookIndex];
-            const chapter = currentChapterIndex + 1;
-
-            const existing = userNotes.find(n => n.book === book && n.chapter === chapter && n.verse === selectedVerse);
-            
-            if (existing) {
-                await sbClient.from('journal').update({ content }).match({ id: existing.id });
-                existing.content = content;
-            } else {
-                const { data } = await sbClient.from('journal').insert({
-                    book, chapter, verse: selectedVerse, content, user_id: user.id
-                }).select();
-                if (data) userNotes.push(data[0]);
-            }
-            
-            renderChapter();
-            closeNoteModal();
-            closeVerseMenu();
-        }
-
-        function closeVerseMenu() { document.getElementById('verseActionMenu').style.display = 'none'; }
-        function closeNoteModal() { document.getElementById('noteModal').style.display = 'none'; }
-        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
-
-        async function handleLogin(e) {
-            e.preventDefault();
-            const email = e.target.email.value;
-            const password = e.target.password.value;
-            const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
-            if (error) {
-                const { error: signUpError } = await sbClient.auth.signUp({ email, password });
-                if (signUpError) return alert(signUpError.message);
-                alert("Check your email for confirmation!");
-            } else {
-                user = data.user;
-                updateAuthUI();
-                loadUserData();
-                closeAuthModal();
-            }
-        }
-
-        function loadVoices() {
-            const voiceSelect = document.getElementById('voiceSelect');
-            const voices = synth.getVoices();
-            voiceSelect.innerHTML = '';
-            
-            // Prioritize high-quality voices across platforms
-            const priorityVoices = voices.sort((a, b) => {
-                const aName = a.name.toLowerCase();
-                const bName = b.name.toLowerCase();
-                
-                // Neural/Online voices are highest priority (Windows/Edge/Chrome)
-                const aIsNeural = aName.includes('online') || aName.includes('neural') || aName.includes('siri');
-                const bIsNeural = bName.includes('online') || bName.includes('neural') || bName.includes('siri');
-                
-                if (aIsNeural && !bIsNeural) return -1;
-                if (!aIsNeural && bIsNeural) return 1;
-                
-                // Then specific high-quality engines
-                if (aName.includes('google') && !bName.includes('google')) return -1;
-                if (aName.includes('samantha') && !bName.includes('samantha')) return -1;
-                
-                return 0;
-            });
-
-            priorityVoices.forEach((voice, i) => {
-                const option = document.createElement('option');
-                option.textContent = voice.name + (voice.name.includes('Online') ? ' ✨' : '');
-                option.value = i;
-                
-                // Auto-select best matches
-                if (voice.name.includes('Samantha') || voice.name.includes('Aria') || voice.name.includes('Siri') || (voice.name.includes('Google') && voice.lang.includes('en-US'))) {
-                    option.selected = true;
+        async function init() {
+            setTimeout(() => { document.getElementById('loading').style.display = 'none'; }, 4000);
+            try {
+                if (typeof supabase !== 'undefined') {
+                    sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    const { data: { session } } = await sbClient.auth.getSession();
+                    user = session?.user || null;
+                    if (window.location.hash.includes('type=recovery')) handleRecovery();
                 }
-                
-                voiceSelect.appendChild(option);
-            });
+                const response = await fetch('data/bible.json');
+                bibleData = await response.json();
+                populateSelectors();
+                renderChapter();
+                loadVoices();
+                if (user) loadUserData();
+                updateAuthUI();
+            } catch (error) { console.error(error); }
+            finally { document.getElementById('loading').style.display = 'none'; }
         }
 
-        // Handle async voice loading
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = loadVoices;
+        async function handleRecovery() {
+            const pass = prompt("Enter new password:");
+            if (pass) {
+                await sbClient.auth.updateUser({ password: pass });
+                alert("Updated!");
+            }
+            window.location.hash = '';
+        }
+
+        async function loadUserData() {
+            const { data: h } = await sbClient.from('highlights').select('*');
+            const { data: n } = await sbClient.from('journal').select('*');
+            userHighlights = h || [];
+            userNotes = n || [];
+            renderChapter();
         }
 
         function populateSelectors() {
-            const bookSelect = document.getElementById('bookSelect');
-            bookNames.forEach((name, index) => {
-                const opt = document.createElement('option');
-                opt.value = index;
-                opt.textContent = name;
-                if (index === currentBookIndex) opt.selected = true;
-                bookSelect.appendChild(opt);
+            const b = document.getElementById('bookSelect');
+            bookNames.forEach((n, i) => {
+                const o = document.createElement('option');
+                o.value = i; o.textContent = n;
+                if (i === currentBookIndex) o.selected = true;
+                b.appendChild(o);
             });
             updateChapterSelector();
         }
 
         function updateChapterSelector() {
-            const chapterSelect = document.getElementById('chapterSelect');
-            chapterSelect.innerHTML = '';
-            const chapters = bibleData.books[currentBookIndex].chapters;
-            chapters.forEach((_, index) => {
-                const opt = document.createElement('option');
-                opt.value = index;
-                opt.textContent = `Chapter ${index + 1}`;
-                if (index === currentChapterIndex) opt.selected = true;
-                chapterSelect.appendChild(opt);
+            const c = document.getElementById('chapterSelect');
+            c.innerHTML = '';
+            bibleData.books[currentBookIndex].chapters.forEach((_, i) => {
+                const o = document.createElement('option');
+                o.value = i; o.textContent = `Chapter ${i + 1}`;
+                if (i === currentChapterIndex) o.selected = true;
+                c.appendChild(o);
             });
         }
 
         function renderChapter() {
             const book = bibleData.books[currentBookIndex];
             const chapter = book.chapters[currentChapterIndex];
-            const header = document.getElementById('chapterHeader');
-            const textContainer = document.getElementById('bibleText');
-            const bookName = bookNames[currentBookIndex];
+            const name = bookNames[currentBookIndex];
             const chapNum = currentChapterIndex + 1;
-
-            header.textContent = `${bookName} ${chapNum}`;
-            
+            document.getElementById('chapterHeader').textContent = `${name} ${chapNum}`;
             let html = '';
-            chapter.forEach((verse, i) => {
+            chapter.forEach((v, i) => {
                 const vNum = i + 1;
-                const isHighlighted = userHighlights.some(h => h.book === bookName && h.chapter === chapNum && h.verse === vNum);
-                const hasNote = userNotes.some(n => n.book === bookName && n.chapter === chapNum && n.verse === vNum);
-
-                html += `<span class="verse ${isHighlighted ? 'user-highlight' : ''} ${hasNote ? 'has-note' : ''}" onclick="handleVerseClick(${vNum})">
-                            <span class="verse-num">${vNum}</span>${verse} 
-                         </span>`;
+                const h = userHighlights.some(x => x.book === name && x.chapter === chapNum && x.verse === vNum);
+                const n = userNotes.some(x => x.book === name && x.chapter === chapNum && x.verse === vNum);
+                html += `<span class="verse ${h ? 'user-highlight' : ''} ${n ? 'has-note' : ''}" onclick="handleVerseClick(${vNum})"><span class="verse-num">${vNum}</span>${v} </span>`;
             });
-            textContainer.innerHTML = html;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('bibleText').innerHTML = html;
         }
 
-        function changeBook() {
-            currentBookIndex = parseInt(document.getElementById('bookSelect').value);
-            currentChapterIndex = 0;
-            updateChapterSelector();
-            renderChapter();
-        }
-
-        function changeChapter() {
-            currentChapterIndex = parseInt(document.getElementById('chapterSelect').value);
-            renderChapter();
-        }
-
-        function nextChapter() {
-            const book = bibleData.books[currentBookIndex];
-            if (currentChapterIndex < book.chapters.length - 1) {
-                currentChapterIndex++;
-            } else if (currentBookIndex < bibleData.books.length - 1) {
-                currentBookIndex++;
-                currentChapterIndex = 0;
-                updateChapterSelector();
-                document.getElementById('bookSelect').value = currentBookIndex;
+        function handleVerseClick(v) { selectedVerse = v; document.getElementById('verseActionMenu').style.display = 'flex'; }
+        function closeVerseMenu() { document.getElementById('verseActionMenu').style.display = 'none'; }
+        
+        async function toggleHighlight() {
+            if (!user) return alert("Sign in first");
+            const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
+            const ex = userHighlights.find(h => h.book === book && h.chapter === chap && h.verse === selectedVerse);
+            if (ex) {
+                await sbClient.from('highlights').delete().match({ id: ex.id });
+                userHighlights = userHighlights.filter(h => h.id !== ex.id);
+            } else {
+                const { data } = await sbClient.from('highlights').insert({ book, chapter: chap, verse: selectedVerse, user_id: user.id }).select();
+                if (data) userHighlights.push(data[0]);
             }
-            renderChapter();
-            document.getElementById('chapterSelect').value = currentChapterIndex;
+            renderChapter(); closeVerseMenu();
         }
 
-        function prevChapter() {
-            if (currentChapterIndex > 0) {
-                currentChapterIndex--;
-            } else if (currentBookIndex > 0) {
-                currentBookIndex--;
-                const prevBook = bibleData.books[currentBookIndex];
-                currentChapterIndex = prevBook.chapters.length - 1;
-                updateChapterSelector();
-                document.getElementById('bookSelect').value = currentBookIndex;
-            }
-            renderChapter();
-            document.getElementById('chapterSelect').value = currentChapterIndex;
+        function openNoteModal() { document.getElementById('noteModal').style.display = 'flex'; }
+        function closeNoteModal() { document.getElementById('noteModal').style.display = 'none'; }
+        async function saveNote() {
+            const content = document.getElementById('noteText').value;
+            const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
+            await sbClient.from('journal').insert({ book, chapter: chap, verse: selectedVerse, content, user_id: user.id });
+            loadUserData(); closeNoteModal(); closeVerseMenu();
         }
 
-        // Settings Panel
-        function openPanel() {
-            document.getElementById('sidePanel').classList.add('open');
-            document.getElementById('overlay').style.display = 'block';
+        function updateAuthUI() { 
+            document.getElementById('authBtn').textContent = user ? 'Sign Out' : 'Sign In'; 
+            document.getElementById('accountSettings').style.display = user ? 'block' : 'none';
+        }
+        async function toggleAuth() {
+            if (user) { await sbClient.auth.signOut(); user = null; updateAuthUI(); renderChapter(); }
+            else document.getElementById('authModal').style.display = 'flex';
+        }
+        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+        async function handleLogin(e) {
+            e.preventDefault();
+            const { data, error } = await sbClient.auth.signInWithPassword({ email: e.target.email.value, password: e.target.password.value });
+            if (error) alert(error.message); else { user = data.user; updateAuthUI(); loadUserData(); closeAuthModal(); }
         }
 
-        function closePanel() {
-            document.getElementById('sidePanel').classList.remove('open');
-            document.getElementById('overlay').style.display = 'none';
-        }
+        function changeBook() { currentBookIndex = parseInt(document.getElementById('bookSelect').value); currentChapterIndex = 0; updateChapterSelector(); renderChapter(); }
+        function changeChapter() { currentChapterIndex = parseInt(document.getElementById('chapterSelect').value); renderChapter(); }
+        function nextChapter() { if (currentChapterIndex < bibleData.books[currentBookIndex].chapters.length - 1) currentChapterIndex++; else if (currentBookIndex < 65) { currentBookIndex++; currentChapterIndex = 0; } populateSelectors(); renderChapter(); }
+        function prevChapter() { if (currentChapterIndex > 0) currentChapterIndex--; else if (currentBookIndex > 0) { currentBookIndex--; currentChapterIndex = bibleData.books[currentBookIndex].chapters.length - 1; } populateSelectors(); renderChapter(); }
+        function openPanel() { document.getElementById('sidePanel').classList.add('open'); document.getElementById('overlay').style.display = 'block'; }
+        function closePanel() { document.getElementById('sidePanel').classList.remove('open'); document.getElementById('overlay').style.display = 'none'; }
+        function setFont(s) { document.getElementById('bibleText').className = `bible-text ${s}`; }
+        function setSize(s) { document.documentElement.style.setProperty('--font-size-base', s + 'px'); }
+        function toggleTheme() { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
 
-        function setFont(style) {
-            const text = document.getElementById('bibleText');
-            document.getElementById('serifBtn').classList.toggle('active', style === 'serif');
-            document.getElementById('sansBtn').classList.toggle('active', style === 'sans');
-            text.className = `bible-text ${style}`;
-        }
-
-        function setSize(size) {
-            document.documentElement.style.setProperty('--font-size-base', size + 'px');
-        }
-
-        function toggleTheme() {
-            const body = document.body;
-            const current = body.getAttribute('data-theme');
-            body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-        }
-
-        function testVoice() {
-            if (isSpeaking) {
-                synth.cancel();
-                isSpeaking = false;
-            }
-            const utterance = new SpeechSynthesisUtterance("Testing Rooted Bible Voice.");
+        function loadVoices() {
+            const vSelect = document.getElementById('voiceSelect');
             const voices = synth.getVoices();
-            utterance.voice = voices[document.getElementById('voiceSelect').value];
-            synth.speak(utterance);
+            vSelect.innerHTML = '';
+            voices.forEach((v, i) => {
+                const o = document.createElement('option');
+                o.value = i; o.textContent = v.name;
+                if (v.name.includes('Samantha') || v.name.includes('Aria')) o.selected = true;
+                vSelect.appendChild(o);
+            });
         }
+        speechSynthesis.onvoiceschanged = loadVoices;
 
         async function playAudio() {
-            if (isSpeaking) {
-                synth.cancel();
-                isSpeaking = false;
-                // Clear any remaining highlights
-                document.querySelectorAll('.verse').forEach(v => v.classList.remove('highlight'));
-                return;
-            }
-
-            const verses = document.querySelectorAll('.verse');
-            if (verses.length === 0) return;
-
+            if (isSpeaking) { synth.cancel(); isSpeaking = false; return; }
             isSpeaking = true;
+            const verses = document.querySelectorAll('.verse');
             const rate = parseFloat(document.getElementById('speedSlider').value);
-
-            for (let i = 0; i < verses.length; i++) {
+            for (let v of verses) {
                 if (!isSpeaking) break;
-
-                const verseElement = verses[i];
-                const text = verseElement.textContent.replace(/^\d+/, '').trim();
-                
-                // Highlight current verse
-                verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                verseElement.classList.add('highlight');
-
-                await new Promise((resolve) => {
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    const voices = synth.getVoices();
-                    utterance.voice = voices[document.getElementById('voiceSelect').value];
-                    utterance.rate = rate;
-                    
-                    utterance.onend = () => {
-                        verseElement.classList.remove('highlight');
-                        resolve();
-                    };
-                    utterance.onerror = () => {
-                        verseElement.classList.remove('highlight');
-                        resolve();
-                    };
-
-                    synth.speak(utterance);
+                v.classList.add('highlight');
+                await new Promise(res => {
+                    const u = new SpeechSynthesisUtterance(v.textContent.replace(/^\d+/, ''));
+                    u.voice = synth.getVoices()[document.getElementById('voiceSelect').value];
+                    u.rate = rate;
+                    u.onend = res;
+                    synth.speak(u);
                 });
+                v.classList.remove('highlight');
             }
-            
             isSpeaking = false;
         }
 
-        // Start
         init();
     </script>
-
-    <div class="action-menu" id="verseActionMenu">
-        <button class="btn btn-primary" style="padding: 0.6rem 1.2rem;" onclick="toggleHighlight()">Highlight</button>
-        <button class="btn btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="openNoteModal()">Reflection</button>
-        <button class="btn btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="closeVerseMenu()">Cancel</button>
-    </div>
-
-    <div id="noteModal" class="modal">
-        <div class="modal-content">
-            <h2 style="font-family:'Crimson Text',serif; margin-bottom: 1rem; color: var(--accent);">Scripture Reflection</h2>
-            <textarea id="noteText" style="width: 100%; height: 180px; padding: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-page); color: var(--text-main); font-family: inherit; margin-bottom: 1rem;" placeholder="What is God showing you?"></textarea>
-            <div style="display: flex; gap: 1rem;">
-                <button class="btn btn-primary" style="flex:1" onclick="saveNote()">Save</button>
-                <button class="btn btn-secondary" style="flex:1" onclick="closeNoteModal()">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <h2 style="font-family:'Crimson Text',serif; margin-bottom: 1.5rem; color: var(--accent);">Sign In to Rooted</h2>
-            <form onsubmit="handleLogin(event)">
-                <input type="email" name="email" placeholder="Email" required autocomplete="email" style="width:100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-page); color: var(--text-main);">
-                <input type="password" name="password" placeholder="Password" required autocomplete="current-password" style="width:100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-page); color: var(--text-main);">
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Continue</button>
-            </form>
-            <p style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.85rem; cursor: pointer;" onclick="closeAuthModal()">Maybe later</p>
-        </div>
-    </div>
 </body>
 </html>
