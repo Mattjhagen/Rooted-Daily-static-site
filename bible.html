@@ -535,8 +535,41 @@
             body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
         }
 
+        let synth = window.speechSynthesis;
+        let isSpeaking = false;
+
         function playAudio() {
-            alert("ElevenLabs AI Audio is arriving soon! This will use the same premium voices as the mobile app.");
+            if (isSpeaking) {
+                synth.cancel();
+                isSpeaking = false;
+                return;
+            }
+
+            const textBlocks = Array.from(document.querySelectorAll('.verse'))
+                .map(v => v.textContent.replace(/^\d+/, '').trim());
+            const fullText = textBlocks.join('. ');
+
+            const utterance = new SpeechSynthesisUtterance(fullText);
+            
+            // Try to find a premium/neural voice
+            const voices = synth.getVoices();
+            console.log("Available voices:", voices.length);
+            
+            // Preference: Samantha (Apple), Google US English, or any Neural
+            const preferredVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Google US English') || v.name.includes('Neural'));
+            if (preferredVoice) utterance.voice = preferredVoice;
+
+            utterance.rate = 0.95;
+            utterance.onend = () => { isSpeaking = false; };
+            utterance.onerror = () => { isSpeaking = false; };
+
+            synth.speak(utterance);
+            isSpeaking = true;
+        }
+
+        // Ensure voices are loaded (some browsers load them async)
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => synth.getVoices();
         }
 
         // Start
