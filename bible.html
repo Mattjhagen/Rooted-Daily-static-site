@@ -448,6 +448,15 @@
             try {
                 if (typeof supabase !== 'undefined') {
                     sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+                    // Handle Auth Errors from URL Hash
+                    const hash = window.location.hash;
+                    if (hash.includes('error_description')) {
+                        const desc = new URLSearchParams(hash.replace('#', '?')).get('error_description');
+                        alert("Authentication Error: " + desc.replace(/\+/g, ' '));
+                        window.location.hash = '';
+                    }
+
                     const { data: { session } } = await sbClient.auth.getSession();
                     user = session?.user || null;
                     if (window.location.hash.includes('type=recovery')) handleRecovery();
@@ -489,6 +498,7 @@
                     email, 
                     password,
                     options: {
+                        emailRedirectTo: 'https://app.vibecodes.space/bible.html',
                         data: {
                             newsletter_signup: newsletter,
                             agreed_to_terms: true
