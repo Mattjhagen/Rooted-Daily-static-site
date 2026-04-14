@@ -247,6 +247,128 @@
 
         .nav-arrow:hover { transform: scale(1.15); background: var(--accent); color: white; border-color: var(--accent); }
 
+        /* --- Premium Settings Panel --- */
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+        .panel-header h2 {
+            font-family: var(--font-family-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .settings-section {
+            background: var(--bg-page);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .settings-section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        /* Pill Segment Control */
+        .segment-control {
+            display: flex;
+            background: var(--bg-nav);
+            border-radius: 14px;
+            padding: 4px;
+            gap: 4px;
+            border: 1px solid var(--border);
+        }
+        .segment-control button {
+            flex: 1;
+            padding: 0.65rem;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+        }
+        .segment-control button.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 2px 8px rgba(74,115,93,0.4);
+        }
+        /* Custom Slider */
+        .premium-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            margin: 0.75rem 0 0.5rem;
+        }
+        .premium-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(74,115,93,0.5);
+            transition: transform 0.2s;
+        }
+        .premium-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        .speed-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .speed-display strong { color: var(--accent); font-size: 1.1rem; }
+        /* Settings Select */
+        .settings-select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--bg-nav);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2rem;
+        }
+        .account-btn {
+            width: 100%;
+            padding: 0.9rem;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .account-btn:hover { background: var(--border); }
+        .account-btn.danger { color: #f87171; }
+        .account-btn.danger:hover { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); }
+
         .side-panel {
             position: fixed;
             top: 0; right: -400px; width: 400px; height: 100%;
@@ -424,11 +546,51 @@
 
     <div class="overlay" id="overlay" onclick="closePanel()"></div>
     <div class="side-panel" id="sidePanel">
-        <div class="panel-header"><h2>Settings</h2><button class="icon-btn" onclick="closePanel()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
-        <div class="setting-item"><span class="setting-label">Typography</span><div class="font-toggle"><button id="serifBtn" class="active" onclick="setFont('serif')">Serif</button><button id="sansBtn" onclick="setFont('sans')">Sans</button></div></div>
-        <div class="setting-item"><span class="setting-label">Read Speed</span><input type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="size-slider" id="speedSlider" oninput="document.getElementById('speedText').textContent = this.value + 'x'"><div id="speedText" style="text-align:center; font-weight: 700;">1.0x</div></div>
-        <div class="setting-item"><span class="setting-label">Narrator</span><select id="voiceSelect" class="select-btn" style="width: 100%;" onchange="testVoice()"></select></div>
-        <div id="accountSettings" style="display: none; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 2rem;"><button class="btn btn-secondary" onclick="openPasswordReset()">Change Password</button></div>
+        <div class="panel-header">
+            <h2>Settings</h2>
+            <button class="icon-btn" onclick="closePanel()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        </div>
+
+        <div class="settings-section">
+            <span class="settings-section-label">Typography</span>
+            <div class="segment-control">
+                <button id="serifBtn" class="active" onclick="setFont('serif')">Serif</button>
+                <button id="sansBtn" onclick="setFont('sans')">Sans</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <span class="settings-section-label">Narrator Speed</span>
+            <input type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="premium-slider" id="speedSlider" oninput="updateSpeed(this.value)">
+            <div class="speed-display">
+                <span>0.5x</span>
+                <strong id="speedText">1.0x</strong>
+                <span>2.0x</span>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <span class="settings-section-label">Voice</span>
+            <select id="voiceSelect" class="settings-select" onchange="testVoice()"></select>
+        </div>
+
+        <div id="accountSettings" style="display: none;">
+            <div class="settings-section">
+                <span class="settings-section-label">Account</span>
+                <button class="account-btn" onclick="openPasswordReset()">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    Change Password
+                </button>
+                <button class="account-btn" onclick="openEmailChange()" style="margin-top: 0.5rem;">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Update Email
+                </button>
+                <button class="account-btn danger" onclick="toggleAuth()" style="margin-top: 0.5rem;">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sign Out
+                </button>
+            </div>
+        </div>
     </div>
 
     <div class="action-menu" id="verseActionMenu">
@@ -668,7 +830,12 @@
         async function toggleAuth() { if (user) { await sbClient.auth.signOut(); user = null; updateAuthUI(); renderChapter(); } else openAuthModal(); }
         function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
         function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
-        function setFont(s) { document.getElementById('bibleText').className = `bible-text ${s}`; }
+        function setFont(s) {
+            document.getElementById('bibleText').className = `bible-text ${s}`;
+            document.getElementById('serifBtn').classList.toggle('active', s === 'serif');
+            document.getElementById('sansBtn').classList.toggle('active', s === 'sans');
+        }
+        function updateSpeed(v) { document.getElementById('speedText').textContent = v + 'x'; }
         function setSize(s) { document.documentElement.style.setProperty('--font-size-base', s + 'px'); }
         function toggleTheme() { 
             const cur = document.body.getAttribute('data-theme');
