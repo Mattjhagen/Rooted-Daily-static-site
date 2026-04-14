@@ -108,13 +108,27 @@
         }
         .hbtn {
             background: none; border: none; cursor: pointer;
-            color: var(--text-muted);
-            padding: 8px;
+            color: var(--text);
+            padding: 7px 10px;
             border-radius: 10px;
+            border: 1px solid transparent;
             display: flex; align-items: center; justify-content: center;
+            gap: 0.3rem;
+            font-family: var(--sans);
+            font-size: 0.82rem;
+            font-weight: 600;
             transition: all 0.2s;
         }
-        .hbtn:hover { color: var(--text); background: var(--border); }
+        .hbtn:hover { color: var(--text); background: var(--border); border-color: var(--border); }
+        .hbtn-signin {
+            background: var(--accent);
+            color: white !important;
+            border-radius: 20px;
+            padding: 0.45rem 1rem;
+            font-size: 0.85rem;
+            border: none;
+        }
+        .hbtn-signin:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(74,115,93,0.4); background: var(--accent); }
 
         /* ── CHAPTER TOOLBAR ── */
         .chapter-bar {
@@ -193,22 +207,29 @@
         /* ── BOTTOM VERSE ACTION SHEET ── */
         .verse-sheet {
             position: fixed;
-            bottom: -300px;
+            bottom: -320px;
             left: 0; right: 0;
-            background: var(--bg-nav);
+            background: rgba(30, 45, 61, 0.97);
             border-top: 1px solid var(--border);
-            border-radius: 28px 28px 0 0;
-            padding: 1rem 1.5rem 2rem;
-            z-index: 500;
+            border-radius: 24px 24px 0 0;
+            padding: 0.75rem 1.5rem 7rem;
+            /* z-index BELOW overlay but ABOVE reflect bar */
+            z-index: 150;
             transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(16px);
+            /* Sheet does NOT block page interaction when open */
+            pointer-events: none;
         }
-        .verse-sheet.open { bottom: 0; }
+        .verse-sheet.open { bottom: 0; pointer-events: all; }
         .sheet-handle {
             width: 36px; height: 4px;
             background: var(--border);
             border-radius: 2px;
-            margin: 0 auto 1.2rem;
+            margin: 0 auto 1rem;
+        }
+        .sheet-top-row {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 0.9rem;
         }
         .sheet-ref {
             font-family: var(--sans);
@@ -217,47 +238,67 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--accent);
+        }
+        .sheet-count {
+            background: var(--accent);
+            color: white;
+            border-radius: 20px;
+            padding: 0.2rem 0.7rem;
+            font-family: var(--sans);
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: none;
+        }
+        .sheet-count.visible { display: inline-block; }
+        .color-row {
+            display: flex; gap: 0.7rem; align-items: center;
             margin-bottom: 1rem;
         }
-        .color-row {
-            display: flex; gap: 0.75rem; align-items: center;
-            margin-bottom: 1.25rem;
-        }
         .color-dot {
-            width: 34px; height: 34px;
+            width: 32px; height: 32px;
             border-radius: 50%;
             border: 3px solid transparent;
             cursor: pointer;
             transition: transform 0.2s, border-color 0.2s;
+            flex-shrink: 0;
         }
-        .color-dot:hover, .color-dot.selected { transform: scale(1.15); border-color: white; }
+        .color-dot:hover, .color-dot.selected { transform: scale(1.2); border-color: white; }
         .color-dot.yellow { background: #f5c400; }
         .color-dot.green  { background: #4a735d; }
         .color-dot.red    { background: #ef4444; }
         .color-dot.blue   { background: #3b82f6; }
         .color-dot.erase  { background: var(--bg-card); border-color: var(--border); color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
         .sheet-actions {
-            display: flex; gap: 0.75rem;
+            display: flex; gap: 0.65rem;
         }
         .sheet-action-btn {
             flex: 1;
-            display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
-            padding: 0.9rem 0.5rem;
+            display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+            padding: 0.8rem 0.5rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 14px;
             color: var(--text-muted);
             font-family: var(--sans);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
         .sheet-action-btn:hover { color: var(--text); background: var(--border); }
         .sheet-close {
-            position: absolute; top: 1rem; right: 1.25rem;
-            background: none; border: none; cursor: pointer;
-            color: var(--text-muted); font-size: 1.2rem;
+            position: absolute; top: 0.9rem; right: 1.25rem;
+            background: var(--border); border: none; cursor: pointer;
+            color: var(--text); font-size: 0.8rem;
+            width: 26px; height: 26px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+        }
+        /* Verse selection glow */
+        .verse.selected {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            border-radius: 4px;
         }
 
         /* ── PINNED REFLECT BUTTON ── */
@@ -301,9 +342,10 @@
         .overlay {
             display: none;
             position: fixed; inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 300;
+            background: rgba(0,0,0,0.6);
+            z-index: 390;
             backdrop-filter: blur(4px);
+            /* Only used for Settings panel, NOT verse sheet */
         }
         .side-panel {
             position: fixed;
@@ -493,19 +535,16 @@
         </div>
         <div class="header-center" id="headerTitle">...</div>
         <div class="header-right">
-            <button class="hbtn" title="Typography" onclick="toggleFont()">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><text x="2" y="14" font-size="12" font-family="serif" fill="currentColor" stroke="none">T</text></svg>
-                <span style="font-family:var(--sans);font-size:0.85rem;font-weight:600;">T</span>
-            </button>
-            <button class="hbtn" title="Bookmark" onclick="addBookmark()">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <button class="hbtn" title="Toggle Font" onclick="toggleFont()">
+                <span style="font-family:'Crimson Text',serif;font-size:1rem;">Aa</span>
             </button>
             <button class="hbtn" id="playBtn" title="Play" onclick="playAudio()">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Play</span>
             </button>
-            <button class="hbtn" id="authBtn" onclick="toggleAuth()" style="font-family:var(--sans);font-size:0.85rem;font-weight:600;padding:6px 14px;border:1px solid var(--border);border-radius:20px;">Sign In</button>
+            <button class="hbtn hbtn-signin" id="authBtn" onclick="toggleAuth()">Sign In</button>
             <button class="hbtn" onclick="openPanel()">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
         </div>
     </header>
@@ -547,27 +586,30 @@
     <div class="verse-sheet" id="verseSheet">
         <div class="sheet-handle"></div>
         <button class="sheet-close" onclick="closeVerseSheet()">✕</button>
-        <div class="sheet-ref" id="sheetRef">VERSE</div>
+        <div class="sheet-top-row">
+            <div class="sheet-ref" id="sheetRef">TAP VERSES TO SELECT</div>
+            <span class="sheet-count" id="sheetCount">1 verse</span>
+        </div>
         <div class="color-row">
             <div class="color-dot yellow" onclick="applyHighlight('yellow')" title="Yellow"></div>
             <div class="color-dot green"  onclick="applyHighlight('green')"  title="Green"></div>
             <div class="color-dot red"    onclick="applyHighlight('red')"    title="Red"></div>
             <div class="color-dot blue"   onclick="applyHighlight('blue')"   title="Blue"></div>
-            <div class="color-dot erase"  onclick="applyHighlight('none')"   title="Erase">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16l10-10 7 7-4.5 4.5"/><path d="M6.5 17.5l4-4"/></svg>
+            <div class="color-dot erase"  onclick="applyHighlight('none')"   title="Remove">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16l10-10 7 7-4.5 4.5"/><path d="M6.5 17.5l4-4"/></svg>
             </div>
         </div>
         <div class="sheet-actions">
             <button class="sheet-action-btn" onclick="shareVerse()">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                 Share
             </button>
             <button class="sheet-action-btn" onclick="openNote()">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
                 Note
             </button>
             <button class="sheet-action-btn" onclick="copyVerse()">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 Copy
             </button>
         </div>
@@ -772,62 +814,119 @@
             fetch(`https://api.indexnow.org/indexnow?url=${encodeURIComponent(location.href)}&key=${INDEXNOW_KEY}`).catch(()=>{});
         }
 
-        // ── VERSE INTERACTION ──
-        function handleVerseClick(vNum, el) {
-            selectedVerse = vNum;
-            selectedVerseText = el.textContent.trim();
-            const ref = `${bookNames[currentBookIndex]} ${currentChapterIndex + 1}:${vNum}`;
-            document.getElementById('sheetRef').textContent = ref;
+        // ── VERSE SELECTION (Multi-select) ──
+        let selectedVerses = new Set(); // set of verse numbers
 
-            // Show active highlight in dot picker
-            const hl = userHighlights.find(h => h.book === bookNames[currentBookIndex] && h.chapter === currentChapterIndex + 1 && h.verse === vNum);
+        function handleVerseClick(vNum, el) {
+            // Toggle selection
+            if (selectedVerses.has(vNum)) {
+                selectedVerses.delete(vNum);
+                el.classList.remove('selected');
+            } else {
+                selectedVerses.add(vNum);
+                el.classList.add('selected');
+            }
+
+            if (selectedVerses.size === 0) {
+                closeVerseSheet();
+                return;
+            }
+
+            // Build range label e.g. "Matthew 1:2–5" or "Matthew 1:2, 7, 12"
+            const sortedNums = [...selectedVerses].sort((a,b)=>a-b);
+            const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
+            let ref;
+            if (sortedNums.length === 1) {
+                ref = `${book} ${chap}:${sortedNums[0]}`;
+            } else {
+                // Check if contiguous
+                const isContiguous = sortedNums.every((n,i) => i === 0 || n === sortedNums[i-1]+1);
+                ref = isContiguous
+                    ? `${book} ${chap}:${sortedNums[0]}–${sortedNums[sortedNums.length-1]}`
+                    : `${book} ${chap}:${sortedNums.join(', ')}`;
+            }
+
+            document.getElementById('sheetRef').textContent = ref;
+            const countEl = document.getElementById('sheetCount');
+            if (sortedNums.length > 1) {
+                countEl.textContent = `${sortedNums.length} verses`;
+                countEl.classList.add('visible');
+            } else {
+                countEl.classList.remove('visible');
+            }
+
+            // Update selected highlight dot indicator
+            const existingHl = userHighlights.find(h => h.book===book && h.chapter===chap && h.verse===sortedNums[0]);
             document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-            if (hl) { const dot = document.querySelector(`.color-dot.${hl.color}`); if(dot) dot.classList.add('selected'); }
+            if (existingHl && sortedNums.length === 1) {
+                const dot = document.querySelector(`.color-dot.${existingHl.color}`);
+                if (dot) dot.classList.add('selected');
+            }
 
             openVerseSheet();
         }
 
         function openVerseSheet() {
             document.getElementById('verseSheet').classList.add('open');
-            document.getElementById('overlay').style.display = 'block';
+            // NO overlay — user can still scroll and tap more verses
         }
 
         function closeVerseSheet() {
             document.getElementById('verseSheet').classList.remove('open');
-            document.getElementById('overlay').style.display = 'none';
+            // Deselect all
+            selectedVerses.clear();
+            document.querySelectorAll('.verse.selected').forEach(v => v.classList.remove('selected'));
+            document.getElementById('sheetCount').classList.remove('visible');
         }
 
         async function applyHighlight(color) {
             if (!user) { closeVerseSheet(); openAuthModal(); return; }
             const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
-            const existing = userHighlights.find(h => h.book === book && h.chapter === chap && h.verse === selectedVerse);
-            if (existing) await sbClient.from('highlights').delete().match({ id: existing.id });
-            userHighlights = userHighlights.filter(h => !(h.book === book && h.chapter === chap && h.verse === selectedVerse));
-            if (color !== 'none') {
-                const { data } = await sbClient.from('highlights').insert({ book, chapter: chap, verse: selectedVerse, color, user_id: user.id }).select();
-                if (data) userHighlights.push(data[0]);
+            for (const vNum of selectedVerses) {
+                const existing = userHighlights.find(h => h.book===book && h.chapter===chap && h.verse===vNum);
+                if (existing) await sbClient.from('highlights').delete().match({ id: existing.id });
+                userHighlights = userHighlights.filter(h => !(h.book===book && h.chapter===chap && h.verse===vNum));
+                if (color !== 'none') {
+                    const { data } = await sbClient.from('highlights').insert({ book, chapter: chap, verse: vNum, color, user_id: user.id }).select();
+                    if (data) userHighlights.push(data[0]);
+                }
             }
             renderChapter();
             closeVerseSheet();
         }
 
+        function getSelectedText() {
+            const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
+            const sortedNums = [...selectedVerses].sort((a,b)=>a-b);
+            const isContiguous = sortedNums.length > 1 && sortedNums.every((n,i) => i===0 || n===sortedNums[i-1]+1);
+            const refStr = sortedNums.length === 1
+                ? `${book} ${chap}:${sortedNums[0]}`
+                : isContiguous
+                    ? `${book} ${chap}:${sortedNums[0]}–${sortedNums[sortedNums.length-1]}`
+                    : `${book} ${chap}:${sortedNums.join(', ')}`;
+            const verses = bibleData.books[currentBookIndex].chapters[chap-1];
+            const text = sortedNums.map(n => verses[n-1]).join(' ');
+            return { text, ref: refStr };
+        }
+
         function copyVerse() {
-            const text = `"${selectedVerseText}" — ${bookNames[currentBookIndex]} ${currentChapterIndex+1}:${selectedVerse}`;
-            navigator.clipboard.writeText(text).then(() => { closeVerseSheet(); });
+            const { text, ref } = getSelectedText();
+            navigator.clipboard.writeText(`"${text}" — ${ref}`);
+            closeVerseSheet();
         }
 
         function shareVerse() {
-            const text = `"${selectedVerseText}" — ${bookNames[currentBookIndex]} ${currentChapterIndex+1}:${selectedVerse}`;
-            if (navigator.share) { navigator.share({ text, url: location.href }); }
-            else { copyVerse(); }
+            const { text, ref } = getSelectedText();
+            const fullText = `"${text}" — ${ref}`;
+            if (navigator.share) navigator.share({ text: fullText, url: location.href });
+            else { navigator.clipboard.writeText(fullText); closeVerseSheet(); }
         }
 
         function openNote() {
             if (!user) { closeVerseSheet(); openAuthModal(); return; }
             document.getElementById('noteText').value = '';
             document.getElementById('noteModal').style.display = 'flex';
-            document.getElementById('overlay').style.display = 'block';
-            closeVerseSheet();
+            // Don't close sheet so user sees which verse(s) they're noting
         }
 
         function closeNoteModal() {
