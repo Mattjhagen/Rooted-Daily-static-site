@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Reader | Rooted Daily</title>
+    <link rel="icon" type="image/png" href="rooted-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #ffffff;
+            --bg-nav: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #666666;
+            --accent: #4a735d;
+            --border: #e5e7eb;
+            --font-size-base: 1.125rem;
+            --font-family-body: 'Inter', sans-serif;
+            --font-family-serif: 'Crimson Text', serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #0f172a;
+            --bg-nav: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-family-body);
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.7;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- Header --- */
+        header {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-nav);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        [data-theme="dark"] .icon-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* --- Bible Toolbar --- */
+        .bible-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-nav);
+            position: sticky;
+            top: 72px;
+            z-index: 99;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .selector-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .select-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-page);
+            color: var(--text-main);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 120px;
+        }
+
+        /* --- Bible Content --- */
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            min-height: 80vh;
+        }
+
+        .chapter-title {
+            font-family: var(--font-family-serif);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .verse {
+            margin-bottom: 0.5rem;
+            transition: background 0.2s;
+            display: inline;
+        }
+
+        .verse-num {
+            font-size: 0.75rem;
+            color: var(--accent);
+            vertical-align: super;
+            margin-right: 0.25rem;
+            font-weight: 700;
+        }
+
+        .bible-text {
+            font-size: var(--font-size-base);
+            text-align: justify;
+        }
+
+        .serif { font-family: var(--font-family-serif); }
+        .sans { font-family: var(--font-family-body); }
+
+        /* --- Navigation --- */
+        .page-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .nav-arrow {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-nav);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .nav-arrow:hover {
+            transform: scale(1.1);
+            background: var(--accent);
+            color: white;
+        }
+
+        /* --- Side Panel (Settings/Drawer) --- */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+        }
+
+        .side-panel {
+            position: fixed;
+            top: 0; right: -350px; width: 350px; height: 100%;
+            background: var(--bg-page);
+            z-index: 1001;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            padding: 2rem;
+        }
+
+        .side-panel.open { right: 0; }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .setting-item {
+            margin-bottom: 2rem;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .font-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .font-toggle button {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            background: none;
+            cursor: pointer;
+            border-radius: 8px;
+            color: var(--text-main);
+        }
+
+        .font-toggle button.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .size-slider {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        /* --- AI Coming Soon --- */
+        .ai-banner {
+            background: linear-gradient(135deg, #4f46e5, #4a735d);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* --- Loading --- */
+        #loading {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-page);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 640px) {
+            .nav-arrow { width: 40px; height: 40px; }
+            .bible-toolbar { padding: 0.5rem 1rem; }
+            .select-btn { min-width: auto; padding: 0.5rem 0.75rem; font-size: 0.9rem; }
+            .chapter-title { font-size: 1.8rem; }
+            .side-panel { width: 100%; right: -100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <header>
+        <a href="index.html" class="logo">Rooted</a>
+        <div class="nav-right">
+            <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </button>
+            <button class="icon-btn" onclick="openPanel()" title="Text Settings">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="bible-toolbar">
+        <div class="selector-group">
+            <select id="bookSelect" class="select-btn" onchange="changeBook()"></select>
+            <select id="chapterSelect" class="select-btn" onchange="changeChapter()"></select>
+            <div class="select-btn" style="background: rgba(0,0,0,0.03); border:none;">WEB</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button class="icon-btn" title="Parallel (Coming Soon)">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+            </button>
+            <button class="icon-btn" onclick="playAudio()" title="Listen">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2V15H6L11 19V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>
+            <button class="icon-btn" onclick="openPanel()" title="A|A Settings">
+                <span style="font-weight: 700; font-size: 1rem;">AA</span>
+            </button>
+        </div>
+    </div>
+
+    <main id="bibleContainer">
+        <h1 id="chapterHeader" class="chapter-title">Matthew 1</h1>
+        <div id="bibleText" class="bible-text serif">
+            <!-- Text injected here -->
+        </div>
+
+        <div class="ai-banner">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            AI Spiritual Guide - Coming Soon to Web!
+        </div>
+    </main>
+
+    <div class="page-nav">
+        <div class="nav-arrow" onclick="prevChapter()" id="prevBtn" title="Previous Chapter">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </div>
+        <div class="nav-arrow" onclick="nextChapter()" id="nextBtn" title="Next Chapter">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closePanel()"></div>
+    <div class="side-panel" id="sidePanel">
+        <div class="panel-header">
+            <h3>Text Settings</h3>
+            <button class="icon-btn" onclick="closePanel()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        </div>
+
+        <div class="setting-item">
+            <span class="setting-label">Font Style</span>
+            <div class="font-toggle">
+                <button id="serifBtn" class="active" onclick="setFont('serif')">Serif</button>
+                <button id="sansBtn" onclick="setFont('sans')">Sans</button>
+            </div>
+        </div>
+
+        <div class="setting-item">
+            <span class="setting-label">Font Size</span>
+            <input type="range" min="14" max="32" value="18" class="size-slider" oninput="setSize(this.value)">
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.5rem;">
+                <span>Small</span>
+                <span>Large</span>
+            </div>
+        </div>
+
+        <div class="setting-item">
+            <span class="setting-label">ElevenLabs Voice (Coming Soon)</span>
+            <select class="select-btn" style="width: 100%;">
+                <option>Premium Male (Slow)</option>
+                <option>Premium Female (Calm)</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        let bibleData = null;
+        let currentBookIndex = 39; // Matthew (starts at 0, Matt is usually 40th book)
+        let currentChapterIndex = 0;
+
+        const bookNames = [
+            "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
+            "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs",
+            "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos",
+            "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
+            "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians",
+            "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter",
+            "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"
+        ];
+
+        async function init() {
+            try {
+                const response = await fetch('data/bible.json');
+                bibleData = await response.json();
+                populateSelectors();
+                renderChapter();
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error("Failed to load bible data:", error);
+            }
+        }
+
+        function populateSelectors() {
+            const bookSelect = document.getElementById('bookSelect');
+            bookNames.forEach((name, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = name;
+                if (index === currentBookIndex) opt.selected = true;
+                bookSelect.appendChild(opt);
+            });
+            updateChapterSelector();
+        }
+
+        function updateChapterSelector() {
+            const chapterSelect = document.getElementById('chapterSelect');
+            chapterSelect.innerHTML = '';
+            const chapters = bibleData.books[currentBookIndex].chapters;
+            chapters.forEach((_, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = `Chapter ${index + 1}`;
+                if (index === currentChapterIndex) opt.selected = true;
+                chapterSelect.appendChild(opt);
+            });
+        }
+
+        function renderChapter() {
+            const book = bibleData.books[currentBookIndex];
+            const chapter = book.chapters[currentChapterIndex];
+            const header = document.getElementById('chapterHeader');
+            const textContainer = document.getElementById('bibleText');
+
+            header.textContent = `${bookNames[currentBookIndex]} ${currentChapterIndex + 1}`;
+            
+            let html = '';
+            chapter.forEach((verse, i) => {
+                html += `<span class="verse"><span class="verse-num">${i + 1}</span>${verse} </span>`;
+            });
+            textContainer.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function changeBook() {
+            currentBookIndex = parseInt(document.getElementById('bookSelect').value);
+            currentChapterIndex = 0;
+            updateChapterSelector();
+            renderChapter();
+        }
+
+        function changeChapter() {
+            currentChapterIndex = parseInt(document.getElementById('chapterSelect').value);
+            renderChapter();
+        }
+
+        function nextChapter() {
+            const book = bibleData.books[currentBookIndex];
+            if (currentChapterIndex < book.chapters.length - 1) {
+                currentChapterIndex++;
+            } else if (currentBookIndex < bibleData.books.length - 1) {
+                currentBookIndex++;
+                currentChapterIndex = 0;
+                updateChapterSelector();
+                document.getElementById('bookSelect').value = currentBookIndex;
+            }
+            renderChapter();
+            document.getElementById('chapterSelect').value = currentChapterIndex;
+        }
+
+        function prevChapter() {
+            if (currentChapterIndex > 0) {
+                currentChapterIndex--;
+            } else if (currentBookIndex > 0) {
+                currentBookIndex--;
+                const prevBook = bibleData.books[currentBookIndex];
+                currentChapterIndex = prevBook.chapters.length - 1;
+                updateChapterSelector();
+                document.getElementById('bookSelect').value = currentBookIndex;
+            }
+            renderChapter();
+            document.getElementById('chapterSelect').value = currentChapterIndex;
+        }
+
+        // Settings Panel
+        function openPanel() {
+            document.getElementById('sidePanel').classList.add('open');
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closePanel() {
+            document.getElementById('sidePanel').classList.remove('open');
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function setFont(style) {
+            const text = document.getElementById('bibleText');
+            document.getElementById('serifBtn').classList.toggle('active', style === 'serif');
+            document.getElementById('sansBtn').classList.toggle('active', style === 'sans');
+            text.className = `bible-text ${style}`;
+        }
+
+        function setSize(size) {
+            document.documentElement.style.setProperty('--font-size-base', size + 'px');
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme');
+            body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+        }
+
+        function playAudio() {
+            alert("ElevenLabs AI Audio is arriving soon! This will use the same premium voices as the mobile app.");
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+</html>
