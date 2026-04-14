@@ -271,16 +271,12 @@
     const BOOK = "Obadiah";
     const CHAPTER = 1;
     const REF = "Obadiah 1";
-    const VERSE_TEXT = "The vision of Obadiah. This is what the Lord  Yahweh  says about Edom. We have heard news from Yahweh, and an ambassador is sent among the nations, saying, \u201cArise, and let\u2019s rise up against her in battle. Behold,  I have made you small among the nations. You are greatly despised. The pride of your heart has deceived you, you who dwell in the clefts of the rock, whose habitation is high, who says in his heart, \u2018Who will bring me down to the ground?\u2019 Though you mount on high as the eagle, and though your nest is set among the stars, I will bring you down from there,\u201d says Yahweh. \u201cIf thieves came to you, if robbers by night \u2014 oh, what disaster awaits you \u2014 wouldn\u2019t they only steal until they had enough? If grape pickers came to you, wouldn\u2019t they leave some gleaning grapes?";
-
-    function getKey() { return localStorage.getItem('gemini_key') || ''; }
-    function saveKey(k) { localStorage.setItem('gemini_key', k); }
+    const GEMINI_KEY = "AIzaSyAuZ2dMYxPANek-XRiL5Ef3tDPk5RSMwUc";
 
     async function generateExplanation(prompt) {
-        let key = getKey();
-        if (!key) {
-            document.getElementById('apiSetup').classList.add('visible');
-            document.getElementById('explainBtn').textContent = 'Unlock AI';
+        if (!GEMINI_KEY) {
+            document.getElementById('aiResponse').innerHTML = '⚠️ AI explanations are not yet configured. Check back soon!';
+            document.getElementById('aiResponse').classList.add('visible');
             return;
         }
         const btn = document.getElementById('explainBtn');
@@ -288,38 +284,32 @@
         btn.disabled = true;
 
         const userPrompt = prompt || `Explain Obadiah 1 from the Bible in a warm, accessible way. Cover:
-1. What is happening in this chapter (1-2 sentences of context)
+1. What is happening in this chapter (context in 1-2 sentences)
 2. The key spiritual insight or lesson (2-3 sentences)
 3. How someone can apply this to their life today (2-3 sentences)
 Keep the tone warm, grounded, and non-denominational. Begin with the chapter reference.`;
 
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     contents: [{parts: [{text: userPrompt}]}],
-                    generationConfig: {temperature: 0.7, maxOutputTokens: 512}
+                    generationConfig: {temperature: 0.7, maxOutputTokens: 600}
                 })
             });
             const data = await res.json();
             if (data.error) throw new Error(data.error.message);
             const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
             const el = document.getElementById('aiResponse');
-            el.innerHTML = text.replace(/\n/g, '<br>');
+            el.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
             el.classList.add('visible');
             document.getElementById('promptForm').classList.add('visible');
-            btn.textContent = 'Refresh';
+            btn.textContent = '&#10024; Refresh';
             btn.disabled = false;
         } catch(e) {
-            if (e.message.includes('API_KEY_INVALID') || e.message.includes('400')) {
-                document.getElementById('apiSetup').classList.add('visible');
-                document.getElementById('aiResponse').innerHTML = '⚠️ Invalid API key. Please check and try again.';
-                document.getElementById('aiResponse').classList.add('visible');
-            } else {
-                document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
-                document.getElementById('aiResponse').classList.add('visible');
-            }
+            document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
+            document.getElementById('aiResponse').classList.add('visible');
             btn.textContent = 'Try Again';
             btn.disabled = false;
         }
@@ -328,13 +318,8 @@ Keep the tone warm, grounded, and non-denominational. Begin with the chapter ref
     function askCustom() {
         const q = document.getElementById('customPrompt').value.trim();
         if (!q) return;
-        generateExplanation(`Regarding Obadiah 1: ${q}. Please give a thoughtful, scripture-rooted answer in 3-4 sentences.`);
+        generateExplanation(`Regarding Obadiah 1: ${q}. Please give a thoughtful, grounded, scripture-rooted answer in 3-4 sentences.`);
         document.getElementById('customPrompt').value = '';
-    }
-
-    // Auto-show key input if no key saved
-    if (!getKey()) {
-        // Don't auto-show, wait for button click
     }
 </script>
 </body>

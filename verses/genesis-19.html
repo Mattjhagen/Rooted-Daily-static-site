@@ -288,16 +288,12 @@
     const BOOK = "Genesis";
     const CHAPTER = 19;
     const REF = "Genesis 19";
-    const VERSE_TEXT = "The two angels came to Sodom at evening. Lot sat in the gate of Sodom. Lot saw them, and rose up to meet them. He bowed himself with his face to the earth, and he said, \u201cSee now, my lords, please turn aside into your servant\u2019s house, stay all night, wash your feet, and you can rise up early, and go on your way.\u201d They said, \u201cNo, but we will stay in the street all night.\u201d He urged them greatly, and they came in with him, and entered into his house. He made them a feast, and baked unleavened bread, and they ate. But before they lay down, the men of the city, the men of Sodom, surrounded the house, both young and old, all the people from every quarter. They called to Lot, and said to him, \u201cWhere are the men who came in to you this night? Bring them out to us, that we may have sex with them.\u201d";
-
-    function getKey() { return localStorage.getItem('gemini_key') || ''; }
-    function saveKey(k) { localStorage.setItem('gemini_key', k); }
+    const GEMINI_KEY = "AIzaSyAuZ2dMYxPANek-XRiL5Ef3tDPk5RSMwUc";
 
     async function generateExplanation(prompt) {
-        let key = getKey();
-        if (!key) {
-            document.getElementById('apiSetup').classList.add('visible');
-            document.getElementById('explainBtn').textContent = 'Unlock AI';
+        if (!GEMINI_KEY) {
+            document.getElementById('aiResponse').innerHTML = '⚠️ AI explanations are not yet configured. Check back soon!';
+            document.getElementById('aiResponse').classList.add('visible');
             return;
         }
         const btn = document.getElementById('explainBtn');
@@ -305,38 +301,32 @@
         btn.disabled = true;
 
         const userPrompt = prompt || `Explain Genesis 19 from the Bible in a warm, accessible way. Cover:
-1. What is happening in this chapter (1-2 sentences of context)
+1. What is happening in this chapter (context in 1-2 sentences)
 2. The key spiritual insight or lesson (2-3 sentences)
 3. How someone can apply this to their life today (2-3 sentences)
 Keep the tone warm, grounded, and non-denominational. Begin with the chapter reference.`;
 
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     contents: [{parts: [{text: userPrompt}]}],
-                    generationConfig: {temperature: 0.7, maxOutputTokens: 512}
+                    generationConfig: {temperature: 0.7, maxOutputTokens: 600}
                 })
             });
             const data = await res.json();
             if (data.error) throw new Error(data.error.message);
             const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
             const el = document.getElementById('aiResponse');
-            el.innerHTML = text.replace(/\n/g, '<br>');
+            el.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
             el.classList.add('visible');
             document.getElementById('promptForm').classList.add('visible');
-            btn.textContent = 'Refresh';
+            btn.textContent = '&#10024; Refresh';
             btn.disabled = false;
         } catch(e) {
-            if (e.message.includes('API_KEY_INVALID') || e.message.includes('400')) {
-                document.getElementById('apiSetup').classList.add('visible');
-                document.getElementById('aiResponse').innerHTML = '⚠️ Invalid API key. Please check and try again.';
-                document.getElementById('aiResponse').classList.add('visible');
-            } else {
-                document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
-                document.getElementById('aiResponse').classList.add('visible');
-            }
+            document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
+            document.getElementById('aiResponse').classList.add('visible');
             btn.textContent = 'Try Again';
             btn.disabled = false;
         }
@@ -345,13 +335,8 @@ Keep the tone warm, grounded, and non-denominational. Begin with the chapter ref
     function askCustom() {
         const q = document.getElementById('customPrompt').value.trim();
         if (!q) return;
-        generateExplanation(`Regarding Genesis 19: ${q}. Please give a thoughtful, scripture-rooted answer in 3-4 sentences.`);
+        generateExplanation(`Regarding Genesis 19: ${q}. Please give a thoughtful, grounded, scripture-rooted answer in 3-4 sentences.`);
         document.getElementById('customPrompt').value = '';
-    }
-
-    // Auto-show key input if no key saved
-    if (!getKey()) {
-        // Don't auto-show, wait for button click
     }
 </script>
 </body>

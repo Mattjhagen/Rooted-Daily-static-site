@@ -322,16 +322,12 @@
     const BOOK = "Mark";
     const CHAPTER = 14;
     const REF = "Mark 14";
-    const VERSE_TEXT = "It was now two days before the feast of the Passover and the unleavened bread, and the chief priests and the scribes sought how they might seize him by deception, and kill him. For they said, \u201cNot during the feast, because there might be a riot of the people.\u201d While he was at Bethany, in the house of Simon the leper, as he sat at the table, a woman came having an alabaster jar of ointment of pure nard \u2014 very costly. She broke the jar, and poured it over his head. But there were some who were indignant among themselves, saying, \u201cWhy has this ointment been wasted? For this might have been sold for more than three hundred denarii,  and given to the poor.\u201d They grumbled against her.";
-
-    function getKey() { return localStorage.getItem('gemini_key') || ''; }
-    function saveKey(k) { localStorage.setItem('gemini_key', k); }
+    const GEMINI_KEY = "AIzaSyAuZ2dMYxPANek-XRiL5Ef3tDPk5RSMwUc";
 
     async function generateExplanation(prompt) {
-        let key = getKey();
-        if (!key) {
-            document.getElementById('apiSetup').classList.add('visible');
-            document.getElementById('explainBtn').textContent = 'Unlock AI';
+        if (!GEMINI_KEY) {
+            document.getElementById('aiResponse').innerHTML = '⚠️ AI explanations are not yet configured. Check back soon!';
+            document.getElementById('aiResponse').classList.add('visible');
             return;
         }
         const btn = document.getElementById('explainBtn');
@@ -339,38 +335,32 @@
         btn.disabled = true;
 
         const userPrompt = prompt || `Explain Mark 14 from the Bible in a warm, accessible way. Cover:
-1. What is happening in this chapter (1-2 sentences of context)
+1. What is happening in this chapter (context in 1-2 sentences)
 2. The key spiritual insight or lesson (2-3 sentences)
 3. How someone can apply this to their life today (2-3 sentences)
 Keep the tone warm, grounded, and non-denominational. Begin with the chapter reference.`;
 
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     contents: [{parts: [{text: userPrompt}]}],
-                    generationConfig: {temperature: 0.7, maxOutputTokens: 512}
+                    generationConfig: {temperature: 0.7, maxOutputTokens: 600}
                 })
             });
             const data = await res.json();
             if (data.error) throw new Error(data.error.message);
             const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
             const el = document.getElementById('aiResponse');
-            el.innerHTML = text.replace(/\n/g, '<br>');
+            el.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
             el.classList.add('visible');
             document.getElementById('promptForm').classList.add('visible');
-            btn.textContent = 'Refresh';
+            btn.textContent = '&#10024; Refresh';
             btn.disabled = false;
         } catch(e) {
-            if (e.message.includes('API_KEY_INVALID') || e.message.includes('400')) {
-                document.getElementById('apiSetup').classList.add('visible');
-                document.getElementById('aiResponse').innerHTML = '⚠️ Invalid API key. Please check and try again.';
-                document.getElementById('aiResponse').classList.add('visible');
-            } else {
-                document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
-                document.getElementById('aiResponse').classList.add('visible');
-            }
+            document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
+            document.getElementById('aiResponse').classList.add('visible');
             btn.textContent = 'Try Again';
             btn.disabled = false;
         }
@@ -379,13 +369,8 @@ Keep the tone warm, grounded, and non-denominational. Begin with the chapter ref
     function askCustom() {
         const q = document.getElementById('customPrompt').value.trim();
         if (!q) return;
-        generateExplanation(`Regarding Mark 14: ${q}. Please give a thoughtful, scripture-rooted answer in 3-4 sentences.`);
+        generateExplanation(`Regarding Mark 14: ${q}. Please give a thoughtful, grounded, scripture-rooted answer in 3-4 sentences.`);
         document.getElementById('customPrompt').value = '';
-    }
-
-    // Auto-show key input if no key saved
-    if (!getKey()) {
-        // Don't auto-show, wait for button click
     }
 </script>
 </body>

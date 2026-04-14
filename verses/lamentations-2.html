@@ -272,16 +272,12 @@
     const BOOK = "Lamentations";
     const CHAPTER = 2;
     const REF = "Lamentations 2";
-    const VERSE_TEXT = "How has the Lord covered the daughter of Zion with a cloud in his anger! He has cast down from heaven to the earth the beauty of Israel, And hasn\u2019t remembered his footstool in the day of his anger.   The Lord has swallowed up all the habitations of Jacob, and has not pitied: He has thrown down in his wrath the strongholds of the daughter of Judah; He has brought them down to the ground; he has profaned the kingdom and its princes.   He has cut off in fierce anger all the horn of Israel; He has drawn back his right hand from before the enemy: He has burned up Jacob like a flaming fire, which devours all around.   He has bent his bow like an enemy, he has stood with his right hand as an adversary, Has killed all that were pleasant to the eye: In the tent of the daughter of Zion he has poured out his wrath like fire.   The Lord has become as an enemy, he has swallowed up Israel; He has swallowed up all her palaces, he has destroyed his strongholds; He has multiplied in the daughter of Judah mourning and lamentation.  ";
-
-    function getKey() { return localStorage.getItem('gemini_key') || ''; }
-    function saveKey(k) { localStorage.setItem('gemini_key', k); }
+    const GEMINI_KEY = "AIzaSyAuZ2dMYxPANek-XRiL5Ef3tDPk5RSMwUc";
 
     async function generateExplanation(prompt) {
-        let key = getKey();
-        if (!key) {
-            document.getElementById('apiSetup').classList.add('visible');
-            document.getElementById('explainBtn').textContent = 'Unlock AI';
+        if (!GEMINI_KEY) {
+            document.getElementById('aiResponse').innerHTML = '⚠️ AI explanations are not yet configured. Check back soon!';
+            document.getElementById('aiResponse').classList.add('visible');
             return;
         }
         const btn = document.getElementById('explainBtn');
@@ -289,38 +285,32 @@
         btn.disabled = true;
 
         const userPrompt = prompt || `Explain Lamentations 2 from the Bible in a warm, accessible way. Cover:
-1. What is happening in this chapter (1-2 sentences of context)
+1. What is happening in this chapter (context in 1-2 sentences)
 2. The key spiritual insight or lesson (2-3 sentences)
 3. How someone can apply this to their life today (2-3 sentences)
 Keep the tone warm, grounded, and non-denominational. Begin with the chapter reference.`;
 
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     contents: [{parts: [{text: userPrompt}]}],
-                    generationConfig: {temperature: 0.7, maxOutputTokens: 512}
+                    generationConfig: {temperature: 0.7, maxOutputTokens: 600}
                 })
             });
             const data = await res.json();
             if (data.error) throw new Error(data.error.message);
             const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
             const el = document.getElementById('aiResponse');
-            el.innerHTML = text.replace(/\n/g, '<br>');
+            el.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
             el.classList.add('visible');
             document.getElementById('promptForm').classList.add('visible');
-            btn.textContent = 'Refresh';
+            btn.textContent = '&#10024; Refresh';
             btn.disabled = false;
         } catch(e) {
-            if (e.message.includes('API_KEY_INVALID') || e.message.includes('400')) {
-                document.getElementById('apiSetup').classList.add('visible');
-                document.getElementById('aiResponse').innerHTML = '⚠️ Invalid API key. Please check and try again.';
-                document.getElementById('aiResponse').classList.add('visible');
-            } else {
-                document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
-                document.getElementById('aiResponse').classList.add('visible');
-            }
+            document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
+            document.getElementById('aiResponse').classList.add('visible');
             btn.textContent = 'Try Again';
             btn.disabled = false;
         }
@@ -329,13 +319,8 @@ Keep the tone warm, grounded, and non-denominational. Begin with the chapter ref
     function askCustom() {
         const q = document.getElementById('customPrompt').value.trim();
         if (!q) return;
-        generateExplanation(`Regarding Lamentations 2: ${q}. Please give a thoughtful, scripture-rooted answer in 3-4 sentences.`);
+        generateExplanation(`Regarding Lamentations 2: ${q}. Please give a thoughtful, grounded, scripture-rooted answer in 3-4 sentences.`);
         document.getElementById('customPrompt').value = '';
-    }
-
-    // Auto-show key input if no key saved
-    if (!getKey()) {
-        // Don't auto-show, wait for button click
     }
 </script>
 </body>

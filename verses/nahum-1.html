@@ -265,16 +265,12 @@
     const BOOK = "Nahum";
     const CHAPTER = 1;
     const REF = "Nahum 1";
-    const VERSE_TEXT = "A revelation about Nineveh. The book of the vision of Nahum the Elkoshite. Yahweh  is a jealous God  and avenges. Yahweh avenges and is full of wrath. Yahweh takes vengeance on his adversaries, and he maintains wrath against his enemies. Yahweh is slow to anger, and great in power, and will by no means leave the guilty unpunished. Yahweh has his way in the whirlwind and in the storm, and the clouds are the dust of his feet. He rebukes the sea, and makes it dry, and dries up all the rivers. Bashan languishes, and Carmel; and the flower of Lebanon languishes. The mountains quake before him, and the hills melt away. The earth trembles at his presence, yes, the world, and all who dwell in it.";
-
-    function getKey() { return localStorage.getItem('gemini_key') || ''; }
-    function saveKey(k) { localStorage.setItem('gemini_key', k); }
+    const GEMINI_KEY = "AIzaSyAuZ2dMYxPANek-XRiL5Ef3tDPk5RSMwUc";
 
     async function generateExplanation(prompt) {
-        let key = getKey();
-        if (!key) {
-            document.getElementById('apiSetup').classList.add('visible');
-            document.getElementById('explainBtn').textContent = 'Unlock AI';
+        if (!GEMINI_KEY) {
+            document.getElementById('aiResponse').innerHTML = '⚠️ AI explanations are not yet configured. Check back soon!';
+            document.getElementById('aiResponse').classList.add('visible');
             return;
         }
         const btn = document.getElementById('explainBtn');
@@ -282,38 +278,32 @@
         btn.disabled = true;
 
         const userPrompt = prompt || `Explain Nahum 1 from the Bible in a warm, accessible way. Cover:
-1. What is happening in this chapter (1-2 sentences of context)
+1. What is happening in this chapter (context in 1-2 sentences)
 2. The key spiritual insight or lesson (2-3 sentences)
 3. How someone can apply this to their life today (2-3 sentences)
 Keep the tone warm, grounded, and non-denominational. Begin with the chapter reference.`;
 
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     contents: [{parts: [{text: userPrompt}]}],
-                    generationConfig: {temperature: 0.7, maxOutputTokens: 512}
+                    generationConfig: {temperature: 0.7, maxOutputTokens: 600}
                 })
             });
             const data = await res.json();
             if (data.error) throw new Error(data.error.message);
             const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
             const el = document.getElementById('aiResponse');
-            el.innerHTML = text.replace(/\n/g, '<br>');
+            el.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
             el.classList.add('visible');
             document.getElementById('promptForm').classList.add('visible');
-            btn.textContent = 'Refresh';
+            btn.textContent = '&#10024; Refresh';
             btn.disabled = false;
         } catch(e) {
-            if (e.message.includes('API_KEY_INVALID') || e.message.includes('400')) {
-                document.getElementById('apiSetup').classList.add('visible');
-                document.getElementById('aiResponse').innerHTML = '⚠️ Invalid API key. Please check and try again.';
-                document.getElementById('aiResponse').classList.add('visible');
-            } else {
-                document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
-                document.getElementById('aiResponse').classList.add('visible');
-            }
+            document.getElementById('aiResponse').innerHTML = '⚠️ ' + e.message;
+            document.getElementById('aiResponse').classList.add('visible');
             btn.textContent = 'Try Again';
             btn.disabled = false;
         }
@@ -322,13 +312,8 @@ Keep the tone warm, grounded, and non-denominational. Begin with the chapter ref
     function askCustom() {
         const q = document.getElementById('customPrompt').value.trim();
         if (!q) return;
-        generateExplanation(`Regarding Nahum 1: ${q}. Please give a thoughtful, scripture-rooted answer in 3-4 sentences.`);
+        generateExplanation(`Regarding Nahum 1: ${q}. Please give a thoughtful, grounded, scripture-rooted answer in 3-4 sentences.`);
         document.getElementById('customPrompt').value = '';
-    }
-
-    // Auto-show key input if no key saved
-    if (!getKey()) {
-        // Don't auto-show, wait for button click
     }
 </script>
 </body>
