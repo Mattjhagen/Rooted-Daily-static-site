@@ -34,6 +34,9 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
         }
 
         .logo {
@@ -44,74 +47,95 @@
             text-decoration: none;
         }
 
-        /* --- Hero --- */
+        /* --- Hero Section --- */
         .hero {
-            padding: 6rem 2rem;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(10,14,18,0.7), rgba(10,14,18,0.9)), url('https://images.unsplash.com/photo-1507434965515-61970f2bd7c6?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            padding: 2rem;
+        }
+
+        .hero-content {
             max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
             align-items: center;
         }
 
-        @media (max-width: 900px) {
-            .hero { grid-template-columns: 1fr; text-align: center; padding: 4rem 2rem; }
-            .showcase-wrapper { justify-content: center; }
+        @media (max-width: 1024px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; margin-top: 4rem; }
+            .showcase-wrapper { justify-content: center; transform: scale(0.8); }
         }
 
-        .hero h1 {
+        .hero-text h1 {
             font-family: 'Crimson Text', serif;
-            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
             margin-bottom: 1.5rem;
-            line-height: 1.1;
+            line-height: 1;
+            letter-spacing: -0.02em;
         }
 
-        .hero p {
+        .hero-text p {
             font-size: 1.25rem;
             color: var(--text-secondary);
             margin-bottom: 3rem;
+            max-width: 500px;
         }
+
+        @media (max-width: 1024px) { .hero-text p { margin-left: auto; margin-right: auto; } }
 
         /* --- Buttons --- */
-        .cta-group { display: flex; gap: 1rem; flex-wrap: wrap; }
-        @media (max-width: 900px) { .cta-group { justify-content: center; } }
+        .cta-group { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+        @media (max-width: 1024px) { .cta-group { justify-content: center; } }
 
         .btn {
-            padding: 1rem 2rem;
-            border-radius: 12px;
+            padding: 1.1rem 2.5rem;
+            border-radius: 14px;
             text-decoration: none;
             font-weight: 700;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             border: none;
-            display: inline-block;
+            font-size: 1.05rem;
         }
 
-        .btn-primary { background: var(--accent-green); color: white; box-shadow: 0 10px 20px rgba(74, 115, 93, 0.2); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(74, 115, 93, 0.3); }
-        .btn-secondary { background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+        .btn-primary { background: var(--accent-green); color: white; box-shadow: 0 10px 30px rgba(74, 115, 93, 0.4); }
+        .btn-primary:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(74, 115, 93, 0.5); }
+        .btn-secondary { background: rgba(255,255,255,0.08); color: white; border: 1px solid var(--border); backdrop-filter: blur(10px); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.15); transform: translateY(-5px); }
 
         /* --- Premium Showcase --- */
         .showcase-wrapper {
-            position: relative;
             display: flex;
-            align-items: flex-end;
-            gap: 20px;
+            justify-content: flex-end;
+            perspective: 1500px;
         }
 
-        /* The 3D Phone Mockup */
         .phone-mockup {
-            width: 280px;
-            height: 580px;
+            width: 320px;
+            height: 660px;
             background: #000;
-            border-radius: 45px;
-            border: 12px solid #1a1f26;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border-radius: 50px;
+            border: 14px solid #1c2027;
+            box-shadow: 
+                0 50px 100px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(255,255,255,0.1);
             overflow: hidden;
             position: relative;
-            z-index: 10;
+            transform: rotateY(-10deg) rotateX(5deg);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: rotateY(-10deg) rotateX(5deg) translateY(0); }
+            50% { transform: rotateY(-5deg) rotateX(8deg) translateY(-20px); }
         }
 
         .screen-slider {
@@ -125,57 +149,56 @@
             top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 1.2s ease-in-out;
         }
 
         .screen-slider img.active { opacity: 1; }
 
-        /* The Bible Next to it */
-        .bible-graphic {
-            width: 240px;
-            opacity: 0.6;
-            filter: grayscale(0.5);
-            margin-bottom: 20px;
-            display: none; /* Hide on small screens */
+        .phone-gloss {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 20;
+            pointer-events: none;
         }
-
-        @media (min-width: 1100px) { .bible-graphic { display: block; } }
 
         /* --- Modal --- */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 1000;
             justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
         }
 
         .modal-content {
             background: #151b22;
-            padding: 3rem;
-            border-radius: 20px;
-            max-width: 500px;
+            padding: 3.5rem;
+            border-radius: 30px;
+            max-width: 550px;
             width: 90%;
             border: 1px solid var(--border);
             text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
         }
 
-        .step-list { text-align: left; margin: 2rem 0; }
-        .step { margin-bottom: 1rem; color: var(--text-secondary); }
+        .step-list { text-align: left; margin: 2.5rem 0; }
+        .step { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-secondary); }
         .step b { color: var(--accent-green); }
 
         /* --- Footer --- */
         footer {
-            padding: 4rem 2rem;
+            padding: 6rem 2rem;
             text-align: center;
-            border-top: 1px solid var(--border);
+            background: var(--bg-dark);
             color: var(--text-secondary);
         }
 
-        .footer-links { margin-bottom: 1rem; display: flex; gap: 2rem; justify-content: center; }
-        .footer-links a { color: var(--text-secondary); text-decoration: none; }
+        .footer-links { margin-bottom: 2rem; display: flex; gap: 3rem; justify-content: center; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .footer-links a:hover { color: var(--accent-green); }
     </style>
 </head>
 <body>
@@ -185,25 +208,25 @@
     </header>
 
     <section class="hero">
-        <div class="hero-text">
-            <h1>Renew Your Mind. <br>Rooted in Truth.</h1>
-            <p>Your daily Bible companion with high-quality audio, AI-guided reflections, and spiritual habit tracking.</p>
-            
-            <div class="cta-group">
-                <button onclick="openModal()" class="btn btn-primary">Download Android APK</button>
-                <a href="https://www.venmo.com/u/UnSungMinistries" target="_blank" class="btn btn-secondary">Support the Mission</a>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Renew Your Mind. <br>Rooted in Truth.</h1>
+                <p>Experience Scripture with natural audio narration, AI-guided reflections, and spiritual habit tracking.</p>
+                
+                <div class="cta-group">
+                    <button onclick="openModal()" class="btn btn-primary">Download Android APK</button>
+                    <a href="https://www.venmo.com/u/UnSungMinistries" target="_blank" class="btn btn-secondary">Support the Mission</a>
+                </div>
             </div>
-        </div>
 
-        <div class="showcase-wrapper">
-            <!-- Representing the "Bible next to Phone" layout -->
-            <img src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&q=80&w=400" class="bible-graphic" alt="Bible Background">
-            
-            <div class="phone-mockup">
-                <div class="screen-slider" id="screenSlider">
-                    <img src="home_cropped.png" class="active" alt="Home">
-                    <img src="bible_cropped.png" alt="Bible">
-                    <img src="reflection_cropped.png" alt="Reflection">
+            <div class="showcase-wrapper">
+                <div class="phone-mockup">
+                    <div class="phone-gloss"></div>
+                    <div class="screen-slider" id="screenSlider">
+                        <img src="home_cropped.png" class="active" alt="Home Screen">
+                        <img src="bible_cropped.png" alt="Bible Reader">
+                        <img src="reflection_cropped.png" alt="AI Reflection">
+                    </div>
                 </div>
             </div>
         </div>
@@ -211,31 +234,33 @@
 
     <div id="installModal" class="modal">
         <div class="modal-content">
-            <h2 style="font-family:'Crimson Text',serif; font-size: 2rem; margin-bottom: 1rem;">Installation Guide</h2>
+            <h2 style="font-family:'Crimson Text',serif; font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent-green);">Installation Guide</h2>
             <div class="step-list">
                 <div class="step">1. Download the <b>rooted_bible.apk</b></div>
-                <div class="step">2. Open the file and tap <b>Install</b></div>
-                <div class="step">3. If prompted, allow <b>unknown sources</b></div>
+                <div class="step">2. Once finished, open the file and tap <b>Install</b></div>
+                <div class="step">3. Give permission for <b>unknown sources</b> if asked</div>
             </div>
-            <a href="https://expo.dev/artifacts/eas/thM8gDTpYnPB8yjKhfCZYF.apk" class="btn btn-primary" style="display:block;">Download Now</a>
-            <p style="margin-top:1.5rem; color:#666; cursor:pointer;" onclick="closeModal()">Close</p>
+            <a href="https://expo.dev/artifacts/eas/thM8gDTpYnPB8yjKhfCZYF.apk" class="btn btn-primary" style="display:block; text-align: center;">Download Now</a>
+            <p style="margin-top:2rem; color:#888; cursor:pointer; font-weight: 600;" onclick="closeModal()">Dismiss</p>
         </div>
     </div>
 
     <footer>
         <div class="footer-links">
-            <a href="mailto:rootedapp@p3lending.space">Contact</a>
-            <a href="https://www.venmo.com/u/UnSungMinistries">Support Us</a>
+            <a href="mailto:rootedapp@p3lending.space">Contact Developer</a>
+            <a href="https://www.venmo.com/u/UnSungMinistries">Support the Cause</a>
         </div>
-        <p>&copy; 2026 Rooted Daily</p>
+        <p>&copy; 2026 Rooted Daily Bible Companion. A faith-first project.</p>
     </footer>
 
     <script>
+        // Modal Logic
         const modal = document.getElementById('installModal');
         function openModal() { modal.style.display = 'flex'; }
         function closeModal() { modal.style.display = 'none'; }
         window.onclick = function(e) { if (e.target == modal) closeModal(); }
 
+        // Animation Logic
         const slides = document.querySelectorAll('#screenSlider img');
         let currentSlide = 0;
         function nextSlide() {
@@ -243,7 +268,7 @@
             currentSlide = (currentSlide + 1) % slides.length;
             slides[currentSlide].classList.add('active');
         }
-        setInterval(nextSlide, 3500);
+        setInterval(nextSlide, 4000); // Transitions every 4 seconds
     </script>
 </body>
 </html>
