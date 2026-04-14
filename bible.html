@@ -462,13 +462,13 @@
         // Supabase Initialization
         const SUPABASE_URL = 'https://xphxtkdsshqsddajzlkj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaHh0a2Rzc2hxc2RkYWp6bGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4Mzg1MzksImV4cCI6MjA5MTQxNDUzOX0.zkXqNnFkOxkYEkQh8pYpsfUMdJMd8ri_Bta5_Jn_8lg';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let user = null;
         let selectedVerse = null;
 
         async function init() {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
+                const { data: { session } } = await sbClient.auth.getSession();
                 user = session?.user || null;
                 updateAuthUI();
 
@@ -491,7 +491,7 @@
 
         async function toggleAuth() {
             if (user) {
-                await supabase.auth.signOut();
+                await sbClient.auth.signOut();
                 user = null;
                 updateAuthUI();
                 renderChapter(); // Refresh to remove private data
@@ -504,8 +504,8 @@
         let userNotes = [];
 
         async function loadUserData() {
-            const { data: highlights } = await supabase.from('highlights').select('*');
-            const { data: notes } = await supabase.from('journal').select('*');
+            const { data: highlights } = await sbClient.from('highlights').select('*');
+            const { data: notes } = await sbClient.from('journal').select('*');
             userHighlights = highlights || [];
             userNotes = notes || [];
             renderChapter();
@@ -524,10 +524,10 @@
             const existing = userHighlights.find(h => h.book === book && h.chapter === chapter && h.verse === selectedVerse);
             
             if (existing) {
-                await supabase.from('highlights').delete().match({ id: existing.id });
+                await sbClient.from('highlights').delete().match({ id: existing.id });
                 userHighlights = userHighlights.filter(h => h.id !== existing.id);
             } else {
-                const { data } = await supabase.from('highlights').insert({ 
+                const { data } = await sbClient.from('highlights').insert({ 
                     book, chapter, verse: selectedVerse, user_id: user.id 
                 }).select();
                 if (data) userHighlights.push(data[0]);
@@ -555,10 +555,10 @@
             const existing = userNotes.find(n => n.book === book && n.chapter === chapter && n.verse === selectedVerse);
             
             if (existing) {
-                await supabase.from('journal').update({ content }).match({ id: existing.id });
+                await sbClient.from('journal').update({ content }).match({ id: existing.id });
                 existing.content = content;
             } else {
-                const { data } = await supabase.from('journal').insert({
+                const { data } = await sbClient.from('journal').insert({
                     book, chapter, verse: selectedVerse, content, user_id: user.id
                 }).select();
                 if (data) userNotes.push(data[0]);
@@ -578,10 +578,9 @@
             e.preventDefault();
             const email = e.target.email.value;
             const password = e.target.password.value;
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
             if (error) {
-                // Try signup if login fails (simple dev flow)
-                const { error: signUpError } = await supabase.auth.signUp({ email, password });
+                const { error: signUpError } = await sbClient.auth.signUp({ email, password });
                 if (signUpError) return alert(signUpError.message);
                 alert("Check your email for confirmation!");
             } else {
