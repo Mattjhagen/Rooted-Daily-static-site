@@ -388,9 +388,10 @@
     </div>
 
     <div class="action-menu" id="verseActionMenu">
-        <button class="btn btn-primary" onclick="toggleHighlight()">Highlight</button>
-        <button class="btn btn-secondary" onclick="openNoteModal()">Reflection</button>
-        <button class="btn btn-secondary" onclick="closeVerseMenu()">Cancel</button>
+        <button class="btn btn-primary" style="padding: 0.6rem 1.2rem;" onclick="toggleHighlight()">Highlight</button>
+        <button class="btn btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="openNoteModal()">Reflection</button>
+        <button class="btn btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="addBookmark()">Bookmark</button>
+        <button class="btn btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="closeVerseMenu()">Cancel</button>
     </div>
 
     <div id="noteModal" class="modal"><div class="modal-content"><h2>Reflection</h2><textarea id="noteText"></textarea><div style="display: flex; gap: 1rem;"><button class="btn btn-primary" onclick="saveNote()">Save</button><button class="btn btn-secondary" onclick="closeNoteModal()">Cancel</button></div></div></div>
@@ -491,7 +492,11 @@
         function closeVerseMenu() { document.getElementById('verseActionMenu').style.display = 'none'; }
         
         async function toggleHighlight() {
-            if (!user) return alert("Sign in first");
+            if (!user) {
+                closeVerseMenu();
+                openAuthModal();
+                return;
+            }
             const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
             const ex = userHighlights.find(h => h.book === book && h.chapter === chap && h.verse === selectedVerse);
             if (ex) {
@@ -504,7 +509,24 @@
             renderChapter(); closeVerseMenu();
         }
 
-        function openNoteModal() { document.getElementById('noteModal').style.display = 'flex'; }
+        function openNoteModal() { 
+            if (!user) {
+                closeVerseMenu();
+                openAuthModal();
+                return;
+            }
+            document.getElementById('noteModal').style.display = 'flex'; 
+        }
+
+        function addBookmark() {
+            if (!user) {
+                closeVerseMenu();
+                openAuthModal();
+                return;
+            }
+            alert("Bookmark saved!"); // Placeholder for bookmark logic
+            closeVerseMenu();
+        }
         function closeNoteModal() { document.getElementById('noteModal').style.display = 'none'; }
         async function saveNote() {
             const content = document.getElementById('noteText').value;
