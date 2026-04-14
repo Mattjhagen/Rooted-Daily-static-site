@@ -391,18 +391,25 @@
         </div>
 
         <div class="setting-item">
-            <span class="setting-label">ElevenLabs Voice (Coming Soon)</span>
-            <select class="select-btn" style="width: 100%;">
-                <option>Premium Male (Slow)</option>
-                <option>Premium Female (Calm)</option>
-            </select>
+            <span class="setting-label">Narrator Voice</span>
+            <select id="voiceSelect" class="select-btn" style="width: 100%;" onchange="testVoice()"></select>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Select "Samantha" or "Siri" for a premium experience.</p>
+        </div>
+
+        <div class="setting-item">
+            <span class="setting-label">ElevenLabs (Coming Soon)</span>
+            <div style="padding: 1rem; border: 1px dashed var(--border); border-radius: 8px; font-size: 0.9rem; color: var(--text-muted);">
+                Premium AI voices will be integrated here for the ultimate experience.
+            </div>
         </div>
     </div>
 
     <script>
         let bibleData = null;
-        let currentBookIndex = 39; // Matthew (starts at 0, Matt is usually 40th book)
+        let currentBookIndex = 39; // Matthew
         let currentChapterIndex = 0;
+        let synth = window.speechSynthesis;
+        let isSpeaking = false;
 
         const bookNames = [
             "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
@@ -420,10 +427,30 @@
                 bibleData = await response.json();
                 populateSelectors();
                 renderChapter();
+                loadVoices();
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
                 console.error("Failed to load bible data:", error);
             }
+        }
+
+        function loadVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            const voices = synth.getVoices();
+            voiceSelect.innerHTML = '';
+            
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = i;
+                if (voice.name.includes('Samantha') || voice.name.includes('Siri')) option.selected = true;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        // Handle async voice loading
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
         }
 
         function populateSelectors() {
@@ -535,8 +562,16 @@
             body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
         }
 
-        let synth = window.speechSynthesis;
-        let isSpeaking = false;
+        function testVoice() {
+            if (isSpeaking) {
+                synth.cancel();
+                isSpeaking = false;
+            }
+            const utterance = new SpeechSynthesisUtterance("Testing Rooted Bible Voice.");
+            const voices = synth.getVoices();
+            utterance.voice = voices[document.getElementById('voiceSelect').value];
+            synth.speak(utterance);
+        }
 
         function playAudio() {
             if (isSpeaking) {
@@ -550,26 +585,14 @@
             const fullText = textBlocks.join('. ');
 
             const utterance = new SpeechSynthesisUtterance(fullText);
-            
-            // Try to find a premium/neural voice
             const voices = synth.getVoices();
-            console.log("Available voices:", voices.length);
-            
-            // Preference: Samantha (Apple), Google US English, or any Neural
-            const preferredVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Google US English') || v.name.includes('Neural'));
-            if (preferredVoice) utterance.voice = preferredVoice;
-
+            utterance.voice = voices[document.getElementById('voiceSelect').value];
             utterance.rate = 0.95;
             utterance.onend = () => { isSpeaking = false; };
             utterance.onerror = () => { isSpeaking = false; };
 
             synth.speak(utterance);
             isSpeaking = true;
-        }
-
-        // Ensure voices are loaded (some browsers load them async)
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = () => synth.getVoices();
         }
 
         // Start
