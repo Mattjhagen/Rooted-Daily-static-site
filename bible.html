@@ -342,6 +342,58 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* --- Modals --- */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--bg-page);
+            padding: 2.5rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-nav);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
         /* --- Mobile Responsive --- */
         @media (max-width: 640px) {
             .nav-arrow { width: 40px; height: 40px; }
@@ -462,12 +514,15 @@
         // Supabase Initialization
         const SUPABASE_URL = 'https://xphxtkdsshqsddajzlkj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaHh0a2Rzc2hxc2RkYWp6bGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4Mzg1MzksImV4cCI6MjA5MTQxNDUzOX0.zkXqNnFkOxkYEkQh8pYpsfUMdJMd8ri_Bta5_Jn_8lg';
-        const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        let sbClient = null;
         let user = null;
         let selectedVerse = null;
 
         async function init() {
             try {
+                // Initialize Supabase Client
+                sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
                 const { data: { session } } = await sbClient.auth.getSession();
                 user = session?.user || null;
                 updateAuthUI();
@@ -478,9 +533,12 @@
                 renderChapter();
                 loadVoices();
                 if (user) loadUserData();
-                document.getElementById('loading').style.display = 'none';
             } catch (error) {
-                console.error("Failed to load bible data:", error);
+                console.error("Initialization error:", error);
+            } finally {
+                // Always dismiss loading screen
+                const loader = document.getElementById('loading');
+                if (loader) loader.style.display = 'none';
             }
         }
 
