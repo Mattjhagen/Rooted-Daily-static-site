@@ -11,23 +11,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --bg-page: #ffffff;
-            --bg-nav: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #666666;
-            --accent: #4a735d;
-            --border: #e5e7eb;
-            --font-size-base: 1.125rem;
-            --font-family-body: 'Inter', sans-serif;
-            --font-family-serif: 'Crimson Text', serif;
-        }
-
-        [data-theme="dark"] {
             --bg-page: #0f172a;
             --bg-nav: #1e293b;
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
+            --accent: #4a735d;
             --border: #334155;
+            --font-size-base: 1.25rem;
+            --font-family-body: 'Inter', sans-serif;
+            --font-family-serif: 'Crimson Text', serif;
+        }
+
+        [data-theme="light"] {
+            --bg-page: #ffffff;
+            --bg-nav: #f8fafc;
+            --text-main: #1a1a1a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,170 +35,179 @@
             font-family: var(--font-family-body);
             background-color: var(--bg-page);
             color: var(--text-main);
-            line-height: 1.7;
-            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.8;
+            transition: background-color 0.4s, color 0.4s;
+            overflow-x: hidden;
         }
 
         header {
-            height: 72px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 1.5rem;
+            padding: 0 2rem;
             border-bottom: 1px solid var(--border);
             background: var(--bg-nav);
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
         .logo {
-            font-family: 'Crimson Text', serif;
-            font-size: 1.8rem;
+            font-family: var(--font-family-serif);
+            font-size: 2rem;
             font-weight: 700;
             color: var(--accent);
             text-decoration: none;
+            letter-spacing: -0.02em;
         }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
+        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
 
         .icon-btn {
             background: none;
             border: none;
             cursor: pointer;
             color: var(--text-main);
-            padding: 8px;
-            border-radius: 50%;
+            padding: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
 
-        .icon-btn:hover { background: rgba(0,0,0,0.05); }
-        [data-theme="dark"] .icon-btn:hover { background: rgba(255,255,255,0.1); }
+        .icon-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+        [data-theme="light"] .icon-btn:hover { background: rgba(0,0,0,0.05); }
 
         .bible-toolbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.75rem 1.5rem;
+            padding: 1rem 2rem;
             border-bottom: 1px solid var(--border);
             background: var(--bg-nav);
             position: sticky;
-            top: 72px;
+            top: 80px;
             z-index: 99;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
-        .selector-group { display: flex; gap: 0.5rem; flex-grow: 1; }
+        .selector-group { display: flex; gap: 0.75rem; flex-grow: 1; }
         .select-btn {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.25rem;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             background: var(--bg-page);
             color: var(--text-main);
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            min-width: 120px;
+            gap: 0.75rem;
+            min-width: 140px;
+            transition: border-color 0.2s;
         }
+        .select-btn:hover { border-color: var(--accent); }
 
         main {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
+            max-width: 850px;
+            margin: 4rem auto;
+            padding: 0 2rem;
             min-height: 80vh;
         }
 
         .chapter-title {
             font-family: var(--font-family-serif);
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             text-align: center;
-            margin-bottom: 3rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .verse {
-            margin-bottom: 0.5rem;
-            transition: background 0.3s ease, padding 0.3s ease;
-            display: inline;
-            padding: 2px 0;
-            border-radius: 4px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .verse:hover { background-color: rgba(74, 115, 93, 0.05); }
-
-        .verse.highlight {
-            background-color: rgba(74, 115, 93, 0.2);
-            box-shadow: 0 0 10px rgba(74, 115, 93, 0.1);
-        }
-
-        .user-highlight {
-            background-color: rgba(255, 230, 0, 0.3) !important;
-            border-bottom: 2px solid rgba(255, 200, 0, 0.5);
-        }
-
-        .has-note::after {
-            content: '📝';
-            font-size: 0.8rem;
-            position: absolute;
-            top: -10px;
-            right: -5px;
-        }
-
-        .verse-num {
-            font-size: 0.75rem;
+            margin-bottom: 4rem;
+            letter-spacing: 0.05em;
             color: var(--accent);
-            vertical-align: super;
-            margin-right: 0.25rem;
             font-weight: 700;
         }
 
-        .bible-text { font-size: var(--font-size-base); text-align: justify; }
+        .bible-text {
+            font-size: var(--font-size-base);
+            text-align: left;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .verse {
+            margin-bottom: 1rem;
+            display: inline;
+            padding: 4px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .verse:hover { background-color: rgba(74, 115, 93, 0.15); }
+
+        .verse.highlight {
+            background-color: rgba(74, 115, 93, 0.3);
+            box-shadow: 0 0 15px rgba(74, 115, 93, 0.2);
+        }
+
+        .user-highlight {
+            background: linear-gradient(to bottom, transparent 60%, rgba(255, 230, 0, 0.3) 60%) !important;
+            border-radius: 0;
+        }
+
+        .has-note::after {
+            content: '•';
+            color: var(--accent);
+            font-size: 1.5rem;
+            position: absolute;
+            top: -15px;
+            right: 0;
+        }
+
+        .verse-num {
+            font-size: 0.85rem;
+            color: var(--accent);
+            vertical-align: super;
+            margin-right: 0.4rem;
+            font-weight: 800;
+            opacity: 0.7;
+        }
+
         .serif { font-family: var(--font-family-serif); }
         .sans { font-family: var(--font-family-body); }
 
         .action-menu {
             position: fixed;
-            bottom: 2rem;
+            bottom: 3rem;
             left: 50%;
             transform: translateX(-50%);
             background: var(--bg-nav);
             border: 1px solid var(--border);
-            padding: 1rem;
-            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
             display: none;
-            gap: 1rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            gap: 1.25rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
             z-index: 1000;
+            backdrop-filter: blur(15px);
         }
 
         .page-nav {
             position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
+            bottom: 3rem;
             width: 100%;
             display: flex;
             justify-content: space-between;
-            padding: 0 1rem;
+            padding: 0 5rem;
             pointer-events: none;
             z-index: 50;
         }
 
         .nav-arrow {
-            width: 48px;
-            height: 48px;
+            width: 60px; height: 60px;
             background: var(--bg-nav);
             border: 1px solid var(--border);
             border-radius: 50%;
@@ -207,69 +216,76 @@
             justify-content: center;
             cursor: pointer;
             pointer-events: auto;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .nav-arrow:hover { transform: scale(1.1); background: var(--accent); color: white; }
-
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            z-index: 1000;
-        }
+        .nav-arrow:hover { transform: scale(1.15); background: var(--accent); color: white; border-color: var(--accent); }
 
         .side-panel {
             position: fixed;
-            top: 0; right: -350px; width: 350px; height: 100%;
-            background: var(--bg-page);
+            top: 0; right: -400px; width: 400px; height: 100%;
+            background: var(--bg-nav);
             z-index: 1001;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-            transition: right 0.3s ease;
-            padding: 2rem;
+            box-shadow: -20px 0 60px rgba(0,0,0,0.3);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 3rem;
         }
-
         .side-panel.open { right: 0; }
 
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
-        }
-
-        .setting-item { margin-bottom: 2rem; }
-        .setting-label { font-weight: 600; margin-bottom: 0.75rem; display: block; }
-        .font-toggle { display: flex; gap: 0.5rem; }
-        .font-toggle button {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            background: none;
-            cursor: pointer;
-            border-radius: 8px;
-            color: var(--text-main);
-        }
-        .font-toggle button.active { background: var(--accent); color: white; border-color: var(--accent); }
-        .size-slider { width: 100%; margin-top: 0.5rem; }
-
-        .ai-banner {
-            background: linear-gradient(135deg, #4f46e5, #4a735d);
-            color: white;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-top: 3rem;
-            text-align: center;
-            display: flex;
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            font-weight: 600;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
         }
+
+        .modal-content {
+            background: var(--bg-nav);
+            padding: 3rem;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: var(--bg-page);
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .input-field:focus { border-color: var(--accent); outline: none; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1.1rem;
+            width: 100%;
+        }
+
+        .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(74, 115, 93, 0.3); }
+        .btn-secondary { background: var(--bg-page); color: var(--text-main); border: 1px solid var(--border); }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
 
         #loading {
             position: fixed;
@@ -278,64 +294,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2000;
+            z-index: 3000;
         }
-
         .spinner {
-            width: 40px; height: 40px;
-            border: 4px solid var(--border);
-            border-top: 4px solid var(--accent);
+            width: 50px; height: 50px;
+            border: 5px solid var(--border);
+            border-top: 5px solid var(--accent);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
-
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-content {
-            background: var(--bg-page);
-            padding: 2.5rem;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-secondary { background: var(--bg-nav); color: var(--text-main); border: 1px solid var(--border); }
-        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
-
-        @media (max-width: 640px) {
-            .nav-arrow { width: 40px; height: 40px; }
-            .bible-toolbar { padding: 0.5rem 1rem; }
-            .select-btn { min-width: auto; padding: 0.5rem 0.75rem; font-size: 0.9rem; }
-            .chapter-title { font-size: 1.8rem; }
+        @media (max-width: 768px) {
+            .page-nav { padding: 0 1rem; }
             .side-panel { width: 100%; right: -100%; }
+            .chapter-title { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -346,10 +319,8 @@
     <header>
         <a href="index.html" class="logo">Rooted</a>
         <div class="nav-right">
-            <button id="authBtn" class="btn btn-secondary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;" onclick="toggleAuth()">Sign In</button>
-            <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-            </button>
+            <button id="authBtn" class="btn btn-secondary" style="width:auto; padding: 0.6rem 1.5rem;" onclick="toggleAuth()">Sign In</button>
+            <button class="icon-btn" onclick="toggleTheme()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
             <button class="icon-btn" onclick="openPanel()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
         </div>
     </header>
@@ -358,60 +329,60 @@
         <div class="selector-group">
             <select id="bookSelect" class="select-btn" onchange="changeBook()"></select>
             <select id="chapterSelect" class="select-btn" onchange="changeChapter()"></select>
-            <div class="select-btn" style="background: rgba(0,0,0,0.03); border:none;">WEB</div>
         </div>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <button class="icon-btn" onclick="playAudio()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2V15H6L11 19V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
-            <button class="icon-btn" onclick="openPanel()"><span style="font-weight: 700;">AA</span></button>
+        <div style="display: flex; gap: 1rem;">
+            <button class="icon-btn" onclick="playAudio()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2V15H6L11 19V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+            <button class="icon-btn" onclick="openPanel()"><span style="font-weight: 800;">AA</span></button>
         </div>
     </div>
 
-    <main id="bibleContainer">
-        <h1 id="chapterHeader" class="chapter-title">Loading...</h1>
+    <main>
+        <h1 id="chapterHeader" class="chapter-title">...</h1>
         <div id="bibleText" class="bible-text serif"></div>
-        <div class="ai-banner">AI Spiritual Guide - Coming Soon!</div>
     </main>
 
     <div class="page-nav">
-        <div class="nav-arrow" onclick="prevChapter()" id="prevBtn"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
-        <div class="nav-arrow" onclick="nextChapter()" id="nextBtn"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+        <div class="nav-arrow" onclick="prevChapter()"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 22 10 12 18 2"></polyline></svg></div>
+        <div class="nav-arrow" onclick="nextChapter()"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="3"><polyline points="10 22 18 12 10 2"></polyline></svg></div>
+    </div>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <h2 id="authTitle" style="margin-bottom: 2rem; font-family:var(--font-family-serif); font-size: 2.2rem;">Sign In</h2>
+            <form onsubmit="handleAuth(event)">
+                <input type="email" name="email" class="input-field" placeholder="Email Address" required autocomplete="email">
+                <input type="password" name="password" class="input-field" placeholder="Password" required autocomplete="current-password">
+                <button type="submit" id="submitBtn" class="btn btn-primary">Sign In</button>
+            </form>
+            <p style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.95rem;">
+                <span id="authToggleText">Don't have an account?</span>
+                <a href="#" onclick="toggleAuthMode()" id="authToggleLink" style="color: var(--accent); font-weight: 700; text-decoration: none;">Sign Up</a>
+            </p>
+            <p style="margin-top: 1rem; cursor: pointer; opacity: 0.6;" onclick="closeAuthModal()">Cancel</p>
+        </div>
     </div>
 
     <div class="overlay" id="overlay" onclick="closePanel()"></div>
     <div class="side-panel" id="sidePanel">
-        <div class="panel-header"><h3>Settings</h3><button class="icon-btn" onclick="closePanel()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
-        <div class="setting-item"><span class="setting-label">Font Style</span><div class="font-toggle"><button id="serifBtn" class="active" onclick="setFont('serif')">Serif</button><button id="sansBtn" onclick="setFont('sans')">Sans</button></div></div>
-        <div class="setting-item"><span class="setting-label">Font Size</span><input type="range" min="14" max="32" value="18" class="size-slider" oninput="setSize(this.value)"></div>
-        <div class="setting-item"><span class="setting-label">Narrator Voice</span><select id="voiceSelect" class="select-btn" style="width: 100%;" onchange="testVoice()"></select></div>
-        <div class="setting-item"><span class="setting-label">Narrator Speed</span><input type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="size-slider" id="speedSlider" oninput="document.getElementById('speedText').textContent = this.value + 'x'"><div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span id="speedText">1.0x</span></div></div>
-        <div id="accountSettings" class="setting-item" style="display: none;"><hr style="margin-bottom: 1.5rem;"><span class="setting-label">Account</span><button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.5rem;" onclick="openPasswordReset()">Change Password</button></div>
+        <div class="panel-header"><h2>Settings</h2><button class="icon-btn" onclick="closePanel()"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+        <div class="setting-item"><span class="setting-label">Typography</span><div class="font-toggle"><button id="serifBtn" class="active" onclick="setFont('serif')">Serif</button><button id="sansBtn" onclick="setFont('sans')">Sans</button></div></div>
+        <div class="setting-item"><span class="setting-label">Read Speed</span><input type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="size-slider" id="speedSlider" oninput="document.getElementById('speedText').textContent = this.value + 'x'"><div id="speedText" style="text-align:center; font-weight: 700;">1.0x</div></div>
+        <div class="setting-item"><span class="setting-label">Narrator</span><select id="voiceSelect" class="select-btn" style="width: 100%;" onchange="testVoice()"></select></div>
+        <div id="accountSettings" style="display: none; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 2rem;"><button class="btn btn-secondary" onclick="openPasswordReset()">Change Password</button></div>
     </div>
 
     <div class="action-menu" id="verseActionMenu">
-        <button class="btn btn-primary" style="padding: 0.6rem 1.2rem;" onclick="toggleHighlight()">Highlight</button>
-        <button class="btn btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="openNoteModal()">Reflection</button>
-        <button class="btn btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="addBookmark()">Bookmark</button>
-        <button class="btn btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="closeVerseMenu()">Cancel</button>
+        <button class="btn btn-primary" style="width: auto;" onclick="toggleHighlight()">Highlight</button>
+        <button class="btn btn-secondary" style="width: auto;" onclick="openNoteModal()">Reflection</button>
+        <button class="btn btn-secondary" style="width: auto;" onclick="closeVerseMenu()">✕</button>
     </div>
 
-    <div id="noteModal" class="modal"><div class="modal-content"><h2>Reflection</h2><textarea id="noteText"></textarea><div style="display: flex; gap: 1rem;"><button class="btn btn-primary" onclick="saveNote()">Save</button><button class="btn btn-secondary" onclick="closeNoteModal()">Cancel</button></div></div></div>
-    <div id="authModal" class="modal"><div class="modal-content"><h2>Sign In</h2><form onsubmit="handleLogin(event)"><input type="email" name="email" placeholder="Email" required autocomplete="email"><input type="password" name="password" placeholder="Password" required autocomplete="current-password"><button type="submit" class="btn btn-primary">Continue</button></form><p onclick="closeAuthModal()">Cancel</p></div></div>
+    <div id="noteModal" class="modal"><div class="modal-content"><h2>Reflection</h2><textarea id="noteText" class="input-field" style="height: 200px; margin-top: 1rem;"></textarea><div style="display: flex; gap: 1rem;"><button class="btn btn-primary" onclick="saveNote()">Save</button><button class="btn btn-secondary" onclick="closeNoteModal()">Cancel</button></div></div></div>
 
     <script>
-        let bibleData = null;
-        let currentBookIndex = 39;
-        let currentChapterIndex = 0;
-        let synth = window.speechSynthesis;
-        let isSpeaking = false;
-        let sbClient = null;
-        let user = null;
-        let selectedVerse = null;
-        let userHighlights = [];
-        let userNotes = [];
-
-        const SUPABASE_URL = 'https://xphxtkdsshqsddajzlkj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaHh0a2Rzc2hxc2RkYWp6bGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4Mzg1MzksImV4cCI6MjA5MTQxNDUzOX0.zkXqNnFkOxkYEkQh8pYpsfUMdJMd8ri_Bta5_Jn_8lg';
-        const bookNames = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"];
+        let bibleData, currentBookIndex = 39, currentChapterIndex = 0, synth = window.speechSynthesis, isSpeaking = false, sbClient, user, selectedVerse, userHighlights = [], userNotes = [], authMode = 'signin';
+        const SUPABASE_URL = 'https://xphxtkdsshqsddajzlkj.supabase.co', SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaHh0a2Rzc2hxc2RkYWp6bGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4Mzg1MzksImV4cCI6MjA5MTQxNDUzOX0.zkXqNnFkOxkYEkQh8pYpsfUMdJMd8ri_Bta5_Jn_8lg';
+        const bookNames = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah", "Inter", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"];
 
         async function init() {
             setTimeout(() => { document.getElementById('loading').style.display = 'none'; }, 4000);
@@ -422,64 +393,41 @@
                     user = session?.user || null;
                     if (window.location.hash.includes('type=recovery')) handleRecovery();
                 }
-                const response = await fetch('data/bible.json');
-                bibleData = await response.json();
-                populateSelectors();
-                renderChapter();
-                loadVoices();
+                const res = await fetch('data/bible.json');
+                bibleData = await res.json();
+                populateSelectors(); renderChapter(); loadVoices();
                 if (user) loadUserData();
                 updateAuthUI();
-            } catch (error) { console.error(error); }
-            finally { document.getElementById('loading').style.display = 'none'; }
+            } catch (e) { console.error(e); } finally { document.getElementById('loading').style.display = 'none'; }
         }
 
-        async function handleRecovery() {
-            const pass = prompt("Enter new password:");
-            if (pass) {
-                await sbClient.auth.updateUser({ password: pass });
-                alert("Updated!");
+        async function handleAuth(e) {
+            e.preventDefault();
+            const email = e.target.email.value, password = e.target.password.value;
+            let result;
+            if (authMode === 'signin') {
+                result = await sbClient.auth.signInWithPassword({ email, password });
+            } else {
+                result = await sbClient.auth.signUp({ email, password });
+                if (!result.error) alert("Check your email for confirmation!");
             }
-            window.location.hash = '';
+            if (result.error) alert(result.error.message);
+            else if (result.data.user) { user = result.data.user; updateAuthUI(); loadUserData(); closeAuthModal(); }
         }
 
-        async function loadUserData() {
-            const { data: h } = await sbClient.from('highlights').select('*');
-            const { data: n } = await sbClient.from('journal').select('*');
-            userHighlights = h || [];
-            userNotes = n || [];
-            renderChapter();
-        }
-
-        function populateSelectors() {
-            const b = document.getElementById('bookSelect');
-            bookNames.forEach((n, i) => {
-                const o = document.createElement('option');
-                o.value = i; o.textContent = n;
-                if (i === currentBookIndex) o.selected = true;
-                b.appendChild(o);
-            });
-            updateChapterSelector();
-        }
-
-        function updateChapterSelector() {
-            const c = document.getElementById('chapterSelect');
-            c.innerHTML = '';
-            bibleData.books[currentBookIndex].chapters.forEach((_, i) => {
-                const o = document.createElement('option');
-                o.value = i; o.textContent = `Chapter ${i + 1}`;
-                if (i === currentChapterIndex) o.selected = true;
-                c.appendChild(o);
-            });
+        function toggleAuthMode() {
+            authMode = authMode === 'signin' ? 'signup' : 'signin';
+            document.getElementById('authTitle').textContent = authMode === 'signin' ? 'Sign In' : 'Create Account';
+            document.getElementById('submitBtn').textContent = authMode === 'signin' ? 'Sign In' : 'Sign Up';
+            document.getElementById('authToggleText').textContent = authMode === 'signin' ? "Don't have an account?" : "Already have an account?";
+            document.getElementById('authToggleLink').textContent = authMode === 'signin' ? "Sign Up" : "Sign In";
         }
 
         function renderChapter() {
-            const book = bibleData.books[currentBookIndex];
-            const chapter = book.chapters[currentChapterIndex];
-            const name = bookNames[currentBookIndex];
-            const chapNum = currentChapterIndex + 1;
+            const book = bibleData.books[currentBookIndex], name = bookNames[currentBookIndex], chapNum = currentChapterIndex + 1;
             document.getElementById('chapterHeader').textContent = `${name} ${chapNum}`;
             let html = '';
-            chapter.forEach((v, i) => {
+            book.chapters[currentChapterIndex].forEach((v, i) => {
                 const vNum = i + 1;
                 const h = userHighlights.some(x => x.book === name && x.chapter === chapNum && x.verse === vNum);
                 const n = userNotes.some(x => x.book === name && x.chapter === chapNum && x.verse === vNum);
@@ -488,105 +436,72 @@
             document.getElementById('bibleText').innerHTML = html;
         }
 
-        function handleVerseClick(v) { selectedVerse = v; document.getElementById('verseActionMenu').style.display = 'flex'; }
-        function closeVerseMenu() { document.getElementById('verseActionMenu').style.display = 'none'; }
-        
-        async function toggleHighlight() {
-            if (!user) {
-                closeVerseMenu();
-                openAuthModal();
-                return;
-            }
-            const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
-            const ex = userHighlights.find(h => h.book === book && h.chapter === chap && h.verse === selectedVerse);
-            if (ex) {
-                await sbClient.from('highlights').delete().match({ id: ex.id });
-                userHighlights = userHighlights.filter(h => h.id !== ex.id);
-            } else {
-                const { data } = await sbClient.from('highlights').insert({ book, chapter: chap, verse: selectedVerse, user_id: user.id }).select();
-                if (data) userHighlights.push(data[0]);
-            }
-            renderChapter(); closeVerseMenu();
-        }
-
-        function openNoteModal() { 
-            if (!user) {
-                closeVerseMenu();
-                openAuthModal();
-                return;
-            }
-            document.getElementById('noteModal').style.display = 'flex'; 
-        }
-
-        function addBookmark() {
-            if (!user) {
-                closeVerseMenu();
-                openAuthModal();
-                return;
-            }
-            alert("Bookmark saved!"); // Placeholder for bookmark logic
-            closeVerseMenu();
-        }
-        function closeNoteModal() { document.getElementById('noteModal').style.display = 'none'; }
-        async function saveNote() {
-            const content = document.getElementById('noteText').value;
-            const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
-            await sbClient.from('journal').insert({ book, chapter: chap, verse: selectedVerse, content, user_id: user.id });
-            loadUserData(); closeNoteModal(); closeVerseMenu();
+        async function loadUserData() {
+            const { data: h } = await sbClient.from('highlights').select('*');
+            const { data: n } = await sbClient.from('journal').select('*');
+            userHighlights = h || []; userNotes = n || []; renderChapter();
         }
 
         function updateAuthUI() { 
             document.getElementById('authBtn').textContent = user ? 'Sign Out' : 'Sign In'; 
             document.getElementById('accountSettings').style.display = user ? 'block' : 'none';
         }
-        async function toggleAuth() {
-            if (user) { await sbClient.auth.signOut(); user = null; updateAuthUI(); renderChapter(); }
-            else document.getElementById('authModal').style.display = 'flex';
-        }
-        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
-        async function handleLogin(e) {
-            e.preventDefault();
-            const { data, error } = await sbClient.auth.signInWithPassword({ email: e.target.email.value, password: e.target.password.value });
-            if (error) alert(error.message); else { user = data.user; updateAuthUI(); loadUserData(); closeAuthModal(); }
+
+        async function toggleHighlight() {
+            if (!user) { closeVerseMenu(); openAuthModal(); return; }
+            const book = bookNames[currentBookIndex], chap = currentChapterIndex + 1;
+            const ex = userHighlights.find(h => h.book === book && h.chapter === chap && h.verse === selectedVerse);
+            if (ex) { await sbClient.from('highlights').delete().match({ id: ex.id }); userHighlights = userHighlights.filter(x => x.id !== ex.id); }
+            else { const { data } = await sbClient.from('highlights').insert({ book, chapter: chap, verse: selectedVerse, user_id: user.id }).select(); if (data) userHighlights.push(data[0]); }
+            renderChapter(); closeVerseMenu();
         }
 
+        function populateSelectors() {
+            const b = document.getElementById('bookSelect');
+            bookNames.forEach((n, i) => { const o = document.createElement('option'); o.value = i; o.textContent = n; if (i === currentBookIndex) o.selected = true; b.appendChild(o); });
+            updateChapterSelector();
+        }
+        function updateChapterSelector() {
+            const c = document.getElementById('chapterSelect'); c.innerHTML = '';
+            bibleData.books[currentBookIndex].chapters.forEach((_, i) => { const o = document.createElement('option'); o.value = i; o.textContent = `Chapter ${i + 1}`; if (i === currentChapterIndex) o.selected = true; c.appendChild(o); });
+        }
+        function handleVerseClick(v) { selectedVerse = v; document.getElementById('verseActionMenu').style.display = 'flex'; }
+        function closeVerseMenu() { document.getElementById('verseActionMenu').style.display = 'none'; }
+        function openNoteModal() { if (!user) { closeVerseMenu(); openAuthModal(); return; } document.getElementById('noteModal').style.display = 'flex'; }
+        function closeNoteModal() { document.getElementById('noteModal').style.display = 'none'; }
+        async function saveNote() { const content = document.getElementById('noteText').value; await sbClient.from('journal').insert({ book: bookNames[currentBookIndex], chapter: currentChapterIndex + 1, verse: selectedVerse, content, user_id: user.id }); loadUserData(); closeNoteModal(); closeVerseMenu(); }
+        async function toggleAuth() { if (user) { await sbClient.auth.signOut(); user = null; updateAuthUI(); renderChapter(); } else openAuthModal(); }
+        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+        function setFont(s) { document.getElementById('bibleText').className = `bible-text ${s}`; }
+        function setSize(s) { document.documentElement.style.setProperty('--font-size-base', s + 'px'); }
+        function toggleTheme() { 
+            const cur = document.body.getAttribute('data-theme');
+            document.body.setAttribute('data-theme', cur === 'light' ? 'dark' : 'light'); 
+        }
         function changeBook() { currentBookIndex = parseInt(document.getElementById('bookSelect').value); currentChapterIndex = 0; updateChapterSelector(); renderChapter(); }
         function changeChapter() { currentChapterIndex = parseInt(document.getElementById('chapterSelect').value); renderChapter(); }
         function nextChapter() { if (currentChapterIndex < bibleData.books[currentBookIndex].chapters.length - 1) currentChapterIndex++; else if (currentBookIndex < 65) { currentBookIndex++; currentChapterIndex = 0; } populateSelectors(); renderChapter(); }
         function prevChapter() { if (currentChapterIndex > 0) currentChapterIndex--; else if (currentBookIndex > 0) { currentBookIndex--; currentChapterIndex = bibleData.books[currentBookIndex].chapters.length - 1; } populateSelectors(); renderChapter(); }
         function openPanel() { document.getElementById('sidePanel').classList.add('open'); document.getElementById('overlay').style.display = 'block'; }
         function closePanel() { document.getElementById('sidePanel').classList.remove('open'); document.getElementById('overlay').style.display = 'none'; }
-        function setFont(s) { document.getElementById('bibleText').className = `bible-text ${s}`; }
-        function setSize(s) { document.documentElement.style.setProperty('--font-size-base', s + 'px'); }
-        function toggleTheme() { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
 
         function loadVoices() {
-            const vSelect = document.getElementById('voiceSelect');
-            const voices = synth.getVoices();
-            vSelect.innerHTML = '';
-            voices.forEach((v, i) => {
-                const o = document.createElement('option');
-                o.value = i; o.textContent = v.name;
-                if (v.name.includes('Samantha') || v.name.includes('Aria')) o.selected = true;
-                vSelect.appendChild(o);
-            });
+            const vSelect = document.getElementById('voiceSelect'); const voices = synth.getVoices(); vSelect.innerHTML = '';
+            voices.forEach((v, i) => { const o = document.createElement('option'); o.value = i; o.textContent = v.name; if (v.name.includes('Samantha') || v.name.includes('Aria')) o.selected = true; vSelect.appendChild(o); });
         }
         speechSynthesis.onvoiceschanged = loadVoices;
 
         async function playAudio() {
             if (isSpeaking) { synth.cancel(); isSpeaking = false; return; }
-            isSpeaking = true;
-            const verses = document.querySelectorAll('.verse');
-            const rate = parseFloat(document.getElementById('speedSlider').value);
+            isSpeaking = true; const verses = document.querySelectorAll('.verse'); const rate = parseFloat(document.getElementById('speedSlider').value);
             for (let v of verses) {
                 if (!isSpeaking) break;
                 v.classList.add('highlight');
                 await new Promise(res => {
                     const u = new SpeechSynthesisUtterance(v.textContent.replace(/^\d+/, ''));
                     u.voice = synth.getVoices()[document.getElementById('voiceSelect').value];
-                    u.rate = rate;
-                    u.onend = res;
-                    synth.speak(u);
+                    u.rate = rate; u.onend = res; synth.speak(u);
                 });
                 v.classList.remove('highlight');
             }
