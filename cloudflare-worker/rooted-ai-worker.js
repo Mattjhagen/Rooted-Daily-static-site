@@ -18,7 +18,8 @@ export default {
   async fetch(request, env) {
 
     const origin = request.headers.get('Origin') || '';
-    const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+    // Native apps (Android/iOS) don't send Origin — allow with wildcard
+    const allowedOrigin = !origin ? '*' : (ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]);
 
     // Handle CORS preflight
     if (request.method === 'OPTIONS') {
