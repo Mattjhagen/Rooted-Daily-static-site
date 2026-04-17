@@ -5,7 +5,7 @@ Generates SEO-optimized HTML pages with static book context + live Gemini AI int
 """
 import json, os, re, sys
 
-SITE_URL = "https://app.vibecodes.space"
+SITE_URL = "https://rootedapp.space"
 OUTPUT_DIR = "verses"
 
 # Pass your Gemini API key as a command-line argument:
@@ -133,13 +133,11 @@ def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters
     next_link = f'<a class="nav-pill" href="{next_slug}.html">Next &#8594;</a>' if next_slug else '<span class="nav-pill disabled">Next &#8594;</span>'
     reader_link = f"../bible.html?book={book_name.replace(' ', '+')}&chapter={chap_num}"
 
-    # Chapter navigation within book
+    # Chapter navigation within book (Show all chapters for maximum crawlability)
     chap_nav = "".join(
         f'<a class="chap-dot {"active" if i == chap_idx else ""}" href="{slugify(book_name, i+1)}.html">{i+1}</a>'
-        for i in range(min(total_chapters, 40))
+        for i in range(total_chapters)
     )
-    if total_chapters > 40:
-        chap_nav += f'<span style="color:var(--text-muted);font-size:0.8rem;">+{total_chapters-40} more</span>'
 
     return f'''<!DOCTYPE html>
 <html lang="en">
@@ -151,8 +149,15 @@ def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters
     <meta name="keywords" content="{book_name}, {ref}, {keywords}, Bible verse, scripture, audio Bible, Rooted Daily">
     <link rel="canonical" href="{SITE_URL}/verses/{slug}.html">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9L915C1DE8"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-9L915C1DE8');</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HSEJQQEFLJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){{dataLayer.push(arguments);}}
+      gtag('js', new Date());
+
+      gtag('config', 'G-HSEJQQEFLJ');
+    </script>
 
     <meta property="og:type" content="article">
     <meta property="og:title" content="{ref} — {title_tag} | Rooted Daily">
@@ -329,7 +334,10 @@ def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters
 
 <header>
     <a class="logo" href="../index.html">Rooted</a>
-    <a class="listen-btn" href="{reader_link}">&#9654; Listen &amp; Reflect</a>
+    <div style="display:flex;gap:1.5rem;align-items:center;">
+        <a href="../bible-index.html" style="font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;color:var(--text-muted);text-decoration:none;">Library Index</a>
+        <a class="listen-btn" href="{reader_link}">&#9654; Listen &amp; Reflect</a>
+    </div>
 </header>
 
 <div class="hero">
@@ -483,7 +491,7 @@ def main():
     print("Writing sitemap.xml...")
     with open("sitemap.xml","w",encoding="utf-8") as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
-        for page in ["","bible.html","terms.html","privacy.html"]:
+        for page in ["","bible.html","bible-index.html","terms.html","privacy.html"]:
             f.write(f'  <url><loc>{SITE_URL}/{page}</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>\n')
         for url in sitemap_urls:
             f.write(f'  <url><loc>{url}</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>\n')

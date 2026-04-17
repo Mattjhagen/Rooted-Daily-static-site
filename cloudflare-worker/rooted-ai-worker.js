@@ -8,7 +8,6 @@
  */
 
 const ALLOWED_ORIGINS = [
-  'https://app.vibecodes.space',
   'https://rootedapp.space',
   'http://localhost:5500',   // local dev
   'http://127.0.0.1:5500',

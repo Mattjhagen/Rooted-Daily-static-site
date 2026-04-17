@@ -6,20 +6,21 @@
     <title>Bible Reader | Rooted Daily</title>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9L915C1DE8"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HSEJQQEFLJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-9L915C1DE8');
+
+      gtag('config', 'G-HSEJQQEFLJ');
     </script>
 
     <meta name="description" content="Experience the Bible with high-quality neural narration, personalized highlights, and private spiritual reflections. Stay rooted in truth everywhere.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://app.vibecodes.space/bible.html">
+    <meta property="og:url" content="https://rootedapp.space/bible.html">
     <meta property="og:title" content="Bible Reader | Rooted Daily">
     <meta property="og:description" content="Experience the Bible with neural narration, verse highlighting, and a private reflection journal.">
-    <meta property="og:image" content="https://app.vibecodes.space/hero-bg.png">
+    <meta property="og:image" content="https://rootedapp.space/hero-bg.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:title" content="Bible Reader | Rooted Daily">
 
@@ -676,6 +677,7 @@
     <header>
         <div class="header-left">
             <a href="index.html" class="logo-link">Rooted</a>
+            <a href="bible-index.html" style="font-family:var(--sans); font-size:0.75rem; font-weight:700; color:var(--text-muted); text-decoration:none; margin-left:1rem; border:1px solid var(--border); padding:0.2rem 0.6rem; border-radius:12px;">Library</a>
         </div>
         <div class="header-center" id="headerTitle">...</div>
         <div class="header-right">
@@ -1296,7 +1298,7 @@
             } else {
                 const newsletter = e.target.newsletter?.checked;
                 const { data, error } = await sbClient.auth.signUp({ email, password, options: {
-                    emailRedirectTo: 'https://app.vibecodes.space/bible.html',
+                    emailRedirectTo: 'https://rootedapp.space/bible.html',
                     data: { newsletter_signup: newsletter, agreed_to_terms: true }
                 }});
                 if (error) {
