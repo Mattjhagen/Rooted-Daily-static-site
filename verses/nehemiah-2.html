@@ -36,6 +36,7 @@
             --accent:#4a735d;--accent-glow:rgba(74,115,93,0.3);
             --border:rgba(255,255,255,0.08);
         }
+        html{scroll-behavior:smooth;}
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'Crimson Text',serif;background:var(--bg);color:var(--text);line-height:1.9;}
         a{color:inherit;text-decoration:none;}
@@ -187,6 +188,30 @@
             h1{font-size:2rem;}
             main{padding:1.5rem 1rem 8rem;}
         }
+
+        /* FOOTNOTE BOTTOM SHEET */
+        .fn-sheet {
+            position: fixed; bottom: -100%; left: 0; right: 0;
+            background: rgba(30, 45, 61, 0.97); backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border); border-radius: 24px 24px 0 0;
+            padding: 0.75rem 1.5rem 2.5rem; z-index: 1000;
+            transition: bottom 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        .fn-sheet.open { bottom: 0; pointer-events: all; }
+        .fn-sheet-handle {
+            width: 36px; height: 4px; background: var(--border);
+            border-radius: 2px; margin: 0 auto 1rem;
+        }
+        .fn-sheet-close {
+            position: absolute; top: 1rem; right: 1.5rem;
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 1.1rem; cursor: pointer;
+        }
+        .fn-sheet-inner {
+            max-height: 45vh; overflow-y: auto; padding-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -217,7 +242,7 @@
     </div>
 
     <article>
-        <p class="verse" id="v1"><sup class="vnum">1</sup><span class="vtext">In the month Nisan, in the twentieth year of Artaxerxes the king, when wine was before him, I picked up the wine, and gave it to the king. Now I had not been sad before in his presence.</span></p>
+        <p class="verse" id="v1"><sup class="vnum">1</sup><span class="vtext">In the month Nisan, in the twentieth year of Artaxerxes the king, when wine was before him, I picked up the wine, and gave it to the king. Now I had not been sad before in his presence.<a href="#fn-2-1" onclick="openFnSheet(event, 'fn-2-1')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a></span></p>
 <p class="verse" id="v2"><sup class="vnum">2</sup><span class="vtext">The king said to me, “Why is your face sad, since you are not sick? This is nothing else but sorrow of heart.” Then I was very much afraid.</span></p>
 <p class="verse" id="v3"><sup class="vnum">3</sup><span class="vtext">I said to the king, “Let the king live forever! Why shouldn’t my face be sad, when the city, the place of my fathers’ tombs, lies waste, and its gates have been consumed with fire?”</span></p>
 <p class="verse" id="v4"><sup class="vnum">4</sup><span class="vtext">Then the king said to me, “What is your request?” So I prayed to the God of heaven.</span></p>
@@ -238,6 +263,8 @@
 <p class="verse" id="v19"><sup class="vnum">19</sup><span class="vtext">But when Sanballat the Horonite, Tobiah the Ammontite servant, and Geshem the Arabian, heard it, they ridiculed us, and despised us, and said, “What is this thing that you are doing? Will you rebel against the king?”</span></p>
 <p class="verse" id="v20"><sup class="vnum">20</sup><span class="vtext">Then I answered them, and said to them, “The God of heaven will prosper us. Therefore we, his servants, will arise and build; but you have no portion, nor right, nor memorial, in Jerusalem.”</span></p>
     </article>
+    
+    <div class="footnotes-section" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);"><h3>📖 Living Legacy Study Bible</h3><div class="footnotes-list" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;"><div class="fn-item" id="fn-2-1" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:'Inter',sans-serif;font-size:0.85rem;">Nehemiah 2:1</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">Nehemiah's carefully chosen moment in</p></div></div></div>
 
     <!-- AI EXPLANATION SECTION -->
     <div class="ai-section">
@@ -276,11 +303,27 @@
     <p>&copy; 2026 <a href="../index.html">Rooted Daily</a> &middot; <a href="../terms.html">Terms</a> &middot; <a href="../privacy.html">Privacy</a> &middot; <a href="../sitemap.xml">Sitemap</a></p>
 </footer>
 
+<div id="fn-sheet" class="fn-sheet">
+    <div class="fn-sheet-handle"></div>
+    <button class="fn-sheet-close" onclick="closeFnSheet()">✕</button>
+    <div id="fn-sheet-body" style="margin-top:0.5rem; max-height:40vh; overflow-y:auto; padding-bottom:2rem;"></div>
+</div>
+
 <script>
+    function openFnSheet(e, id) {
+        e.preventDefault();
+        const content = document.getElementById(id).innerHTML;
+        document.getElementById('fn-sheet-body').innerHTML = content;
+        document.getElementById('fn-sheet').classList.add('open');
+    }
+    function closeFnSheet() {
+        document.getElementById('fn-sheet').classList.remove('open');
+    }
+
     const BOOK = "Nehemiah";
     const CHAPTER = 2;
     const REF = "Nehemiah 2";
-    const GEMINI_KEY = "";
+    const GEMINI_KEY = "AIzaSyCy1uMfymGUfwecaXssdLPgJ3MxmhzTRxM";
 
     async function generateExplanation(prompt) {
         if (!GEMINI_KEY) {

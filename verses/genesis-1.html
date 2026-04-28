@@ -36,6 +36,7 @@
             --accent:#4a735d;--accent-glow:rgba(74,115,93,0.3);
             --border:rgba(255,255,255,0.08);
         }
+        html{scroll-behavior:smooth;}
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'Crimson Text',serif;background:var(--bg);color:var(--text);line-height:1.9;}
         a{color:inherit;text-decoration:none;}
@@ -187,6 +188,30 @@
             h1{font-size:2rem;}
             main{padding:1.5rem 1rem 8rem;}
         }
+
+        /* FOOTNOTE BOTTOM SHEET */
+        .fn-sheet {
+            position: fixed; bottom: -100%; left: 0; right: 0;
+            background: rgba(30, 45, 61, 0.97); backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border); border-radius: 24px 24px 0 0;
+            padding: 0.75rem 1.5rem 2.5rem; z-index: 1000;
+            transition: bottom 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        .fn-sheet.open { bottom: 0; pointer-events: all; }
+        .fn-sheet-handle {
+            width: 36px; height: 4px; background: var(--border);
+            border-radius: 2px; margin: 0 auto 1rem;
+        }
+        .fn-sheet-close {
+            position: absolute; top: 1rem; right: 1.5rem;
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 1.1rem; cursor: pointer;
+        }
+        .fn-sheet-inner {
+            max-height: 45vh; overflow-y: auto; padding-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -217,9 +242,9 @@
     </div>
 
     <article>
-        <p class="verse" id="v1"><sup class="vnum">1</sup><span class="vtext">In the beginning, God  created the heavens and the earth.</span></p>
-<p class="verse" id="v2"><sup class="vnum">2</sup><span class="vtext">The earth was formless and empty. Darkness was on the surface of the deep and God’s Spirit was hovering over the surface of the waters.</span></p>
-<p class="verse" id="v3"><sup class="vnum">3</sup><span class="vtext">God said, “Let there be light,” and there was light.</span></p>
+        <p class="verse" id="v1"><sup class="vnum">1</sup><span class="vtext">In the beginning, God  created the heavens and the earth.<a href="#fn-1-1" onclick="openFnSheet(event, 'fn-1-1')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a></span></p>
+<p class="verse" id="v2"><sup class="vnum">2</sup><span class="vtext">The earth was formless and empty. Darkness was on the surface of the deep and God’s Spirit was hovering over the surface of the waters.<a href="#fn-1-2" onclick="openFnSheet(event, 'fn-1-2')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a></span></p>
+<p class="verse" id="v3"><sup class="vnum">3</sup><span class="vtext">God said, “Let there be light,” and there was light.<a href="#fn-1-3" onclick="openFnSheet(event, 'fn-1-3')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a></span></p>
 <p class="verse" id="v4"><sup class="vnum">4</sup><span class="vtext">God saw the light, and saw that it was good. God divided the light from the darkness.</span></p>
 <p class="verse" id="v5"><sup class="vnum">5</sup><span class="vtext">God called the light “day”, and the darkness he called “night”. There was evening and there was morning, the first day.</span></p>
 <p class="verse" id="v6"><sup class="vnum">6</sup><span class="vtext">God said, “Let there be an expanse in the middle of the waters, and let it divide the waters from the waters.”</span></p>
@@ -242,13 +267,15 @@
 <p class="verse" id="v23"><sup class="vnum">23</sup><span class="vtext">There was evening and there was morning, a fifth day.</span></p>
 <p class="verse" id="v24"><sup class="vnum">24</sup><span class="vtext">God said, “Let the earth produce living creatures after their kind, livestock, creeping things, and animals of the earth after their kind”; and it was so.</span></p>
 <p class="verse" id="v25"><sup class="vnum">25</sup><span class="vtext">God made the animals of the earth after their kind, and the livestock after their kind, and everything that creeps on the ground after its kind. God saw that it was good.</span></p>
-<p class="verse" id="v26"><sup class="vnum">26</sup><span class="vtext">God said, “Let us make man in our image, after our likeness: and let them have dominion over the fish of the sea, and over the birds of the sky, and over the livestock, and over all the earth, and over every creeping thing that creeps on the earth.”</span></p>
-<p class="verse" id="v27"><sup class="vnum">27</sup><span class="vtext">God created man in his own image. In God’s image he created him; male and female he created them.</span></p>
+<p class="verse" id="v26"><sup class="vnum">26</sup><span class="vtext">God said, “Let us make man in our image, after our likeness: and let them have dominion over the fish of the sea, and over the birds of the sky, and over the livestock, and over all the earth, and over every creeping thing that creeps on the earth.”<a href="#fn-1-26" onclick="openFnSheet(event, 'fn-1-26')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a></span></p>
+<p class="verse" id="v27"><sup class="vnum">27</sup><span class="vtext">God created man in his own image. In God’s image he created him; male and female he created them.<a href="#fn-1-27" onclick="openFnSheet(event, 'fn-1-27')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a></span></p>
 <p class="verse" id="v28"><sup class="vnum">28</sup><span class="vtext">God blessed them. God said to them, “Be fruitful, multiply, fill the earth, and subdue it. Have dominion over the fish of the sea, over the birds of the sky, and over every living thing that moves on the earth.”</span></p>
 <p class="verse" id="v29"><sup class="vnum">29</sup><span class="vtext">God said, “Behold,  I have given you every herb yielding seed, which is on the surface of all the earth, and every tree, which bears fruit yielding seed. It will be your food.</span></p>
 <p class="verse" id="v30"><sup class="vnum">30</sup><span class="vtext">To every animal of the earth, and to every bird of the sky, and to everything that creeps on the earth, in which there is life, I have given every green herb for food;” and it was so.</span></p>
-<p class="verse" id="v31"><sup class="vnum">31</sup><span class="vtext">God saw everything that he had made, and, behold, it was very good. There was evening and there was morning, a sixth day.</span></p>
+<p class="verse" id="v31"><sup class="vnum">31</sup><span class="vtext">God saw everything that he had made, and, behold, it was very good. There was evening and there was morning, a sixth day.<a href="#fn-1-31" onclick="openFnSheet(event, 'fn-1-31')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a></span></p>
     </article>
+    
+    <div class="footnotes-section" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);"><h3>📖 Living Legacy Study Bible</h3><div class="footnotes-list" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;"><div class="fn-item" id="fn-1-1" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:'Inter',sans-serif;font-size:0.85rem;">Genesis 1:1</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">The Hebrew word 'bara' (בָּרָא) is used exclusively of God's creative activity. It implies bringing something entirely new into existence — not reshaping what was already there, but calling into being what had never been. This is the first truth of Scripture: before anything else, God was, and He made.</p></div><div class="fn-item" id="fn-1-2" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:'Inter',sans-serif;font-size:0.85rem;">Genesis 1:2</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">The Spirit 'hovering' uses the Hebrew 'merachefet' — the same word used of an eagle stirring over its nest (Deut. 32:11). Even before light, before order, the Spirit was brooding over chaos with the tenderness of a parent. Darkness was not absence — it was anticipation.</p></div><div class="fn-item" id="fn-1-3" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:'Inter',sans-serif;font-size:0.85rem;">Genesis 1:3</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">God speaks, and reality obeys. The pattern of creation by word echoes throughout Scripture: 'By the word of the LORD the heavens were made' (Psalm 33:6). John's Gospel opens with the same truth: 'In the beginning was the Word.' Creation is God's first sermon.</p></div><div class="fn-item" id="fn-1-26" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:'Inter',sans-serif;font-size:0.85rem;">Genesis 1:26</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">'Let us make man in our image' — the plural has stirred centuries of reflection. Early rabbis saw the divine council; the Church Fathers saw the Trinity. What's unmistakable is the deliberation: God pauses before creating humanity. Every other act was a command; this one is a conversation.</p></div><div class="fn-item" id="fn-1-27" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:'Inter',sans-serif;font-size:0.85rem;">Genesis 1:27</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">The 'image of God' (imago Dei) is the cornerstone of human dignity. It doesn't point to physical resemblance but to the capacity for relationship, moral reasoning, and creative purpose. Every person you meet bears this mark — the fingerprint of the divine.</p></div><div class="fn-item" id="fn-1-31" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:'Inter',sans-serif;font-size:0.85rem;">Genesis 1:31</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">Six times God called His work 'good.' But after creating humanity, He called it 'very good.' The Hebrew 'tov me'od' carries a sense of delight — this was not merely adequate. It was exactly what He wanted. You were exactly what He wanted.</p></div></div></div>
 
     <!-- AI EXPLANATION SECTION -->
     <div class="ai-section">
@@ -287,11 +314,27 @@
     <p>&copy; 2026 <a href="../index.html">Rooted Daily</a> &middot; <a href="../terms.html">Terms</a> &middot; <a href="../privacy.html">Privacy</a> &middot; <a href="../sitemap.xml">Sitemap</a></p>
 </footer>
 
+<div id="fn-sheet" class="fn-sheet">
+    <div class="fn-sheet-handle"></div>
+    <button class="fn-sheet-close" onclick="closeFnSheet()">✕</button>
+    <div id="fn-sheet-body" style="margin-top:0.5rem; max-height:40vh; overflow-y:auto; padding-bottom:2rem;"></div>
+</div>
+
 <script>
+    function openFnSheet(e, id) {
+        e.preventDefault();
+        const content = document.getElementById(id).innerHTML;
+        document.getElementById('fn-sheet-body').innerHTML = content;
+        document.getElementById('fn-sheet').classList.add('open');
+    }
+    function closeFnSheet() {
+        document.getElementById('fn-sheet').classList.remove('open');
+    }
+
     const BOOK = "Genesis";
     const CHAPTER = 1;
     const REF = "Genesis 1";
-    const GEMINI_KEY = "";
+    const GEMINI_KEY = "AIzaSyCy1uMfymGUfwecaXssdLPgJ3MxmhzTRxM";
 
     async function generateExplanation(prompt) {
         if (!GEMINI_KEY) {

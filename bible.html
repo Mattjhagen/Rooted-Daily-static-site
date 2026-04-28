@@ -759,6 +759,9 @@
                 Copy
             </button>
         </div>
+        <div id="sheetFootnotes" class="sheet-footnotes" style="display:none; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); overflow-y:auto; max-height:30vh; padding-bottom:1rem;">
+            <!-- injected by JS -->
+        </div>
     </div>
     <!-- AI FAB BUTTON -->
     <button class="ai-fab" id="aiFab" onclick="toggleAIPanel()" title="Ask AI about this chapter">
@@ -976,13 +979,22 @@
             document.getElementById('chapterHeader').textContent = ref;
 
             let html = '';
+            const chapFootnotes = bookObj.footnotes ? bookObj.footnotes[chapNum.toString()] : null;
+            
             bookObj.chapters[currentChapterIndex].forEach((v, i) => {
                 const vNum = i + 1;
                 const hl = userHighlights.find(h => h.book === name && h.chapter === chapNum && h.verse === vNum);
                 const hlClass = hl ? `hl-${hl.color || 'yellow'}` : '';
                 const hasNote = userNotes.some(n => n.book === name && n.chapter === chapNum && n.verse === vNum);
+                let supTag = '';
+                if (chapFootnotes && chapFootnotes[vNum.toString()]) {
+                    const hasContent = chapFootnotes[vNum.toString()].some(fn =>
+                        (fn.content || fn.text || fn.note || fn.body || '').trim()
+                    );
+                    if (hasContent) supTag = '<sup class="fn-marker" style="color:var(--accent);margin-left:2px;">*</sup>';
+                }
                 html += `<span class="verse ${hlClass}" id="v${vNum}" onclick="handleVerseClick(${vNum}, this)">`
-                      + `<sup class="verse-num">${vNum}</sup>${v}</span> `;
+                      + `<sup class="verse-num">${vNum}</sup>${v}${supTag}</span> `;
             });
             document.getElementById('bibleText').innerHTML = html;
             injectJSONLD(name, chapNum);
@@ -1052,6 +1064,33 @@
             if (existingHl && sortedNums.length === 1) {
                 const dot = document.querySelector(`.color-dot.${existingHl.color}`);
                 if (dot) dot.classList.add('selected');
+            }
+
+            // Display Footnotes
+            const fnContainer = document.getElementById('sheetFootnotes');
+            const chapFootnotes = bibleData.books[currentBookIndex].footnotes ? bibleData.books[currentBookIndex].footnotes[chap.toString()] : null;
+            let fnsHtml = '';
+            if (chapFootnotes) {
+                sortedNums.forEach(vNum => {
+                    const fns = chapFootnotes[vNum.toString()];
+                    if (fns) {
+                        fns.forEach(fn => {
+                            const body = fn.content || fn.text || fn.note || fn.body || '';
+                            if (!body) return; // skip empty footnotes
+                            fnsHtml += `<div style="background:rgba(255,255,255,0.03);padding:0.75rem;border-radius:8px;border-left:3px solid var(--accent);margin-bottom:0.5rem;font-family:var(--sans);">`
+                                     + `<strong style="color:var(--accent);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:0.25rem;">${book} ${chap}:${vNum}</strong>`
+                                     + `<span style="font-size:0.9rem;color:var(--text);line-height:1.5;">${body}</span>`
+                                     + `</div>`;
+                        });
+                    }
+                });
+            }
+            if (fnsHtml) {
+                fnContainer.innerHTML = `<div style="font-family:var(--sans);font-weight:700;font-size:0.75rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem;">📖 Living Legacy Study Bible</div>` + fnsHtml;
+                fnContainer.style.display = 'block';
+            } else {
+                fnContainer.style.display = 'none';
+                fnContainer.innerHTML = '';
             }
 
             openVerseSheet();

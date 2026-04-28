@@ -36,6 +36,7 @@
             --accent:#4a735d;--accent-glow:rgba(74,115,93,0.3);
             --border:rgba(255,255,255,0.08);
         }
+        html{scroll-behavior:smooth;}
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'Crimson Text',serif;background:var(--bg);color:var(--text);line-height:1.9;}
         a{color:inherit;text-decoration:none;}
@@ -187,6 +188,30 @@
             h1{font-size:2rem;}
             main{padding:1.5rem 1rem 8rem;}
         }
+
+        /* FOOTNOTE BOTTOM SHEET */
+        .fn-sheet {
+            position: fixed; bottom: -100%; left: 0; right: 0;
+            background: rgba(30, 45, 61, 0.97); backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border); border-radius: 24px 24px 0 0;
+            padding: 0.75rem 1.5rem 2.5rem; z-index: 1000;
+            transition: bottom 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        .fn-sheet.open { bottom: 0; pointer-events: all; }
+        .fn-sheet-handle {
+            width: 36px; height: 4px; background: var(--border);
+            border-radius: 2px; margin: 0 auto 1rem;
+        }
+        .fn-sheet-close {
+            position: absolute; top: 1rem; right: 1.5rem;
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 1.1rem; cursor: pointer;
+        }
+        .fn-sheet-inner {
+            max-height: 45vh; overflow-y: auto; padding-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -217,7 +242,7 @@
     </div>
 
     <article>
-        <p class="verse" id="v1"><sup class="vnum">1</sup><span class="vtext">On that night, the king couldn’t sleep. He commanded the book of records of the chronicles to be brought, and they were read to the king.</span></p>
+        <p class="verse" id="v1"><sup class="vnum">1</sup><span class="vtext">On that night, the king couldn’t sleep. He commanded the book of records of the chronicles to be brought, and they were read to the king.<a href="#fn-6-1" onclick="openFnSheet(event, 'fn-6-1')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a></span></p>
 <p class="verse" id="v2"><sup class="vnum">2</sup><span class="vtext">It was found written that Mordecai had told of Bigthana and Teresh, two of the king’s eunuchs, who were doorkeepers, who had tried to lay hands on the King Ahasuerus.</span></p>
 <p class="verse" id="v3"><sup class="vnum">3</sup><span class="vtext">The king said, “What honor and dignity has been given to Mordecai for this?” Then the king’s servants who attended him said, “Nothing has been done for him.”</span></p>
 <p class="verse" id="v4"><sup class="vnum">4</sup><span class="vtext">The king said, “Who is in the court?” Now Haman had come into the outer court of the king’s house, to speak to the king about hanging Mordecai on the gallows that he had prepared for him.</span></p>
@@ -232,6 +257,8 @@
 <p class="verse" id="v13"><sup class="vnum">13</sup><span class="vtext">Haman recounted to Zeresh his wife and all his friends everything that had happened to him. Then his wise men and Zeresh his wife said to him, “If Mordecai, before whom you have begun to fall, is of Jewish descent, you will not prevail against him, but you will surely fall before him.”</span></p>
 <p class="verse" id="v14"><sup class="vnum">14</sup><span class="vtext">While they were yet talking with him, the king’s eunuchs came, and hurried to bring Haman to the banquet that Esther had prepared.</span></p>
     </article>
+    
+    <div class="footnotes-section" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);"><h3>📖 Living Legacy Study Bible</h3><div class="footnotes-list" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;"><div class="fn-item" id="fn-6-1" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:'Inter',sans-serif;font-size:0.85rem;">Esther 6:1</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">Divine providence often works through seemingly ordinary moments.</p></div></div></div>
 
     <!-- AI EXPLANATION SECTION -->
     <div class="ai-section">
@@ -270,11 +297,27 @@
     <p>&copy; 2026 <a href="../index.html">Rooted Daily</a> &middot; <a href="../terms.html">Terms</a> &middot; <a href="../privacy.html">Privacy</a> &middot; <a href="../sitemap.xml">Sitemap</a></p>
 </footer>
 
+<div id="fn-sheet" class="fn-sheet">
+    <div class="fn-sheet-handle"></div>
+    <button class="fn-sheet-close" onclick="closeFnSheet()">✕</button>
+    <div id="fn-sheet-body" style="margin-top:0.5rem; max-height:40vh; overflow-y:auto; padding-bottom:2rem;"></div>
+</div>
+
 <script>
+    function openFnSheet(e, id) {
+        e.preventDefault();
+        const content = document.getElementById(id).innerHTML;
+        document.getElementById('fn-sheet-body').innerHTML = content;
+        document.getElementById('fn-sheet').classList.add('open');
+    }
+    function closeFnSheet() {
+        document.getElementById('fn-sheet').classList.remove('open');
+    }
+
     const BOOK = "Esther";
     const CHAPTER = 6;
     const REF = "Esther 6";
-    const GEMINI_KEY = "";
+    const GEMINI_KEY = "AIzaSyCy1uMfymGUfwecaXssdLPgJ3MxmhzTRxM";
 
     async function generateExplanation(prompt) {
         if (!GEMINI_KEY) {

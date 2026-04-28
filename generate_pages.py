@@ -97,7 +97,8 @@ BOOK_INTROS = {
 def slugify(book, chapter):
     return f"{book.lower().replace(' ', '-')}-{chapter}"
 
-def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters):
+def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters, footnotes=None):
+    if footnotes is None: footnotes = {}
     chap_num = chap_idx + 1
     slug = slugify(book_name, chap_num)
     title_tag, book_intro, keywords = BOOK_INTROS.get(book_name, ("Scripture", f"{book_name} is part of the Holy Bible.", "Bible, scripture, faith"))
@@ -124,10 +125,32 @@ def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters
     }
 
     # Visible verse HTML
-    verses_html = "\n".join(
-        f'<p class="verse" id="v{i+1}"><sup class="vnum">{i+1}</sup><span class="vtext">{v}</span></p>'
-        for i, v in enumerate(verses)
-    )
+    verses_html_parts = []
+    for i, v in enumerate(verses):
+        v_num = str(i + 1)
+        sup_tag = ""
+        if v_num in footnotes:
+            has_content = any(
+                (fn.get("content") or fn.get("text") or fn.get("note") or fn.get("body") or "").strip()
+                for fn in footnotes[v_num]
+            )
+            if has_content:
+                sup_tag = f'<a href="#fn-{chap_num}-{v_num}" onclick="openFnSheet(event, \'fn-{chap_num}-{v_num}\')" style="text-decoration:none;"><sup class="fn-marker" style="color:var(--accent);margin-left:2px;cursor:pointer;" title="See footnotes below">*</sup></a>'
+        verses_html_parts.append(f'<p class="verse" id="v{i+1}"><sup class="vnum">{i+1}</sup><span class="vtext">{v}{sup_tag}</span></p>')
+    verses_html = "\n".join(verses_html_parts)
+
+
+    footnotes_html = ""
+    fn_items_html = ""
+    for v_num, fns in sorted(footnotes.items(), key=lambda x: int(x[0])):
+        for fn in fns:
+            content = fn.get("content") or fn.get("text") or fn.get("note") or fn.get("body") or ""
+            if not content.strip():
+                continue
+            fn_items_html += f'<div class="fn-item" id="fn-{chap_num}-{v_num}" style="background:var(--bg-card);padding:1rem;border-radius:8px;border-left:3px solid var(--accent);"><strong style="color:var(--accent);font-family:\'Inter\',sans-serif;font-size:0.85rem;">{book_name} {chap_num}:{v_num}</strong><p style="font-size:0.95rem;color:var(--text-muted);margin-top:0.4rem;">{content}</p></div>'
+
+    if fn_items_html:
+        footnotes_html = f'<div class="footnotes-section" style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);"><h3>📖 Living Legacy Study Bible</h3><div class="footnotes-list" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;">{fn_items_html}</div></div>'
 
     prev_link = f'<a class="nav-pill" href="{prev_slug}.html">&#8592; Prev</a>' if prev_slug else '<span class="nav-pill disabled">&#8592; Prev</span>'
     next_link = f'<a class="nav-pill" href="{next_slug}.html">Next &#8594;</a>' if next_slug else '<span class="nav-pill disabled">Next &#8594;</span>'
@@ -177,6 +200,7 @@ def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters
             --accent:#4a735d;--accent-glow:rgba(74,115,93,0.3);
             --border:rgba(255,255,255,0.08);
         }}
+        html{{scroll-behavior:smooth;}}
         *{{margin:0;padding:0;box-sizing:border-box;}}
         body{{font-family:'Crimson Text',serif;background:var(--bg);color:var(--text);line-height:1.9;}}
         a{{color:inherit;text-decoration:none;}}
@@ -328,6 +352,30 @@ def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters
             h1{{font-size:2rem;}}
             main{{padding:1.5rem 1rem 8rem;}}
         }}
+
+        /* FOOTNOTE BOTTOM SHEET */
+        .fn-sheet {{
+            position: fixed; bottom: -100%; left: 0; right: 0;
+            background: rgba(30, 45, 61, 0.97); backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border); border-radius: 24px 24px 0 0;
+            padding: 0.75rem 1.5rem 2.5rem; z-index: 1000;
+            transition: bottom 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }}
+        .fn-sheet.open {{ bottom: 0; pointer-events: all; }}
+        .fn-sheet-handle {{
+            width: 36px; height: 4px; background: var(--border);
+            border-radius: 2px; margin: 0 auto 1rem;
+        }}
+        .fn-sheet-close {{
+            position: absolute; top: 1rem; right: 1.5rem;
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 1.1rem; cursor: pointer;
+        }}
+        .fn-sheet-inner {{
+            max-height: 45vh; overflow-y: auto; padding-bottom: 1rem;
+        }}
     </style>
 </head>
 <body>
@@ -360,6 +408,8 @@ def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters
     <article>
         {verses_html}
     </article>
+    
+    {footnotes_html}
 
     <!-- AI EXPLANATION SECTION -->
     <div class="ai-section">
@@ -398,7 +448,23 @@ def build_page(book_name, chap_idx, verses, prev_slug, next_slug, total_chapters
     <p>&copy; 2026 <a href="../index.html">Rooted Daily</a> &middot; <a href="../terms.html">Terms</a> &middot; <a href="../privacy.html">Privacy</a> &middot; <a href="../sitemap.xml">Sitemap</a></p>
 </footer>
 
+<div id="fn-sheet" class="fn-sheet">
+    <div class="fn-sheet-handle"></div>
+    <button class="fn-sheet-close" onclick="closeFnSheet()">✕</button>
+    <div id="fn-sheet-body" style="margin-top:0.5rem; max-height:40vh; overflow-y:auto; padding-bottom:2rem;"></div>
+</div>
+
 <script>
+    function openFnSheet(e, id) {{
+        e.preventDefault();
+        const content = document.getElementById(id).innerHTML;
+        document.getElementById('fn-sheet-body').innerHTML = content;
+        document.getElementById('fn-sheet').classList.add('open');
+    }}
+    function closeFnSheet() {{
+        document.getElementById('fn-sheet').classList.remove('open');
+    }}
+
     const BOOK = "{book_name}";
     const CHAPTER = {chap_num};
     const REF = "{ref}";
@@ -479,7 +545,9 @@ def main():
         next_slug = f"../{OUTPUT_DIR}/{slugify(BOOK_NAMES[all_chapters[idx+1][0]], all_chapters[idx+1][1]+1)}" if idx < len(all_chapters)-1 else None
         total_chaps = len(data["books"][bi]["chapters"])
 
-        html = build_page(book_name, ci, verses, prev_slug, next_slug, total_chaps)
+        footnotes = data["books"][bi].get("footnotes", {}).get(str(chap_num), {})
+
+        html = build_page(book_name, ci, verses, prev_slug, next_slug, total_chaps, footnotes)
         with open(os.path.join(OUTPUT_DIR, f"{slug}.html"),"w",encoding="utf-8") as f:
             f.write(html)
 
