@@ -12,7 +12,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-HSEJQQEFLJ');
     </script>
     <link rel="icon" type="image/png" href="rooted-icon.png">
@@ -172,44 +171,6 @@
             z-index: 20;
             pointer-events: none;
         }
-
-        /* --- Modal --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            justify-content: center; align-items: center;
-            backdrop-filter: blur(20px);
-        }
-
-        .modal-content {
-            background: #151b22;
-            padding: 3.5rem;
-            border-radius: 30px;
-            max-width: 550px;
-            width: 90%;
-            border: 1px solid var(--border);
-            text-align: center;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-        }
-
-        .step-list { text-align: left; margin: 2.5rem 0; }
-        .step { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-secondary); }
-        .step b { color: var(--accent-green); }
-
-        /* --- Footer --- */
-        footer {
-            padding: 6rem 2rem;
-            text-align: center;
-            background: var(--bg-dark);
-            color: var(--text-secondary);
-        }
-
-        .footer-links { margin-bottom: 2rem; display: flex; gap: 3rem; justify-content: center; }
-        .footer-links a { color: var(--text-secondary); text-decoration: none; font-weight: 600; transition: color 0.3s; }
-        .footer-links a:hover { color: var(--accent-green); }
     </style>
 </head>
 <body>
@@ -226,7 +187,8 @@
                 <p>Experience Scripture with natural audio narration, AI-guided reflections, and spiritual habit tracking.</p>
                 
                 <div class="cta-group">
-                    <a href="https://play.google.com/store/apps/details?id=com.rooteddaily.bible&pcampaignid=web_share" target="_blank" class="btn btn-primary">Download on Google Play</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.rooteddaily.bible&hl=en_US" target="_blank" class="btn btn-primary">Download on Google Play</a>
+                    <a href="https://apps.apple.com/us/app/rooted-daily/id6763426267" target="_blank" class="btn btn-primary">Download on App Store</a>
                     <a href="bible.html" class="btn btn-secondary">Open Web Reader</a>
                     <a href="https://opencollective.com/pacmac-mobile-llc/donate?interval=oneTime&amount=20&contributeAs=me" target="_blank" class="btn btn-secondary">Support the Mission</a>
                 </div>
@@ -245,19 +207,6 @@
         </div>
     </section>
 
-    <div id="installModal" class="modal">
-        <div class="modal-content">
-            <h2 style="font-family:'Crimson Text',serif; font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent-green);">Installation Guide</h2>
-            <div class="step-list">
-                <div class="step">1. Download the <b>Rooted_Daily_v0.0.9.apk</b></div>
-                <div class="step">2. Once finished, open the file and tap <b>Install</b></div>
-                <div class="step">3. Give permission for <b>unknown sources</b> if asked</div>
-            </div>
-            <a href="https://github.com/Mattjhagen/Rooted_Daily/releases/download/v0.0.9/Rooted_Daily_v0.0.9.apk" class="btn btn-primary" style="display:block; text-align: center;">Download Now</a>
-            <p style="margin-top:2rem; color:#888; cursor:pointer; font-weight: 600;" onclick="closeModal()">Dismiss</p>
-        </div>
-    </div>
-
     <section style="padding: 8rem 2rem; background: #0d1218; border-top: 1px solid var(--border);">
         <div style="max-width: 1200px; margin: 0 auto;">
             <div style="text-align: center; margin-bottom: 5rem;">
@@ -265,59 +214,4 @@
                 <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">Explore every book of the Bible in a clean, distraction-free environment optimized for reading and discovery.</p>
             </div>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem;">
-                <a href="verses/genesis-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">Genesis</a>
-                <a href="verses/exodus-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">Exodus</a>
-                <a href="verses/psalms-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">Psalms</a>
-                <a href="verses/proverbs-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">Proverbs</a>
-                <a href="verses/isaiah-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">Isaiah</a>
-                <a href="verses/matthew-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">Matthew</a>
-                <a href="verses/john-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">John</a>
-                <a href="verses/romans-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">Romans</a>
-                <a href="verses/revelation-1.html" class="btn btn-secondary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 600;">Revelation</a>
-                <a href="bible-index.html" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 12px; font-weight: 700;">Full Index &rarr;</a>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        // Modal Logic
-        const modal = document.getElementById('installModal');
-        function openModal() { modal.style.display = 'flex'; }
-        function closeModal() { modal.style.display = 'none'; }
-        window.onclick = function(e) { if (e.target == modal) closeModal(); }
-
-        // Animation Logic
-        const slides = document.querySelectorAll('#screenSlider img');
-        let currentSlide = 0;
-        function nextSlide() {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }
-        setInterval(nextSlide, 4000); // Transitions every 4 seconds
-    </script>
-
-    <footer style="background: #000; padding: 6rem 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <div style="font-family: 'Crimson Text', serif; font-size: 2rem; color: #4a735d; margin-bottom: 2rem;">Rooted Daily</div>
-            
-            <div style="display: flex; justify-content: center; gap: 3rem; margin-bottom: 3rem; flex-wrap: wrap;">
-                <a href="mailto:rootedapp@rootedapp.space" style="color: white; text-decoration: none; font-weight: 700; border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem 1.5rem; border-radius: 12px; background: rgba(255,255,255,0.05);">Contact Developer</a>
-                <a href="https://opencollective.com/pacmac-mobile-llc/donate?interval=oneTime&amount=20&contributeAs=me" target="_blank" style="color: white; text-decoration: none; font-weight: 700; border: 1px solid #008CFF; padding: 0.8rem 1.5rem; border-radius: 12px; background: rgba(0,140,255,0.1);">Support the Mission</a>
-            </div>
-
-            <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; opacity: 0.6;">
-                <a href="terms.html" style="color: white; text-decoration: none; font-size: 0.9rem;">Terms of Use</a>
-                <a href="privacy.html" style="color: white; text-decoration: none; font-size: 0.9rem;">Privacy Policy</a>
-                <a href="support.html" style="color: white; text-decoration: none; font-size: 0.9rem;">Support</a>
-                <a href="sitemap.xml" style="color: white; text-decoration: none; font-size: 0.9rem;">Sitemap</a>
-            </div>
-            
-            <div style="color: rgba(255,255,255,0.3); font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem;">
-                &copy; 2026 Rooted Daily Bible Companion. A faith-first project for the global church.
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap
