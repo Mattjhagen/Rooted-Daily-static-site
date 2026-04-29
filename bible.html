@@ -524,6 +524,52 @@
         .checkbox-row a { color: var(--accent); text-decoration: underline; }
         .auth-link { color: var(--accent); font-weight: 700; text-decoration: none; }
 
+        /* ── COMMUNITY INSIGHTS ── */
+        .insight-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            padding: 0.85rem;
+            border-radius: 14px;
+            font-family: var(--sans);
+            position: relative;
+        }
+        .insight-author {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        .insight-content {
+            font-size: 0.88rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .insight-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.6rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .like-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255,255,255,0.03);
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+        .like-btn:hover { background: rgba(255,255,255,0.08); color: var(--accent); }
+        .like-btn.liked { color: #ef4444; background: rgba(239,68,68,0.05); }
+
         /* ── AI SCRIPTURE GUIDE ── */
         .ai-fab {
             position: fixed;
@@ -761,6 +807,21 @@
         </div>
         <div id="sheetFootnotes" class="sheet-footnotes" style="display:none; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); overflow-y:auto; max-height:30vh; padding-bottom:1rem;">
             <!-- injected by JS -->
+        </div>
+
+        <div id="communityInsightsSection" class="sheet-footnotes" style="display:none; margin-top:0.5rem; padding-top:1rem; border-top:1px solid var(--border);">
+            <div style="font-family:var(--sans);font-weight:700;font-size:0.75rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem;">💬 Community Insights</div>
+            <div id="communityInsightsList" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+            
+            <div id="insightInputArea" style="margin-top:1.5rem; display:none;">
+                <textarea id="communityInsightInput" class="prem-textarea" placeholder="Share your insight on this verse..." rows="2" style="width:100%; border-radius:12px; padding:0.75rem; font-family:var(--sans); font-size:0.9rem; background:rgba(255,255,255,0.03); border:1px solid var(--border); color:var(--text); resize:none;"></textarea>
+                <button onclick="postCommunityInsight()" id="postInsightBtn" class="btn-primary" style="padding:0.6rem; margin-top:0.5rem; font-size:0.85rem; border-radius:10px;">Post Insight</button>
+            </div>
+            <div id="insightLoginPrompt" style="margin-top:1rem; padding:0.75rem; background:rgba(255,255,255,0.02); border-radius:12px; border:1px dashed var(--border); text-align:center;">
+                <p style="font-family:var(--sans); font-size:0.8rem; color:var(--text-muted); margin:0;">
+                    <a href="#" onclick="openAuthModal(); return false;" style="color:var(--accent); font-weight:700; text-decoration:none;">Sign in</a> to share your own insight.
+                </p>
+            </div>
         </div>
     </div>
     <!-- AI FAB BUTTON -->
@@ -1093,6 +1154,13 @@
                 fnContainer.innerHTML = '';
             }
 
+            // Community Insights
+            if (sortedNums.length === 1) {
+                loadCommunityInsights(book, chap, sortedNums[0]);
+            } else {
+                document.getElementById('communityInsightsSection').style.display = 'none';
+            }
+
             openVerseSheet();
         }
 
@@ -1381,6 +1449,13 @@
         function updateAuthUI() {
             document.getElementById('authBtn').textContent = user ? 'Account' : 'Sign In';
             document.getElementById('accountSettings').style.display = user ? 'block' : 'none';
+
+            const inputArea = document.getElementById('insightInputArea');
+            const loginPrompt = document.getElementById('insightLoginPrompt');
+            if (inputArea && loginPrompt) {
+                inputArea.style.display = user ? 'block' : 'none';
+                loginPrompt.style.display = user ? 'none' : 'block';
+            }
         }
 
         function openPasswordReset() { alert('Password reset email sent to: ' + (user?.email || '')); }
@@ -1397,6 +1472,117 @@
         }
 
         init();
+
+        // ── COMMUNITY INSIGHTS LOGIC ──
+        async function loadCommunityInsights(book, chapter, verse) {
+            const list = document.getElementById('communityInsightsList');
+            const section = document.getElementById('communityInsightsSection');
+            list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);padding:1rem;text-align:center;">Loading insights...</div>';
+            section.style.display = 'block';
+
+            try {
+                const { data, error } = await sbClient
+                    .from('community_insights')
+                    .select('*')
+                    .match({ book, chapter, verse, is_approved: true })
+                    .order('likes_count', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);padding:1.5rem;text-align:center;background:rgba(255,255,255,0.02);border-radius:12px;border:1px dashed var(--border);">No community insights yet. Be the first to share!</div>';
+                } else {
+                    list.innerHTML = data.map(ins => `
+                        <div class="insight-item" id="insight-${ins.id}">
+                            <div class="insight-author">${ins.user_name || 'Community Member'}</div>
+                            <div class="insight-content">${ins.content}</div>
+                            <div class="insight-footer">
+                                <span>${new Date(ins.created_at).toLocaleDateString()}</span>
+                                <button class="like-btn" onclick="toggleInsightLike('${ins.id}')">
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                    <span class="like-count">${ins.likes_count || 0}</span>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error('Error loading insights:', err);
+                list.innerHTML = '<div style="font-size:0.8rem;color:#ef4444;padding:1rem;text-align:center;">Failed to load community insights.</div>';
+            }
+        }
+
+        async function postCommunityInsight() {
+            if (!user) { openAuthModal(); return; }
+            
+            const input = document.getElementById('communityInsightInput');
+            const content = input.value.trim();
+            if (!content) return;
+
+            const btn = document.getElementById('postInsightBtn');
+            btn.disabled = true;
+            btn.textContent = 'Posting...';
+
+            const book = bookNames[currentBookIndex];
+            const chapter = currentChapterIndex + 1;
+            const verse = [...selectedVerses][0];
+
+            try {
+                const { error } = await sbClient
+                    .from('community_insights')
+                    .insert({
+                        user_id: user.id,
+                        user_name: user.user_metadata?.full_name || user.email.split('@')[0],
+                        book,
+                        chapter,
+                        verse,
+                        content
+                    });
+
+                if (error) throw error;
+                input.value = '';
+                await loadCommunityInsights(book, chapter, verse);
+            } catch (err) {
+                alert('Error posting insight: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Post Insight';
+            }
+        }
+
+        async function toggleInsightLike(insightId) {
+            if (!user) { openAuthModal(); return; }
+            
+            try {
+                // Check if already liked
+                const { data: existingLike } = await sbClient
+                    .from('insight_likes')
+                    .select('*')
+                    .match({ user_id: user.id, insight_id: insightId })
+                    .single();
+
+                if (existingLike) {
+                    // Unlike
+                    await sbClient.from('insight_likes').delete().match({ user_id: user.id, insight_id: insightId });
+                    await sbClient.rpc('decrement_likes', { insight_id: insightId });
+                } else {
+                    // Like
+                    await sbClient.from('insight_likes').insert({ user_id: user.id, insight_id: insightId });
+                    await sbClient.rpc('increment_likes', { insight_id: insightId });
+                }
+                
+                // Refresh list
+                const book = bookNames[currentBookIndex];
+                const chapter = currentChapterIndex + 1;
+                const verse = [...selectedVerses][0];
+                await loadCommunityInsights(book, chapter, verse);
+            } catch (err) {
+                console.error('Error toggling like:', err);
+                // Fallback for simple count increment if RPC fails
+            }
+        }
 
         // ── AI SCRIPTURE GUIDE ──
         // API key lives in Cloudflare Worker (never exposed in client code)
